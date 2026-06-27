@@ -1,0 +1,74 @@
+# =====================================================================
+# BASILEUS — RENOVATIO IMPERII (Italia) — capstone event.
+# ---------------------------------------------------------------------
+# Fired from the Restructure-the-Themes decision when the "Italia,
+# Reunified" option is chosen (basileus_reorganize_themes_decision.txt,
+# the scope:italia_reunified branch), mirroring how the eastern Triumph
+# fires its celebration event.
+#
+# root = the emperor who took the decision.
+#
+# Renders the long-dead generals of the Renovatio — Flavius Belisarius
+# (character:9000006) and Narses (character:9000007), defined in
+# history/characters/basileus_roman.txt and basileus_armenian.txt.
+# =====================================================================
+namespace = basileus_italia
+
+basileus_italia.0001 = {
+	type = character_event
+	title = basileus_italia.0001.t
+	desc = basileus_italia.0001.desc
+	theme = basileus_imperial
+	window = basileus_imperial_big_event
+	override_background = { reference = ep3_hippodrome }
+
+	# The triumphant emperor who completed the work, large on the left.
+	left_portrait = {
+		character = root
+		animation = acknowledging
+	}
+	# Justinian, first of the restorers, large on the right.
+	right_portrait = {
+		character = scope:justinian
+		animation = personality_honorable
+	}
+	# The shades of the great reconquering generals, shown small below.
+	lower_left_portrait = {
+		character = scope:belisarius
+		animation = personality_honorable
+	}
+	lower_right_portrait = {
+		character = scope:narses
+		animation = personality_rational
+	}
+
+	immediate = {
+		# root = the reigning emperor; save for the description loc.
+		save_scope_as = renovator
+		# Scope the historical figures by ID for the portraits / loc.
+		# --- Belisarius ---
+		character:9000006 = { save_scope_as = belisarius }
+		# --- Narses ---
+		character:9000007 = { save_scope_as = narses }
+		# Justinian I "the Great" — vanilla historical character (former Roman
+		# Empire holder, retained in title history), not a custom one.
+		character:70512 = { save_scope_as = justinian }
+	}
+
+	option = {
+		name = basileus_italia.0001.a
+		# Permanent personal capstone on the restoring emperor (root).
+		add_character_modifier = {
+			modifier = basileus_renovatio_imperii
+		}
+		# Permanent dynasty-wide glory + renown — mirrors the Theodosian payoff
+		# (vanilla retake_eastern_provinces_decision_effect):
+		#   dynasty ?= { add_dynasty_modifier = <name>  add_dynasty_prestige = X }
+		dynasty ?= {
+			add_dynasty_modifier = basileus_renovatio_imperii_dynasty
+			add_dynasty_prestige = 2500
+		}
+		add_prestige = 500
+		give_nickname = nick_the_great
+	}
+}

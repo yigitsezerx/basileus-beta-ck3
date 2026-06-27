@@ -1,0 +1,45 @@
+﻿# =====================================================================
+# BASILEUS — THE MACEDONIAN RENAISSANCE: the capstone event.
+# ---------------------------------------------------------------------
+# Auto-fired (once) by basileus_macren_yearly_pulse when a dynasty has held
+# e_byzantium for several consecutive generations and the cultural prerequisites
+# hold (Pandidakterion founded, the City richly developed, peace). Grants the
+# "both" payoff via basileus_macren_reward_effect. Standalone-safe: immediate
+# casts its scope (guarded fallback), so `event basileus_macedonian_renaissance.0001`
+# works with no prior state. root = the reigning emperor.
+# =====================================================================
+namespace = basileus_macedonian_renaissance
+
+basileus_macedonian_renaissance.0001 = {
+	type = character_event
+	window = basileus_imperial_big_event
+	title = basileus_macedonian_renaissance.0001.t
+	desc = basileus_macedonian_renaissance.0001.desc
+	theme = basileus_imperial
+	override_background = { reference = ep3_constantinople }
+	override_effect_2d = { reference = legend_glow }
+
+	left_portrait = {
+		character = root
+		animation = acknowledging
+		camera = camera_event_left_pointing_back_fov20
+	}
+
+	immediate = {
+		basileus_macren_cast_scholar_effect = yes
+	}
+
+	# Proclaim the golden age.
+	option = {
+		name = basileus_macedonian_renaissance.0001.a
+	}
+
+	## A humbler register — let the work speak for itself.
+	#option = {
+	#	name = basileus_macedonian_renaissance.0001.b
+	#}
+
+	after = {
+		basileus_macren_reward_effect = yes
+	}
+}

@@ -1,0 +1,143 @@
+﻿###########################################################
+# BASILEUS — SOLE ROMAN EMPEROR
+# Papal-recognition story cycle (story_sole_roman_recognition).
+# 0001 petition (fired from on_setup); 0002/0003 the Pope resists then
+# wavers; 0010 the recognition — renames eastern_roman culture to "Roman".
+# Root = the e_byzantium holder (story_owner) throughout.
+###########################################################
+namespace = basileus_sole_roman
+
+# Shared scope setup: save the Catholic Pope (k_papal_state holder) for portraits.
+# (Used via the 0001/0002/0003/0010 immediates.)
+
+###########################################################
+# 0001 — The Petition to Rome.
+###########################################################
+basileus_sole_roman.0001 = {
+	type = character_event
+	title = basileus_sole_roman.0001.t
+	desc = basileus_sole_roman.0001.desc
+	theme = basileus_imperial
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = thinking
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			title:k_papal_state.holder = { save_scope_as = pope }
+		}
+	}
+
+	option = {
+		name = basileus_sole_roman.0001.a
+	}
+}
+
+###########################################################
+# 0002 — Rome Stalls. The Curia receives the petition coldly.
+###########################################################
+basileus_sole_roman.0002 = {
+	type = character_event
+	title = basileus_sole_roman.0002.t
+	desc = basileus_sole_roman.0002.desc
+	theme = faith
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = disapproval
+	}
+	right_portrait = {
+		character = scope:pope
+		animation = disapproval
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			title:k_papal_state.holder = { save_scope_as = pope }
+		}
+	}
+
+	option = {
+		name = basileus_sole_roman.0002.a
+	}
+}
+
+###########################################################
+# 0003 — Pressure Mounts. The emperorless Latin West wavers.
+###########################################################
+basileus_sole_roman.0003 = {
+	type = character_event
+	title = basileus_sole_roman.0003.t
+	desc = basileus_sole_roman.0003.desc
+	theme = faith
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+	right_portrait = {
+		character = scope:pope
+		animation = worried
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			title:k_papal_state.holder = { save_scope_as = pope }
+		}
+	}
+
+	option = {
+		name = basileus_sole_roman.0003.a
+	}
+}
+
+###########################################################
+# 0010 — Recognition. The Pope proclaims the sole Roman Emperor.
+# Renames the eastern_roman culture to "Roman", then ends the story.
+###########################################################
+basileus_sole_roman.0010 = {
+	type = character_event
+	title = basileus_sole_roman.0010.t
+	desc = basileus_sole_roman.0010.desc
+	theme = basileus_imperial
+	window = basileus_imperial_big_event
+	override_background = { reference = throne_room }
+	override_effect_2d = { reference = legend_glow }
+
+	left_portrait = {
+		character = root
+		animation = idle
+	}
+	right_portrait = {
+		character = scope:pope
+		animation = crowning
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			title:k_papal_state.holder = { save_scope_as = pope }
+		}
+	}
+
+	option = {
+		name = basileus_sole_roman.0010.a
+		custom_tooltip = basileus_sole_roman.0010.a.tt
+		hidden_effect = {
+			basileus_rename_culture_to_roman_effect = yes
+			# Close the story now that recognition is achieved.
+			random_owned_story = {
+				limit = { type = story_sole_roman_recognition }
+				end_story = yes
+			}
+		}
+	}
+}

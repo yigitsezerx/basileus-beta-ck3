@@ -1,0 +1,251 @@
+# =====================================================================
+# BASILEUS - override of vanilla ep3_interactions_events.0005
+# (game/events/dlc/ep3/ep3_interactions_events.txt).
+# VERBATIM copy with changes:
+# 1. Custom 'desc' block to refer to imperial governance/governor.
+# 2. Custom option 'a' name to say "Very well, I shall be your imperial governor."
+# 3. Custom toast titles and refusal custom tooltips for Imperial Autocracy.
+# =====================================================================
+
+ep3_interactions_events.0005 = {
+	type = letter_event
+	opening = ep3_interactions_events.0005.opening
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:actor = { government_has_flag = government_is_roman_imperial } }
+				desc = ep3_interactions_events.0005.desc_imperial
+			}
+			desc = ep3_interactions_events.0005.desc
+		}
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:hereditary = yes }
+				desc = ep3_interactions_events.0005.hereditary
+			}
+			desc = ep3_interactions_events.0005.fallback
+		}
+	}
+	sender = scope:actor
+	
+	trigger = {
+		exists = scope:demanded_administration
+		scope:recipient.primary_title = scope:demanded_administration
+		scope:recipient = { target_is_liege_or_above = scope:actor }
+	}
+
+	#Accept
+	option = {
+		name = {
+			trigger = {
+				scope:actor = { government_has_flag = government_is_roman_imperial }
+			}
+			text = ep3_interactions_events.0005.a_imperial
+		}
+		name = {
+			text = ep3_interactions_events.0005.a
+		}
+		scope:actor = {
+			if = {
+				limit = {
+					government_has_flag = government_is_roman_imperial
+				}
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = demand_imperial_autocracy_interaction_accept
+					left_icon = scope:recipient
+					change_to_administrative_interaction_effect = yes
+				}
+			}
+			else = {
+				send_interface_toast = {
+					type = event_toast_effect_good
+					title = demand_admin_interaction_accept
+					left_icon = scope:recipient
+					change_to_administrative_interaction_effect = yes
+				}
+			}
+		}
+		stress_impact = {
+			greedy = medium_stress_impact_gain
+		}
+		ai_chance = {
+			base = 0
+			demand_admin_acceptance_modifier = yes
+			modifier = { # We increase the value to compensate for the potentially high AI values in the other options
+				factor = 2
+				always = yes
+			}
+		}
+	}
+
+	#Favor
+	option = {
+		name = ep3_interactions_events.0005.b
+		trigger = {
+			NOT = {
+				has_hook_of_type = {
+					target = scope:actor
+					type = favor_hook
+				}
+			}
+			scope:hook = no
+		}
+		show_as_unavailable = { scope:hook = yes }
+		custom_description_no_bullet = {
+			text = if_actor_accepts_desc
+			object = scope:actor
+		}
+		show_as_tooltip = {
+			add_hook = {
+				target = scope:actor
+				type = favor_hook
+			}
+			change_to_administrative_interaction_effect = yes
+		}
+		scope:actor = {
+			trigger_event = {
+				id = ep3_interactions_events.0001
+				days = 5
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = {
+					value = 50
+					# This goes double for your Powerful Vassals. A better contract is likely to be much more important than a short-term payout.
+					if = {
+						limit = { is_powerful_vassal_of = scope:actor }
+						add = 100
+					}
+				}
+				this.liege = scope:actor
+			}
+			modifier = {
+				has_trait = ambitious
+				add = 50
+			}
+		}
+	}
+
+	#Gold
+	option = {
+		name = ep3_interactions_events.0005.c
+		trigger = { scope:hook = no }
+		show_as_unavailable = { scope:hook = yes }
+		save_scope_value_as = {
+			name = gold
+			value = yes
+		}
+		custom_description_no_bullet = {
+			text = if_actor_accepts_desc
+			object = scope:actor
+		}
+		show_as_tooltip = {
+			change_to_administrative_interaction_effect = yes
+		}
+		scope:actor = {
+			trigger_event = {
+				id = ep3_interactions_events.0002
+				days = 5
+			}
+		}
+		ai_chance = {
+			base = 100
+			modifier = {
+				add = 50 # More likely to ask for gold if they're poor
+				scope:recipient.short_term_gold < medium_gold_value
+			}
+			modifier = {
+				add = { # Much more likely to ask for gold if involved in one of their own wars (they want to win).
+					value = 50
+					if = {
+						# Especially true if they're in debt!
+						limit = { gold < 0 }
+						add = 150
+					}
+				}
+				is_at_war = yes
+				any_character_war = { is_war_leader = scope:recipient }
+			}
+			modifier = {
+				has_trait = greedy
+				add = 50
+			}
+			modifier = {
+				ai_greed < high_negative_ai_value
+				add = -50
+			}
+		}
+	}
+
+	#Refuse
+	option = {
+		name = ep3_interactions_events.0005.d
+		trigger = { scope:hook = no }
+		show_as_unavailable = { scope:hook = yes }
+		scope:actor = {
+			if = {
+				limit = {
+					government_has_flag = government_is_roman_imperial
+				}
+				send_interface_toast = {
+					type = event_toast_effect_bad
+					title = demand_imperial_autocracy_interaction_refuse
+					left_icon = scope:recipient
+					custom_tooltip = demand_imperial_autocracy_interaction_vassal_refuses
+				}
+			}
+			else = {
+				send_interface_toast = {
+					type = event_toast_effect_bad
+					title = demand_admin_interaction_refuse
+					left_icon = scope:recipient
+					custom_tooltip = demand_admin_interaction_vassal_refuses
+				}
+			}
+			if = {
+				limit = { is_ai = yes }
+				add_opinion = {
+					modifier = angry_opinion
+					target = scope:recipient
+					opinion = -15
+				}
+			}
+		}
+		ai_chance = {
+			base = 20
+			opinion_modifier = {
+				opinion_target = scope:actor
+				multiplier = -0.5
+			}
+			modifier = {
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 1
+				}
+				add = -15
+			}
+			modifier = {
+				has_dread_level_towards = {
+					target = scope:actor
+					level = 2
+				}
+				add = -30
+			}
+			modifier = {
+				has_trait = stubborn
+				add = 25
+			}
+			modifier = {
+				has_trait = arrogant
+				add = 25
+			}
+			modifier = {
+				has_trait = ambitious
+				add = -25
+			}
+		}
+	}
+}

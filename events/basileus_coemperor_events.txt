@@ -1,0 +1,31 @@
+###########################################################
+# BASILEUS — CO-EMPEROR TRAITS (helper event)
+# 0001 — a hidden, next-tick reconcile. Fired from the diarchy on_actions so the
+# senior/junior emperor traits assign even when the diarchy's co_emperorship
+# PARAMETERS are applied a tick after on_entered_diarchy / on_diarch_change fire
+# (a CK3 timing quirk that made the synchronous grant evaluate too early).
+# root = the diarchy owner (the senior).
+###########################################################
+namespace = basileus_coemperor
+
+basileus_coemperor.0001 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		basileus_reconcile_coemperor_traits_effect = yes
+	}
+}
+
+# 0002 — next-tick resolution for a FORMER co-emperor whose co-emperorship just
+# ended (fired from on_left_diarchy). If they have ascended to an imperial title
+# they become the new senior emperor; otherwise they shed the junior trait.
+# root = the former junior (the old diarch).
+basileus_coemperor.0002 = {
+	type = character_event
+	hidden = yes
+
+	immediate = {
+		basileus_resolve_former_junior_effect = yes
+	}
+}

@@ -1,0 +1,34 @@
+###########################################################
+# BASILEUS — USURPER CIVIL WARS
+# 0001 — A pretender rises. Fired to a human emperor when a vassal becomes a
+# usurper and forms a claimant faction. Pure flavor; the faction itself does
+# the mechanical work (it will declare war once strong enough).
+# root = the emperor; scope:usurper = the pretender.
+###########################################################
+namespace = basileus_usurper
+
+basileus_usurper.0001 = {
+	type = character_event
+	title = basileus_usurper.0001.t
+	desc = basileus_usurper.0001.desc
+	theme = basileus_imperial
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+	right_portrait = {
+		character = scope:usurper
+		animation = scheme
+	}
+
+	option = {
+		name = basileus_usurper.0001.a
+	}
+
+	option = {
+		name = basileus_usurper.0001.b
+		ai_chance = { factor = 0 }
+	}
+}

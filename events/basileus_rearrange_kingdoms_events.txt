@@ -1,0 +1,148 @@
+# =====================================================================
+# BASILEUS — REARRANGE THE KINGDOMS: rename / recolor follow-up events.
+# ---------------------------------------------------------------------
+# Fired from basileus_rearrange_kingdoms_decision after the structural
+# reshape (duchies consolidated, emptied kingdoms destroyed). Lets the
+# emperor name the surviving kingdom, then recolors its duchies after EITHER
+# option via the shared `after` block.
+#
+# root = the emperor who took the decision (= the top liege).
+# =====================================================================
+namespace = basileus_rearrange_kingdoms
+
+# --- ANATOLIA: keep "Anatolikon" or rename to "Asia Minor" -----------
+basileus_rearrange_kingdoms.0001 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_rearrange_kingdoms.0001.t
+	desc = basileus_rearrange_kingdoms.0001.desc
+	theme = emperor
+	override_background = ep3_city_gate
+
+	left_portrait = {
+		character = root
+		animation = thinking
+	}
+
+	# Keep the kingdom's current name (greek "Anatolikon" / culture default).
+	option = {
+		name = basileus_rearrange_kingdoms.0001.a
+	}
+
+	# Rename the kingdom to "Asia Minor". The name is culture-dynamic on the
+	# emperor (root = top liege): greek gets the Greek form, everyone else
+	# (incl. eastern_roman) gets the Latin "Asia Minor" fallback. set_title_name
+	# bakes a fixed string (its <KEY>_adj sibling supplies the adjective),
+	# matching basileus_set_theme_name_effect — avoids the GetPlayer-null blank.
+	option = {
+		name = basileus_rearrange_kingdoms.0001.b
+		if = {
+			limit = { culture = culture:greek }
+			title:k_anatolia = { set_title_name = BASILEUS_ASIA_MINOR_NAME_GREEK }
+		}
+		else = {
+			title:k_anatolia = { set_title_name = BASILEUS_ASIA_MINOR_NAME }
+		}
+	}
+
+	# Runs after whichever option is chosen: recolor the 14 Anatolian duchies.
+	# (The East/West split — event .0002, the "sundering" — is SHELVED; Anatolia
+	# is now left as a single unified kingdom. See basileus_split_anatolia_effect.)
+	after = {
+		basileus_recolor_anatolia_duchies_effect = yes
+	}
+}
+
+# --- SHELVED: ANATOLIA SUNDERING (.0002) --------------------------------------
+# The East/West split event was removed. The decision now unifies + renames
+# Anatolia and stops there (the emperor keeps one undivided k_anatolia). Its
+# helper effects (basileus_split_anatolia_effect /
+# basileus_recolor_eastern_anatolia_and_duchies_effect) and the k_eastern_anatolia
+# title remain defined but are no longer invoked. To un-shelve, restore the .0002
+# event block here and re-add the trigger_event in .0001's after block above.
+
+# =====================================================================
+# FRANCOGALLIA — merge offer (.0010) + rename (.0011)
+# ---------------------------------------------------------------------
+# Fired from the decision's Francogallia block (after basileus_francogallia_effect
+# has formed k_france + k_aquitaine). Mirrors the Anatolia .0001 pattern.
+# =====================================================================
+
+# --- FRANCOGALLIA: offer to merge Aquitaine under France --------------
+basileus_rearrange_kingdoms.0010 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_rearrange_kingdoms.0010.t
+	desc = basileus_rearrange_kingdoms.0010.desc
+	theme = emperor
+	override_background = ep3_city_gate
+
+	left_portrait = {
+		character = root
+		animation = thinking
+	}
+
+	# Fold the southern (Aquitanian) duchies under k_france, then rename.
+	option = {
+		name = basileus_rearrange_kingdoms.0010.a
+		basileus_merge_aquitaine_into_france_effect = yes
+		trigger_event = {
+			id = basileus_rearrange_kingdoms.0011
+			days = 2
+		}
+	}
+
+	# Keep the two crowns as separate catepanates (status quo).
+	option = {
+		name = basileus_rearrange_kingdoms.0010.b
+	}
+}
+
+# --- FRANCOGALLIA: name the reunited western crown --------------------
+# Only reached when the player chose to merge. Renames k_france; the name is
+# culture-dynamic on the emperor (greek gets the Greek form, everyone else the
+# Latin fallback), exactly as the Anatolia rename in .0001.
+basileus_rearrange_kingdoms.0011 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_rearrange_kingdoms.0011.t
+	desc = basileus_rearrange_kingdoms.0011.desc
+	theme = emperor
+	override_background = ep3_city_gate
+
+	left_portrait = {
+		character = root
+		animation = writing
+	}
+
+	# France — greek "Phrangia" / Latin "Francia".
+	option = {
+		name = basileus_rearrange_kingdoms.0011.a
+		if = {
+			limit = { culture = culture:greek }
+			title:k_france = { set_title_name = BASILEUS_FRANCE_NAME_GREEK }
+		}
+		else = {
+			title:k_france = { set_title_name = BASILEUS_FRANCE_NAME }
+		}
+	}
+
+	# Gallia — greek "Gallía" / Latin "Gallia".
+	option = {
+		name = basileus_rearrange_kingdoms.0011.b
+		if = {
+			limit = { culture = culture:greek }
+			title:k_france = { set_title_name = BASILEUS_GALLIA_NAME_GREEK }
+		}
+		else = {
+			title:k_france = { set_title_name = BASILEUS_GALLIA_NAME }
+		}
+	}
+
+	# Baguettia — easter egg, only shown to a lunatic emperor (icon on the label).
+	option = {
+		name = basileus_rearrange_kingdoms.0011.c
+		trigger = { has_trait = lunatic }
+		title:k_france = { set_title_name = BASILEUS_BAGUETTIA_NAME }
+	}
+}

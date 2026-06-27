@@ -1,0 +1,622 @@
+###########################################################
+# BASILEUS â€” THE TWO EMPERORS (Zweikaiserproblem)
+# ---------------------------------------------------------
+# The 871 dispute of Basil I and Louis II, made playable from the Byzantine
+# side against the holder of e_hre. Driven by story_two_emperors_dispute.
+#
+#   .0001  The snub from the West (fired by the story on_setup).
+#   .0002  First rebuttal â€” choose the primary Roman argument (sets heat).
+#   .0003  The rival's reply (Louis's real counter-arguments).
+#   .0004  Second rebuttal â€” how hard to press (sets heat).
+#   .0005  The quarrel spreads through Christendom.
+#   .0006  The Reckoning â€” the climax fork (war / demand precedence / desist).
+#   .0007  War declared â€” the Basileus's court (CB on_declaration).
+#   .0008  War declared â€” the Western court (CB on_declaration).
+#   .0010  War won â€” the false empire dissolved.
+#   .0011  War lost / white peace â€” the dispute fails.
+#   .0020  The demand for precedence â€” the Western emperor decides (AI).
+#   .0021  He refuses â€” war or swallow the insult.
+#   .0022  He concedes â€” the Basileus is acknowledged senior emperor.
+#   .0030  Vindication â€” the rival empire fell by other hands.
+#
+# Heat lives in the global basileus_two_emperors_heat; the disputing Basileus
+# in basileus_two_emperors_challenger. Root = the Basileus unless noted.
+###########################################################
+namespace = basileus_two_emperors
+
+###########################################################
+# 0001 â€” A Letter from the West. The pretender styles the Basileus
+# "Rex Graecorum" and signs himself Emperor of the Romans.
+###########################################################
+basileus_two_emperors.0001 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0001.t
+	desc = {
+		# A Latin-speaking Basileus (eastern_roman / western_roman / renamed
+		# "Roman") is sneered at as a Greek AND has his Latin revival mocked.
+		first_valid = {
+			triggered_desc = {
+				trigger = { culture = { has_cultural_pillar = language_latin } }
+				desc = basileus_two_emperors.0001.desc.latin
+			}
+			desc = basileus_two_emperors.0001.desc
+		}
+	}
+	theme = emperor
+	override_background = ep3_constantinople
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = writing
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+		if = {
+			limit = { exists = character:70523 }
+			character:70523 = { save_scope_as = constantine }
+		}
+	}
+
+	option = {
+		name = basileus_two_emperors.0001.a
+		# The chancery is summoned to draft a fitting reply.
+	}
+}
+
+###########################################################
+# 0002 â€” The First Rebuttal. The Basileus dictates his answer; the chosen
+# argument sets the tenor of the whole quarrel (heat).
+###########################################################
+basileus_two_emperors.0002 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0002.t
+	desc = basileus_two_emperors.0002.desc
+	theme = emperor
+	override_background = ep3_hippodrome
+
+	left_portrait = {
+		character = root
+		animation = writing
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = disapproval
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}		
+		if = {
+			limit = { exists = character:70523 }
+			character:70523 = { save_scope_as = constantine }
+		}		
+	}
+
+	# (a) Unbroken succession & New Rome â€” measured, legalistic. Low heat.
+	option = {
+		name = basileus_two_emperors.0002.a
+		add_prestige = major_prestige_value
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+		set_global_variable = { name = basileus_two_emperors_p1_done value = yes }
+	}
+
+	# (b) Return the snub â€” "You are but a King of the Franks." Medium heat.
+	option = {
+		name = basileus_two_emperors.0002.b
+		add_prestige = major_prestige_value
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+		set_global_variable = { name = basileus_two_emperors_p1_done value = yes }
+	}
+
+	# (c) Deny the Pope â€” "No bishop's oil makes an Emperor." Medium heat.
+	option = {
+		name = basileus_two_emperors.0002.c
+		add_prestige = major_prestige_value
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+		set_global_variable = { name = basileus_two_emperors_p1_done value = yes }
+	}
+
+	# (d) The charge of heresy â€” Filioque & azymes. High heat.
+	option = {
+		name = basileus_two_emperors.0002.d
+		add_piety = major_piety_gain
+		change_global_variable = { name = basileus_two_emperors_heat add = 2 }
+		set_global_variable = { name = basileus_two_emperors_p1_done value = yes }
+	}
+}
+
+###########################################################
+# 0003 â€” The Rival's Reply. Louis's real arguments: papal anointing as
+# christus Domini; the Greeks abandoned Rome, the seat, the nation and the
+# Latin tongue; emperors have come from many peoples â€” Theodosius the Spaniard.
+###########################################################
+basileus_two_emperors.0003 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0003.t
+	desc = {
+		# The "you abandoned Latin" charge is void against a Latin-speaking
+		# Basileus, so the rival pivots to calling the revival a recent sham.
+		first_valid = {
+			triggered_desc = {
+				trigger = { culture = { has_cultural_pillar = language_latin } }
+				desc = basileus_two_emperors.0003.desc.latin
+			}
+			desc = basileus_two_emperors.0003.desc
+		}
+	}
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = war_defender
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+		if = {
+			limit = { exists = character:70534 }
+			character:70534 = { save_scope_as = theodosius }
+		}		
+	}
+
+	option = {
+		name = basileus_two_emperors.0003.a
+		# The insolence is noted; the chancery sharpens its pens once more.
+	}
+}
+
+###########################################################
+# 0004 â€” The Second Rebuttal. How hard shall the Basileus press? Sets heat.
+###########################################################
+basileus_two_emperors.0004 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0004.t
+	desc = {
+		# Latin-speaking Basileus answers the "sham revival" sneer instead.
+		first_valid = {
+			triggered_desc = {
+				trigger = { culture = { has_cultural_pillar = language_latin } }
+				desc = basileus_two_emperors.0004.desc.latin
+			}
+			desc = basileus_two_emperors.0004.desc
+		}
+	}
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = schadenfreude
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = thinking
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+	}
+
+	# (a) Press the historical-legal case calmly. Low heat.
+	option = {
+		name = basileus_two_emperors.0004.a
+		add_prestige = minor_prestige_value
+		change_global_variable = { name = basileus_two_emperors_heat add = 0 }
+		set_global_variable = { name = basileus_two_emperors_p2_done value = yes }
+	}
+
+	# (b) Mock his coronation "by a bishop's hand." Medium heat.
+	option = {
+		name = basileus_two_emperors.0004.b
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+		set_global_variable = { name = basileus_two_emperors_p2_done value = yes }
+	}
+
+	# (c) Threaten â€” the tagmata and the dromons remember Bari. High heat.
+	option = {
+		name = basileus_two_emperors.0004.c
+		change_global_variable = { name = basileus_two_emperors_heat add = 2 }
+		set_global_variable = { name = basileus_two_emperors_p2_done value = yes }
+	}
+
+	# (e) Latin-only: rebut the "sham revival" charge â€” our Latin is no costume.
+	option = {
+		name = basileus_two_emperors.0004.e
+		trigger = { culture = { has_cultural_pillar = language_latin } }
+		add_prestige = minor_prestige_value
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+		set_global_variable = { name = basileus_two_emperors_p2_done value = yes }
+	}
+}
+
+###########################################################
+# 0005 â€” The Quarrel Spreads. The letters are copied and read in every court;
+# the Pope is uneasy, the Latin rite murmurs, the Magnaura seethes.
+###########################################################
+basileus_two_emperors.0005 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0005.t
+	desc = basileus_two_emperors.0005.desc
+	theme = emperor
+	override_background = ep3_holy_site_orthodox
+
+	left_portrait = {
+		character = root
+		animation = personality_zealous
+	}
+	right_portrait = {
+		character = scope:pope
+		animation = chess_cocky
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			title:k_papal_state.holder = { save_scope_as = pope }
+		}
+	}
+
+	# (a) Hold a measured, statesmanlike line. Cools the quarrel.
+	option = {
+		name = basileus_two_emperors.0005.a
+		change_global_variable = { name = basileus_two_emperors_heat add = -1 }
+	}
+
+	# (b) Inflame it from the ambo of Hagia Sophia. Heats the quarrel.
+	option = {
+		name = basileus_two_emperors.0005.b
+		add_piety = minor_piety_gain
+		change_global_variable = { name = basileus_two_emperors_heat add = 1 }
+	}
+}
+
+###########################################################
+# 0006 â€” The Reckoning. The quarrel can no longer be carried on with ink.
+# War, a demand for submission, or let the matter rest.
+###########################################################
+basileus_two_emperors.0006 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0006.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { global_var:basileus_two_emperors_heat >= 4 }
+				desc = basileus_two_emperors.0006.desc.hot
+			}
+			triggered_desc = {
+				trigger = { global_var:basileus_two_emperors_heat <= 1 }
+				desc = basileus_two_emperors.0006.desc.cold
+			}
+			desc = basileus_two_emperors.0006.desc
+		}
+	}
+	theme = emperor
+	override_background = ep3_hippodrome_track
+
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = disappointed
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+	}
+
+	# Draw the sword â€” unlock the Imperial Supremacy war against the e_hre holder.
+	option = {
+		name = basileus_two_emperors.0006.a
+		set_global_variable = { name = basileus_two_emperors_war_unlocked value = yes }
+		custom_tooltip = basileus_two_emperors_war_unlocked_tt
+	}
+
+	# Demand that he bend the knee and renounce the Roman name.
+	option = {
+		name = basileus_two_emperors.0006.b
+		trigger = { exists = title:e_hre.holder }
+		title:e_hre.holder = { trigger_event = basileus_two_emperors.0020 }
+		custom_tooltip = basileus_two_emperors_demand_sent_tt
+	}
+
+	# Let the matter rest â€” back down, and swallow the loss of face.
+	option = {
+		name = basileus_two_emperors.0006.c
+		basileus_two_emperors_fail_effect = yes
+	}
+}
+
+###########################################################
+# 0007 â€” War declared: the Basileus's court (CB on_declaration, root=attacker).
+###########################################################
+basileus_two_emperors.0007 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_two_emperors.0007.t
+	desc = basileus_two_emperors.0007.desc
+	theme = war
+	override_background = ep3_constantinople
+
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+	}
+
+	option = {
+		name = basileus_two_emperors.0007.a
+	}
+}
+
+###########################################################
+# 0008 â€” War declared: the Western court (CB on_declaration, root=defender).
+###########################################################
+basileus_two_emperors.0008 = {
+	type = character_event
+	title = basileus_two_emperors.0008.t
+	desc = basileus_two_emperors.0008.desc
+	theme = war
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = global_var:basileus_two_emperors_challenger }
+			global_var:basileus_two_emperors_challenger = { save_scope_as = basileus }
+		}
+	}
+
+	option = {
+		name = basileus_two_emperors.0008.a
+	}
+}
+
+###########################################################
+# 0010 â€” Victory. The Holy Roman Empire is dissolved; the Basileus stands as
+# the one Roman Emperor of the world. (Rewards applied by the CB on_victory.)
+###########################################################
+basileus_two_emperors.0010 = {
+	type = character_event
+	title = basileus_two_emperors.0010.t
+	desc = basileus_two_emperors.0010.desc
+	theme = emperor
+	window = basileus_imperial_solo
+	override_background = ep3_hippodrome
+	override_effect_2d = { reference = legend_glow }
+
+	left_portrait = {
+		character = root
+		animation = idle
+	}	
+
+	option = {
+		name = basileus_two_emperors.0010.a
+		add_prestige = massive_prestige_value
+	}
+}
+
+###########################################################
+# 0011 â€” The dispute fails (white peace or defeat in the supremacy war).
+###########################################################
+basileus_two_emperors.0011 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_two_emperors.0011.t
+	desc = basileus_two_emperors.0011.desc
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = sadness
+	}
+
+	option = {
+		name = basileus_two_emperors.0011.a
+	}
+}
+
+###########################################################
+# 0020 â€” The Demand for Precedence. The Western emperor must choose: concede
+# the Basileus's seniority, or refuse. Root = the e_hre holder (AI).
+###########################################################
+basileus_two_emperors.0020 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0020.t
+	desc = basileus_two_emperors.0020.desc
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = thinking
+	}
+	right_portrait = {
+		character = scope:basileus
+		animation = personality_bold
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = global_var:basileus_two_emperors_challenger }
+			global_var:basileus_two_emperors_challenger = { save_scope_as = basileus }
+		}
+	}
+
+	# Concede precedence â€” acknowledge the senior Roman Emperor.
+	option = {
+		name = basileus_two_emperors.0020.a
+		ai_chance = {
+			base = 35
+			modifier = { add = 25  scope:basileus = { prestige_level >= 4 } }
+			modifier = { add = 20  has_trait = content }
+			modifier = { add = 20  has_trait = craven }
+			modifier = { add = 15  has_trait = humble }
+			modifier = { add = 15  global_var:basileus_two_emperors_heat >= 2  global_var:basileus_two_emperors_heat <= 3 }
+			modifier = { add = 20  is_at_war = yes }
+			modifier = { add = -25  global_var:basileus_two_emperors_heat >= 5 }
+			modifier = { add = -30  OR = { has_trait = ambitious  has_trait = brave  has_trait = arrogant } }
+		}
+		if = {
+			limit = { exists = scope:basileus }
+			scope:basileus = { trigger_event = basileus_two_emperors.0022 }
+		}
+	}
+
+	# Refuse â€” "I am Emperor by the grace of God and Saint Peter!"
+	option = {
+		name = basileus_two_emperors.0020.b
+		ai_chance = {
+			base = 50
+			modifier = { add = 30  OR = { has_trait = ambitious  has_trait = brave  has_trait = arrogant } }
+			modifier = { add = 25  global_var:basileus_two_emperors_heat >= 5 }
+			modifier = { add = -20  scope:basileus = { prestige_level >= 4 } }
+			modifier = { add = -15  has_trait = craven }
+		}
+		if = {
+			limit = { exists = scope:basileus }
+			scope:basileus = { trigger_event = basileus_two_emperors.0021 }
+		}
+	}
+}
+
+###########################################################
+# 0021 â€” He refuses. War, or swallow the insult. Root = the Basileus.
+###########################################################
+basileus_two_emperors.0021 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0021.t
+	desc = basileus_two_emperors.0021.desc
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = anger
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = anger
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+	}
+
+	# Then it shall be war â€” unlock the Imperial Supremacy casus belli.
+	option = {
+		name = basileus_two_emperors.0021.a
+		set_global_variable = { name = basileus_two_emperors_war_unlocked value = yes }
+		custom_tooltip = basileus_two_emperors_war_unlocked_tt
+	}
+
+	# Swallow the insult â€” the matter is dropped, at a cost to our standing.
+	option = {
+		name = basileus_two_emperors.0021.b
+		basileus_two_emperors_fail_effect = yes
+	}
+}
+
+###########################################################
+# 0022 â€” He concedes. The Basileus is acknowledged senior emperor.
+# (Reward + resolution applied here.) Root = the Basileus.
+###########################################################
+basileus_two_emperors.0022 = {
+	type = character_event
+	window = basileus_imperial_confrontation
+	title = basileus_two_emperors.0022.t
+	desc = basileus_two_emperors.0022.desc
+	theme = emperor
+	override_background = { reference = throne_room }
+	override_effect_2d = { reference = legend_glow }
+
+	left_portrait = {
+		character = root
+		animation = ecstasy
+	}
+	right_portrait = {
+		character = scope:rival
+		animation = sadness
+	}
+
+	immediate = {
+		if = {
+			limit = { exists = title:e_hre.holder }
+			title:e_hre.holder = { save_scope_as = rival }
+		}
+		basileus_two_emperors_concede_precedence_effect = yes
+	}
+
+	option = {
+		name = basileus_two_emperors.0022.a
+	}
+}
+
+###########################################################
+# 0030 â€” Vindication. The Holy Roman Empire fell by other hands before the
+# matter was settled; the question answers itself. Root = the Basileus.
+###########################################################
+basileus_two_emperors.0030 = {
+	type = character_event
+	window = basileus_imperial_solo
+	title = basileus_two_emperors.0030.t
+	desc = basileus_two_emperors.0030.desc
+	theme = emperor
+	override_background = { reference = throne_room }
+
+	left_portrait = {
+		character = root
+		animation = idle
+	}
+
+	option = {
+		name = basileus_two_emperors.0030.a
+	}
+}
