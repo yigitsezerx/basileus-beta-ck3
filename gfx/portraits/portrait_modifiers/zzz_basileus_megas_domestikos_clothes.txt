@@ -1,0 +1,86 @@
+# ============================================================================
+# Megas Domestikos — wears MILITARY armor, alive or dead.
+# ----------------------------------------------------------------------------
+# Priority 5 sits above vanilla armor (priority 4) and royalty clothing
+# (priority 1). For anyone who is NOT the Grand Marshal the only entry has weight
+# 0, so the normal vanilla clothing applies. For the Grand Marshal / Megas
+# Domestikos (alive or dead), they wear Byzantine military armor.
+# ============================================================================
+
+basileus_megas_domestikos_clothes = {
+	usage = game
+	selection_behavior = weighted_random
+	priority = 5
+
+	# --- Pre-EP3: classic byzantine war nobility armor -------------------
+	basileus_md_war_pre_ep3 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = byzantine_war_nobility_clothes
+				accessory = m_clothes_sec_byzantine_war_nob_01_hi
+			}
+		}
+		outfit_tags = { military_outfit }
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				NOT = { has_ep3_dlc_trigger = yes }
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 1 ----------------------------------------------------------
+	basileus_md_war_era1 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = ep3_byzantine_era1_war_nobility_clothes
+				accessory = m_clothes_sec_ep3_byzantine_era1_war_nob_01
+			}
+		}
+		outfit_tags = { military_outfit }
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				portrait_era1_trigger = yes
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 2+ ---------------------------------------------------------
+	basileus_md_war_era2 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = ep3_byzantine_era2_war_nobility_clothes
+				accessory = m_clothes_sec_ep3_byzantine_era2_war_nob_01_hi
+			}
+		}
+		outfit_tags = { military_outfit }
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				OR = {
+					portrait_era2_trigger = yes
+					portrait_era3_trigger = yes
+					portrait_era4_trigger = yes
+				}
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+}

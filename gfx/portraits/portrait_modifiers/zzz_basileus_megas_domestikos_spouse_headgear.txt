@@ -1,0 +1,31 @@
+# ============================================================================
+# Megas Domestikos Spouse — wears NO crowns or royal headgear.
+# ----------------------------------------------------------------------------
+# Priority 5 sits above vanilla headgear (priority 4) and royalty headgear
+# (priority 1). Strips any headgear/crowns so they are depicted with no headgear,
+# both in life and death.
+# ============================================================================
+
+basileus_megas_domestikos_spouse_headgear = {
+	usage = game
+	selection_behavior = weighted_random
+	priority = 5
+
+	basileus_md_spouse_no_headgear = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = headgear
+				template = no_headgear
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_character_flag = basileus_megas_domestikos_spouse
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+}

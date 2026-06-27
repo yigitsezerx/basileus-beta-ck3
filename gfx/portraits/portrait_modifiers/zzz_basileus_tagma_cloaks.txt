@@ -1,0 +1,111 @@
+# ============================================================================
+# Megas Domestikos — no cloak (pairs with the military outfit).
+# ----------------------------------------------------------------------------
+# Priority 7 sits above the vanilla cloak groups (priority 5/6). For anyone who
+# is NOT the Grand Marshal the only entry has weight 0, so the whole group is
+# skipped and the normal vanilla cloak applies. For the Grand Marshal / Megas
+# Domestikos the no_cloak template wins, removing the court cloak.
+# ============================================================================
+
+basileus_tagma_cloak = {
+	usage = game
+	selection_behavior = weighted_random
+	priority = 7
+
+	basileus_megas_domestikos_no_cloak = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = no_cloak
+				range = { 0 1 }
+			}
+		}
+		outfit_tags = { no_cloak }
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				OR = {
+					has_council_position = minister_grand_marshal
+					has_title = title:k_megas_domestikos
+					has_character_flag = basileus_is_megas_domestikos
+				}
+				# But NOT the emperor: when the title transiently parks on the top
+				# liege (between a marshal losing the seat and the office being
+				# re-granted), he must keep his imperial court cloak, not strip it.
+				NOT = { is_independent_ruler = yes }
+			}
+		}
+	}
+
+	# --- Spouse: pre-EP3 era (no cloak) -------------------------------------
+	basileus_md_spouse_cloak_pre_ep3 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = no_cloak
+				range = { 0 1 }
+			}
+		}
+		outfit_tags = { no_cloak }
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				NOT = { has_ep3_dlc_trigger = yes }
+				has_character_flag = basileus_megas_domestikos_spouse
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+
+	# --- Spouse: EP3 era 1 high-nobility cloak -----------------------------
+	basileus_md_spouse_cloak_era1 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = ep3_byzantine_era1_nob
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				portrait_era1_trigger = yes
+				has_character_flag = basileus_megas_domestikos_spouse
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+
+	# --- Spouse: EP3 era 2+ high-nobility cloak ----------------------------
+	basileus_md_spouse_cloak_era2 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = cloaks
+				template = ep3_byzantine_era2_nob
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				OR = {
+					portrait_era2_trigger = yes
+					portrait_era3_trigger = yes
+					portrait_era4_trigger = yes
+				}
+				has_character_flag = basileus_megas_domestikos_spouse
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+}

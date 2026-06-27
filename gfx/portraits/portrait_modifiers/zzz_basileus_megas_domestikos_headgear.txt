@@ -1,0 +1,83 @@
+# ============================================================================
+# Megas Domestikos — wears HIGH-NOBILITY headgear, never royal crowns.
+# ----------------------------------------------------------------------------
+# Priority 5 sits above vanilla headgear (priority 4) and royalty headgear
+# (priority 1). Only applies when NOT wearing active battle armor (so they still
+# wear their military helmets when leading an army, but wear high-noble hats
+# or no headgear at court and in death).
+# ============================================================================
+
+basileus_megas_domestikos_headgear = {
+	usage = game
+	selection_behavior = weighted_random
+	priority = 5
+
+	# --- Pre-EP3: classic byzantine high nobility headgear -------------------
+	basileus_md_headgear_pre_ep3 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = headgear
+				template = byzantine_high_nobility_headgear
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				NOT = { has_ep3_dlc_trigger = yes }
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_wear_armor_trigger = no
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 1 ----------------------------------------------------------
+	basileus_md_headgear_era1 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = headgear
+				template = ep3_byzantine_era1_high_nobility_headgear
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				portrait_era1_trigger = yes
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_wear_armor_trigger = no
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 2+ ---------------------------------------------------------
+	basileus_md_headgear_era2 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = headgear
+				template = ep3_byzantine_era2_high_nobility_headgear
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				OR = {
+					portrait_era2_trigger = yes
+					portrait_era3_trigger = yes
+					portrait_era4_trigger = yes
+				}
+				has_character_flag = basileus_is_megas_domestikos
+				portrait_wear_armor_trigger = no
+				portrait_byzantine_clothing_trigger = yes
+			}
+		}
+	}
+}

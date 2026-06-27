@@ -1,0 +1,106 @@
+# ============================================================================
+# Megas Domestikos — spouse wears HIGH-NOBLE clothes, not imperial/royal garb.
+# ----------------------------------------------------------------------------
+# k_megas_domestikos is a kingdom-tier titular title used as the standing-army
+# command anchor. That fools the vanilla clothing system: in
+# portrait_royalty_trigger (00_clothing_triggers.txt) the "Spouses" branch gives
+# a consort royal clothes when their primary_spouse counts as a king via
+# tgp_portrait_liege_or_ceremonial_liege_king_trigger — which is true for the
+# Megas Domestikos purely because his highest held title is kingdom-tier. The
+# holder himself escapes it (he wears military armor, a higher-priority gene),
+# but his spouse falls through to empress/royalty clothes.
+#
+# This group sits at priority 2 — just above vanilla clothes_base (priority 1) —
+# and, for a byzantine-clothed consort married to the Megas Domestikos, re-applies
+# the byzantine HIGH-NOBILITY clothes (the office is a great officer of state, not
+# real royalty). Era-aware, mirroring the vanilla byzantine_high_nobles /
+# ep3_byzantine_era1/2_high_nobles entries it replaces.
+#
+# For everyone else every entry has weight 0, so the whole group is skipped and
+# the normal vanilla clothing applies (same idiom as zzz_basileus_tagma_cloaks).
+#
+# Guards:
+#   * primary_spouse holds k_megas_domestikos and is NOT independent — skips the
+#     transient case where the title parks on the emperor between marshals (his
+#     empress must keep her imperial garb).
+#   * the consort is not themselves kingdom-tier+ — never demote a genuine royal.
+#   * byzantine clothing style only (greek / eastern_roman), so the templates fit.
+# ============================================================================
+
+basileus_megas_domestikos_spouse_clothes = {
+	usage = game
+	selection_behavior = weighted_random
+	priority = 2
+
+	# --- Pre-EP3: classic byzantine high-nobility clothes -------------------
+	basileus_md_spouse_high_noble_pre_ep3 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = byzantine_high_nobility_clothes
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				NOT = { has_ep3_dlc_trigger = yes }
+				has_character_flag = basileus_megas_domestikos_spouse
+				NOT = { highest_held_title_tier >= tier_kingdom }
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 1 ----------------------------------------------------------
+	basileus_md_spouse_high_noble_era1 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = ep3_byzantine_era1_high_nobility_clothes
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				portrait_era1_trigger = yes
+				has_character_flag = basileus_megas_domestikos_spouse
+				NOT = { highest_held_title_tier >= tier_kingdom }
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+
+	# --- EP3 era 2+ ---------------------------------------------------------
+	basileus_md_spouse_high_noble_era2 = {
+		dna_modifiers = {
+			accessory = {
+				mode = add
+				gene = clothes
+				template = ep3_byzantine_era2_high_nobility_clothes
+				range = { 0 1 }
+			}
+		}
+		weight = {
+			base = 0
+			modifier = {
+				add = 1000
+				has_ep3_dlc_trigger = yes
+				OR = {
+					portrait_era2_trigger = yes
+					portrait_era3_trigger = yes
+					portrait_era4_trigger = yes
+				}
+				has_character_flag = basileus_megas_domestikos_spouse
+				NOT = { highest_held_title_tier >= tier_kingdom }
+				portrait_byzantine_clothing_spouse_trigger = yes
+			}
+		}
+	}
+}
