@@ -1,0 +1,160 @@
+# =====================================================================
+# BASILEUS — DEBUG / TEST EFFECTS (safe to delete before release)
+# ---------------------------------------------------------------------
+# Console usage (needs -debug_mode):
+#   1. Optionally click a character on the map to target them; otherwise
+#      the effect runs on the player.
+#   2. Open the console (`) and type one of:
+#         effect basileus_debug_give_justinian_ere = yes
+#         effect basileus_debug_give_roman_empire_iki = yes
+#         effect basileus_debug_form_theme_pannonia = yes
+#         effect basileus_debug_form_theme_noricum = yes
+#         effect basileus_debug_form_theme_raetia = yes
+#         effect basileus_debug_form_theme_mauretania = yes
+#
+# The give_* effects grant the runner (root) every county title in their region
+# — i.e. take direct control of the whole region for testing. They use a single
+# title-and-vassal change so baronies/holdings transfer cleanly.
+#
+# form_theme_* wire up a new kingdom (declared in common/landed_titles/): they
+# set its de jure tree and grant the title to the runner.
+# =====================================================================
+
+basileus_debug_give_justinian_ere = {
+	create_title_and_vassal_change = {
+		type = conquest
+		save_scope_as = basileus_debug_ere_change
+		add_claim_on_loss = no
+	}
+	every_county_in_region = {
+		region = custom_justinian_ere
+		limit = {
+			exists = holder
+			NOT = { holder = root }
+		}
+		change_title_holder = {
+			holder = root
+			change = scope:basileus_debug_ere_change
+		}
+	}
+	resolve_title_and_vassal_change = scope:basileus_debug_ere_change
+}
+
+basileus_debug_give_roman_empire_iki = {
+	create_title_and_vassal_change = {
+		type = conquest
+		save_scope_as = basileus_debug_iki_change
+		add_claim_on_loss = no
+	}
+	every_county_in_region = {
+		region = custom_roman_empire_iki
+		limit = {
+			exists = holder
+			NOT = { holder = root }
+		}
+		change_title_holder = {
+			holder = root
+			change = scope:basileus_debug_iki_change
+		}
+	}
+	resolve_title_and_vassal_change = scope:basileus_debug_iki_change
+}
+
+# Form the Pannonia theme: wire k_pannonia's de jure tree and grant it to root.
+#   k_pannonia                 -> de jure under e_byzantium
+#   d_slavonia/d_somogy/d_gyor -> de jure under k_pannonia
+#   c_szerem                   -> d_slavonia (south)
+#   c_szekesfehervar/c_visegrad/c_esztergom/c_komarom -> d_gyor (central)
+# k_pannonia must already exist (declared in landed_titles); this only rewires
+# de jure (set_de_jure_liege_title respects the one-tier rule) and grants it.
+basileus_debug_form_theme_pannonia = {
+	# Delegates to the real theme effect (single source of truth) so console
+	# testing always matches what the Restructure-the-Themes decision does.
+	basileus_form_theme_pannonia_effect = yes
+}
+
+# Form the Noricum theme: wire k_noricum's de jure tree and grant it to root.
+#   k_noricum                                       -> de jure under e_byzantium
+#   d_steyermark/d_krain/d_carinthia/d_salzburg     -> de jure under k_noricum
+#   c_vienna/c_sankt_polten/c_amstetten             -> d_steyermark (already their
+#                                                      duchy; set explicitly for clarity)
+basileus_debug_form_theme_noricum = {
+	# Delegates to the real theme effect (single source of truth).
+	basileus_form_theme_noricum_effect = yes
+}
+
+basileus_debug_form_theme_raetia = {
+	# Delegates to the real theme effect (single source of truth).
+	basileus_form_theme_raetia_effect = yes
+}
+
+# Merged Raetia + Noricum -> k_bavaria (the live widget; the two effects above are
+# the now-unwired legacy versions, kept for reference/standalone testing).
+basileus_debug_form_theme_bavaria = {
+	basileus_form_theme_bavaria_effect = yes
+}
+
+basileus_debug_form_theme_mauretania = {
+	# Delegates to the real theme effect (single source of truth).
+	basileus_form_theme_mauretania_effect = yes
+}
+
+basileus_debug_give_custom_western_roman_hemisphere = {
+	create_title_and_vassal_change = {
+		type = conquest
+		save_scope_as = custom_western_roman_hemisphere_change
+		add_claim_on_loss = no
+	}
+	every_county_in_region = {
+		region = custom_western_roman_hemisphere
+		limit = {
+			exists = holder
+			NOT = { holder = root }
+		}
+		change_title_holder = {
+			holder = root
+			change = scope:custom_western_roman_hemisphere_change
+		}
+	}
+	resolve_title_and_vassal_change = scope:custom_western_roman_hemisphere_change
+}
+
+basileus_debug_give_custom_roman_reunification_region = {
+	create_title_and_vassal_change = {
+		type = conquest
+		save_scope_as = custom_roman_reunification_region_change
+		add_claim_on_loss = no
+	}
+	every_county_in_region = {
+		region = custom_roman_reunification_region
+		limit = {
+			exists = holder
+			NOT = { holder = root }
+		}
+		change_title_holder = {
+			holder = root
+			change = scope:custom_roman_reunification_region_change
+		}
+	}
+	resolve_title_and_vassal_change = scope:custom_roman_reunification_region_change
+}
+
+basileus_debug_give_custom_roman_francogallia = {
+	create_title_and_vassal_change = {
+		type = conquest
+		save_scope_as = custom_roman_francogallia_change
+		add_claim_on_loss = no
+	}
+	every_county_in_region = {
+		region = custom_roman_francogallia
+		limit = {
+			exists = holder
+			NOT = { holder = root }
+		}
+		change_title_holder = {
+			holder = root
+			change = scope:custom_roman_francogallia_change
+		}
+	}
+	resolve_title_and_vassal_change = scope:custom_roman_francogallia_change
+}

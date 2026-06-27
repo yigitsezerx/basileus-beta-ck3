@@ -1,0 +1,52 @@
+basileus_roman_world_update_top_participants_effect = {
+	save_scope_as = current_situation
+
+	# Clear variables
+	clear_variable = top_participant_1
+	clear_variable = top_participant_2
+	clear_variable = top_participant_3
+
+	situation_participant_group:romans = {
+		ordered_situation_group_participant = {
+			limit = {
+				is_independent_ruler = no
+			}
+			order_by = roman_world_participant_score
+			scope:current_situation = {
+				set_variable = {
+					name = top_participant_1
+					value = prev
+				}
+			}
+		}
+
+		ordered_situation_group_participant = {
+			limit = {
+				is_independent_ruler = no
+				this != scope:current_situation.var:top_participant_1
+			}
+			order_by = roman_world_participant_score
+			scope:current_situation = {
+				set_variable = {
+					name = top_participant_2
+					value = prev
+				}
+			}
+		}
+
+		ordered_situation_group_participant = {
+			limit = {
+				is_independent_ruler = no
+				this != scope:current_situation.var:top_participant_1
+				this != scope:current_situation.var:top_participant_2
+			}
+			order_by = roman_world_participant_score
+			scope:current_situation = {
+				set_variable = {
+					name = top_participant_3
+					value = prev
+				}
+			}
+		}
+	}
+}

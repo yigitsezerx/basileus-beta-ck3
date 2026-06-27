@@ -1,0 +1,125 @@
+﻿# ============================================================================
+# Subject-contract obligation: the Tagma standing army (auto-scaling).
+# ----------------------------------------------------------------------------
+# Two levels only:
+#   _off  — silent no-op default for EVERY other admin vassal. It must NOT set
+#           enable_title_maa=no (that would disable title-MaA realm-wide).
+#   _on   — the Megas Domestikos: enables the office's title men-at-arms and marks
+#           it a military theme so it surfaces as a controllable imperial army.
+#
+# The army SIZE is not chosen here — it auto-scales with the realm's Imperial
+# Bureaucracy + Agrarian laws, applied by basileus_reconcile_tagma_effect. The
+# obligation is hidden (admin governments can't expose custom obligation levels
+# in the contract UI anyway). defaults_to_highest_valid_level makes the office
+# auto-take _on and everyone else _off.
+# ============================================================================
+
+basileus_tagma_maa = {
+	display_mode = hidden
+	defaults_to_highest_valid_level = yes
+
+	is_shown = {
+		scope:subject = {
+			has_title = title:k_megas_domestikos
+		}
+	}
+
+	obligation_levels = {
+		basileus_tagma_maa_off = {
+			position = { 0 0 }
+			default = yes
+
+			is_valid = {
+				scope:subject = {
+					NOT = { has_title = title:k_megas_domestikos }
+				}
+			}
+
+			# No enable_title_maa key here on purpose (see header).
+			ai_liege_desire = 0
+			ai_subject_desire = 0
+			score = 0
+
+			flag = basileus_tagma_obligation
+		}
+
+		basileus_tagma_maa_on = {
+			position = { 1 0 }
+			parent = basileus_tagma_maa_off
+
+			is_valid = {
+				scope:subject = {
+					has_title = title:k_megas_domestikos
+				}
+			}
+
+			enable_title_maa = yes
+
+			subject_modifier = {
+				# Generous title-MaA slot LIMIT + retention CAP + general MaA cap, so
+				# the office's army is never "over cap" (a second AI disband trigger).
+				# These must clear the FULL tagma (7 title regiments + 1 personal anchor
+				# = 8) AND overcome the roman_imperial_government's men_at_arms_cap = -2
+				# penalty, or create_maa_regiment silently drops the overflow regiments
+				# (this was the ~210-soldier partial-seed bug).
+				men_at_arms_title_limit = 10
+				men_at_arms_title_cap = 10
+				men_at_arms_cap = 12
+				# FREE upkeep for the holder. The Megas Domestikos is an AI vassal
+				# who OWNS this army and pays its maintenance; a large elite host
+				# would bankrupt a landless officer, so the AI disbands it. At -1.0
+				# (zero upkeep) the AI has no maintenance cost to recover.
+				men_at_arms_maintenance = -1.0
+				# Stipend so the office is always in surplus — removes any AI
+				# "balance the budget" impulse that could still drop the army.
+				monthly_income = 5
+
+				# --- ELITE QUALITY (the professional tagmata) -------------------
+				# A modest (~+25%) edge in damage/toughness/pursuit/screen across
+				# the four tagma unit categories. These are per-MaA-type modifiers,
+				# but the Megas Domestikos owns ONLY the standing tagma, so nothing
+				# else in the realm is affected — ordinary cultural cataphracts etc.
+				# recruited by other rulers stay at their base stats.
+				heavy_cavalry_damage_mult = 0.25
+				heavy_cavalry_toughness_mult = 0.25
+				heavy_cavalry_pursuit_mult = 0.25
+				heavy_cavalry_screen_mult = 0.25
+				pikemen_damage_mult = 0.25
+				pikemen_toughness_mult = 0.25
+				pikemen_pursuit_mult = 0.25
+				pikemen_screen_mult = 0.25
+				skirmishers_damage_mult = 0.25
+				skirmishers_toughness_mult = 0.25
+				skirmishers_pursuit_mult = 0.25
+				skirmishers_screen_mult = 0.25
+				archers_damage_mult = 0.25
+				archers_toughness_mult = 0.25
+				archers_pursuit_mult = 0.25
+				archers_screen_mult = 0.25
+
+				# Terrain/counter bonuses can't be edited per-type via character
+				# modifiers (they live in the unit-type definition). The closest
+				# clean proxy is a flat combat-advantage on the open ground the
+				# tagma is built to dominate. Again, only the office's own army is
+				# affected, since the holder fields only the tagma.
+				plains_advantage = 2
+				drylands_advantage = 2
+				hills_advantage = 2
+			}
+
+			ai_liege_desire = 0
+			ai_subject_desire = 0
+			score = 1
+
+			# Registers the office's title men-at-arms as a controllable military
+			# theme army in the emperor's Military window.
+			flag = admin_theme_military
+			flag = admin_martial_obligation_bonus
+			flag = basileus_tagma_obligation
+			# Unique marker for THIS obligation's active level (used by the reconcile
+			# pulse to verify the contract is applied — admin_theme_military alone is
+			# ambiguous because the vanilla theme also sets it).
+			flag = basileus_tagma_active
+		}
+	}
+}

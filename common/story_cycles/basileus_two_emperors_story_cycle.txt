@@ -1,0 +1,329 @@
+story_two_emperors_dispute = {
+	# The Zweikaiserproblem made playable: the Basileus disputes the Western
+	# (Holy Roman) emperor's pretension to the Roman name, in the manner of the
+	# 871 letters between Basil I and Louis II. Opened by the decision
+	# basileus_dispute_western_emperor_decision; on_setup fires the snub (.0001).
+	#
+	# Throne-bound, like the Bulgarian Gambit and Sole Roman cycles: it follows
+	# whoever reigns as Roman emperor. It ends when settled (war won → e_hre
+	# destroyed, or the rival concedes precedence), when abandoned/lost, or when
+	# the rival empire ceases to exist by other hands.
+	#
+	# Progression is time-driven through dispute_stage (panel counter); the
+	# player's rhetorical choices accumulate basileus_two_emperors_heat (a global)
+	# which steers the climax and the rival's willingness to concede.
+	visible = yes
+	icon = {
+		reference = "gfx/interface/icons/government_types/roman_imperial_double_headed.dds"
+	}
+	background = {
+		reference = "gfx/interface/illustrations/event_scenes/ep3_byzantine_throne_room.dds"
+	}
+	visualization = {
+		custom_string_key = "TWO_EMPERORS_INFO_STRING"
+		character = {
+			variable_name = "the_basileus"
+			label = "TE_BASILEUS"
+		}		
+		character = {
+			variable_name = "the_rival"
+			label = "TE_RIVAL"
+		}
+		character = {
+			variable_name = "the_pope"
+			label = "TE_POPE"
+		}
+		basic_counter = {
+			variable_name = "dispute_stage"
+			min = 0
+			max = 5
+			label = "TE_PROGRESS"
+			min_label = "TE_PROGRESS_MIN"
+			max_label = "TE_PROGRESS_MAX"
+		}
+		title = {
+			variable_name = "hre_title"
+			label = "HRE_REALM"
+		}		
+	}
+
+	on_setup = {
+		set_variable = { name = dispute_stage value = 0 }
+		set_variable = { name = hre_title value = title:e_hre }
+		set_global_variable = { name = basileus_two_emperors_heat value = 0 }
+		set_global_variable = { name = basileus_two_emperors_challenger value = story_owner }
+		if = {
+			limit = { exists = title:e_hre.holder }
+			set_variable = { name = the_rival value = title:e_hre.holder }
+		}
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			set_variable = { name = the_pope value = title:k_papal_state.holder }
+		}		
+		if = {
+			limit = {
+				OR = {
+					exists = title:e_byzantium.holder
+					exists = title:h_roman_empire.holder
+					exists = title:h_eastern_roman_empire.holder
+				}
+			}
+			set_variable = { name = the_basileus value = title:e_byzantium.holder }
+		}
+		# The provocation from the West arrives.
+		story_owner = { trigger_event = basileus_two_emperors.0001 }
+	}
+
+	on_end = {
+		# Tidy the per-dispute transient globals. The win/lose markers are
+		# handled by the resolution effects; clear the retryable "failed" flag so
+		# a future dispute (a new HRE) starts clean. "resolved" is permanent.
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_war_unlocked }
+			remove_global_variable = basileus_two_emperors_war_unlocked
+		}
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_heat }
+			remove_global_variable = basileus_two_emperors_heat
+		}
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_challenger }
+			remove_global_variable = basileus_two_emperors_challenger
+		}
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_p1_done }
+			remove_global_variable = basileus_two_emperors_p1_done
+		}
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_p2_done }
+			remove_global_variable = basileus_two_emperors_p2_done
+		}
+		if = {
+			limit = { has_global_variable = basileus_two_emperors_failed }
+			remove_global_variable = basileus_two_emperors_failed
+		}
+	}
+
+	# Throne-bound: pass the quarrel to the next Roman emperor rather than ending.
+	on_owner_death = {
+		if = {
+			limit = {
+				exists = title:e_byzantium.holder
+				title:e_byzantium.holder = { is_alive = yes }
+			}
+			make_story_owner = title:e_byzantium.holder
+		}
+		else_if = {
+			limit = {
+				exists = title:h_roman_empire.holder
+				title:h_roman_empire.holder = { is_alive = yes }
+			}
+			make_story_owner = title:h_roman_empire.holder
+		}
+		else_if = {
+			limit = {
+				exists = title:h_eastern_roman_empire.holder
+				title:h_eastern_roman_empire.holder = { is_alive = yes }
+			}
+			make_story_owner = title:h_eastern_roman_empire.holder
+		}
+		else = { end_story = yes }
+	}
+
+	# Keep the quarrel bound to whoever reigns as Roman emperor.
+	effect_group = {
+		days = 30
+		trigger = {
+			OR = {
+				AND = {
+					exists = title:e_byzantium.holder
+					NOT = { story_owner = title:e_byzantium.holder }
+				}
+				AND = {
+					NOT = { exists = title:e_byzantium.holder }
+					exists = title:h_roman_empire.holder
+					NOT = { story_owner = title:h_roman_empire.holder }
+				}
+			}
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				if = {
+					limit = { exists = title:e_byzantium.holder }
+					make_story_owner = title:e_byzantium.holder
+				}
+				else_if = {
+					limit = { exists = title:h_roman_empire.holder }
+					make_story_owner = title:h_roman_empire.holder
+				}
+				set_global_variable = { name = basileus_two_emperors_challenger value = story_owner }
+			}
+		}
+	}
+
+	# Panel refresh — keep the tracked rival and Pope current.
+	effect_group = {
+		days = 30
+		trigger = { always = yes }
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				if = {
+					limit = {
+						OR = {
+							exists = title:e_byzantium.holder
+							exists = title:h_roman_empire.holder
+							exists = title:h_eastern_roman_empire.holder
+						}
+					}
+					set_variable = { name = the_basileus value = title:e_byzantium.holder }
+				}				
+				if = {
+					limit = { exists = title:e_hre.holder }
+					set_variable = { name = the_rival value = title:e_hre.holder }
+				}
+				if = {
+					limit = { exists = title:k_papal_state.holder }
+					set_variable = { name = the_pope value = title:k_papal_state.holder }
+				}	
+			}
+		}
+	}
+
+	# End backstop — once the dispute is settled (won) or has failed/lapsed,
+	# close the story for good.
+	effect_group = {
+		days = 7
+		trigger = {
+			OR = {
+				has_global_variable = basileus_two_emperors_resolved
+				has_global_variable = basileus_two_emperors_failed
+			}
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = { end_story = yes }
+		}
+	}
+
+	# Guard — the owner is no longer a Roman emperor (deposed, empire dissolved
+	# with no successor). The quarrel lapses.
+	effect_group = {
+		days = 30
+		trigger = {
+			NOT = { has_global_variable = basileus_two_emperors_resolved }
+			NOT = { has_global_variable = basileus_two_emperors_failed }
+			story_owner = { basileus_is_roman_emperor_trigger = no }
+			NOT = { exists = title:e_byzantium.holder }
+			NOT = { exists = title:h_roman_empire.holder }
+			NOT = { exists = title:h_eastern_roman_empire.holder }
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_global_variable = { name = basileus_two_emperors_failed value = yes }
+			}
+		}
+	}
+
+	# Guard — the rival's empire fell by other hands before we settled the
+	# matter. The point is won by default: a brief vindication, then close.
+	effect_group = {
+		days = 30
+		trigger = {
+			NOT = { has_global_variable = basileus_two_emperors_resolved }
+			NOT = { has_global_variable = basileus_two_emperors_failed }
+			NOT = { exists = title:e_hre.holder }
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				story_owner = { trigger_event = basileus_two_emperors.0030 }
+				set_global_variable = { name = basileus_two_emperors_failed value = yes }
+			}
+		}
+	}
+
+	# ---------------------------------------------------------------
+	# THE CORRESPONDENCE — staged beats. Each fires the next letter after a
+	# courier's delay; the choice events gate the reply until answered.
+	# ---------------------------------------------------------------
+	# 1. The chancery drafts the first rebuttal.
+	effect_group = {
+		days = { 10 20 }
+		chance = 100
+		trigger = { var:dispute_stage = 0 }
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = dispute_stage value = 1 }
+				story_owner = { trigger_event = basileus_two_emperors.0002 }
+			}
+		}
+	}
+
+	# 2. The rival's reply returns (only once we have answered).
+	effect_group = {
+		days = { 15 30 }
+		chance = 100
+		trigger = {
+			var:dispute_stage = 1
+			has_global_variable = basileus_two_emperors_p1_done
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = dispute_stage value = 2 }
+				remove_global_variable = basileus_two_emperors_p1_done
+				story_owner = { trigger_event = basileus_two_emperors.0003 }
+			}
+		}
+	}
+
+	# 3. The second rebuttal is composed.
+	effect_group = {
+		days = { 10 20 }
+		chance = 100
+		trigger = { var:dispute_stage = 2 }
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = dispute_stage value = 3 }
+				story_owner = { trigger_event = basileus_two_emperors.0004 }
+			}
+		}
+	}
+
+	# 4. The quarrel spreads through the courts of Christendom.
+	effect_group = {
+		days = { 15 30 }
+		chance = 100
+		trigger = {
+			var:dispute_stage = 3
+			has_global_variable = basileus_two_emperors_p2_done
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = dispute_stage value = 4 }
+				remove_global_variable = basileus_two_emperors_p2_done
+				story_owner = { trigger_event = basileus_two_emperors.0005 }
+			}
+		}
+	}
+
+	# 5. The Reckoning — the climax fork (war or the demand for precedence).
+	effect_group = {
+		days = { 15 30 }
+		chance = 100
+		trigger = { var:dispute_stage = 4 }
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = dispute_stage value = 5 }
+				story_owner = { trigger_event = basileus_two_emperors.0006 }
+			}
+		}
+	}
+}

@@ -1,0 +1,402 @@
+﻿# ============================================================================
+# Imperial Tagma — grant / reconcile / return effects (TIER-SCALED size + upkeep).
+# ----------------------------------------------------------------------------
+# The Megas Domestikos command title (k_megas_domestikos) shadows the Grand
+# Marshal council seat. Appointing a Grand Marshal in an imperial-autocracy
+# court grants the title + a standing army. Composition is FIXED (3 cataphract +
+# 2 skoutatoi + 1 akritai + 1 ballistrai = 7 title regiments) but per-regiment
+# SIZE scales with the realm's Imperial Bureaucracy tier (basileus_tagma_tier,
+# 0-3) — small in 867, full only once the Empire is rebuilt. The emperor (not
+# the free AI office-holder) pays a tier-scaled gold+influence upkeep
+# (basileus_tagma_upkeep_0..3). Leaving the post returns the office.
+#
+# >>> To change sizes: edit the per-tier numbers in the tier branch of
+#     basileus_reconcile_tagma_effect (CATA/SKOUT/AKRITAI/BALL params). To change
+#     upkeep: common/modifiers/basileus_tagma_modifiers.txt. If you change the
+#     regiment COUNT, also update the "count >= 7" reseed guard AND the
+#     men_at_arms caps in the tagma contract. <<<
+# ============================================================================
+
+# Scope: the newly-appointed Grand Marshal (the councillor).
+# Called from minister_grand_marshal on_get_position, and from the quarterly
+# validator pulse (where the current scope is the marshal, NOT root) — so the
+# effect must be scope-safe: it saves the grantee instead of relying on root.
+basileus_grant_tagma_command_effect = {
+	if = {
+		limit = {
+			exists = liege
+			liege = { government_has_flag = government_is_roman_imperial }
+			NOT = { has_title = title:k_megas_domestikos }
+		}
+		save_scope_as = basileus_tagma_grantee
+		liege = { save_scope_as = tagma_emperor }
+
+		# 1. Convert to the standard roman_imperial_government BEFORE the title transfer so
+		#    the new vassal contract is created under our admin contract group.
+		if = {
+			limit = { NOT = { has_government = roman_imperial_government } }
+			change_government = roman_imperial_government
+		}
+
+		# 2. Anchor the office de jure under the emperor's realm, then (if it is
+		#    currently unheld) hand it to the EMPEROR first, so that appointing it
+		#    to the marshal makes them the emperor's VASSAL. Without this, granting
+		#    a landless title with no de jure liege makes the holder INDEPENDENT —
+		#    which drops them from the council and leaves them holding the title as
+		#    their own realm.
+		if = {
+			limit = { exists = scope:tagma_emperor.primary_title }
+			title:k_megas_domestikos = {
+				set_de_jure_liege_title = scope:tagma_emperor.primary_title
+			}
+		}
+		if = {
+			limit = { NOT = { exists = title:k_megas_domestikos.holder } }
+			create_title_and_vassal_change = {
+				type = created
+				save_scope_as = tagma_seed_change
+				add_claim_on_loss = no
+			}
+			title:k_megas_domestikos = {
+				change_title_holder = {
+					holder = scope:tagma_emperor
+					change = scope:tagma_seed_change
+				}
+			}
+			resolve_title_and_vassal_change = scope:tagma_seed_change
+		}
+		# 2b. SWAP GUARD: on a council swap the outgoing marshal still holds the
+		#     office when the incoming one's on_get fires, and the appointment
+		#     below silently fails — leaving the ex-marshal with the Domestikos
+		#     title while serving in another seat (community-reported). Reclaim
+		#     the title to the emperor from any stale holder first, so the
+		#     appointment always transfers out of the emperor's hand.
+		if = {
+			limit = {
+				exists = title:k_megas_domestikos.holder
+				title:k_megas_domestikos.holder = {
+					NOR = {
+						this = scope:basileus_tagma_grantee
+						this = scope:tagma_emperor
+					}
+				}
+			}
+			create_title_and_vassal_change = {
+				type = appointment
+				save_scope_as = tagma_reclaim_change
+				add_claim_on_loss = no
+			}
+			title:k_megas_domestikos = {
+				change_title_holder = {
+					holder = scope:tagma_emperor
+					change = scope:tagma_reclaim_change
+				}
+			}
+			resolve_title_and_vassal_change = scope:tagma_reclaim_change
+		}
+
+		# Appoint the office to the new marshal (held under the emperor -> vassal).
+		create_title_and_vassal_change = {
+			type = appointment
+			save_scope_as = tagma_change
+			add_claim_on_loss = no
+		}
+		title:k_megas_domestikos = {
+			change_title_holder = {
+				holder = scope:basileus_tagma_grantee
+				change = scope:tagma_change
+			}
+		}
+		resolve_title_and_vassal_change = scope:tagma_change
+
+		# 2c. Re-assert Imperial Autocratic AFTER the transfer. Becoming a fresh
+		#     vassal during the title change can reset the holder to plain
+		#     administrative government; we need the standard roman_imperial_government
+		#     so they get our contract group (and thus the tagma obligation).
+		if = {
+			limit = { NOT = { has_government = roman_imperial_government } }
+			change_government = roman_imperial_government
+		}
+
+		# 3. Lock in appointment succession (non-hereditary office).
+		title:k_megas_domestikos = {
+			if = {
+				limit = { NOT = { has_title_law = basileus_tagma_appointment_succession_law } }
+				add_title_law = basileus_tagma_appointment_succession_law
+			}
+		}
+
+		# 4. Theme identity: capital anchor + MILITARY admin theme. We deliberately
+		#    do NOT make the office the holder's primary title — forcing a landless
+		#    title as primary demotes an appointed governor to landless status and
+		#    strips their governed themes. Army visibility comes from the government
+		#    setting administrative_title_maa_setup, not from being the primary title.
+		add_character_flag = basileus_tagma_contract_setup
+		if = {
+			limit = { exists = scope:tagma_emperor.capital_county }
+			title:k_megas_domestikos = {
+				set_capital_county = scope:tagma_emperor.capital_county
+			}
+		}
+		vassal_contract_set_obligation_level = {
+			type = administrative_themes
+			level = admin_theme_tagma
+		}
+		vassal_contract_set_obligation_level = {
+			type = basileus_tagma_maa
+			level = basileus_tagma_maa_on
+		}
+		remove_character_flag = basileus_tagma_contract_setup
+
+		# 5. Seed the standing tagma for the new commander.
+		basileus_reconcile_tagma_effect = yes
+
+		# Set persistent flags for the marshal and spouse
+		add_character_flag = basileus_is_megas_domestikos
+		if = {
+			limit = { exists = primary_spouse }
+			primary_spouse = { add_character_flag = basileus_megas_domestikos_spouse }
+		}
+	}
+}
+
+# Scope: the Megas Domestikos (k_megas_domestikos holder).
+# Keeps the office's fixed-size standing army alive. No size logic: it simply
+# ensures the contract/theme/outfit are set and rebuilds the regiments ONLY if
+# they are currently missing (e.g. a fresh appointment, or if the engine culled
+# them). Cheap and idempotent on the quarterly pulse — if the army is present it
+# does nothing.
+basileus_reconcile_tagma_effect = {
+	if = {
+		limit = { exists = liege }
+		liege = { save_scope_as = tagma_emperor }
+	}
+
+	# Marker so the Military window can list this office under its own header.
+	title:k_megas_domestikos = {
+		if = {
+			limit = { NOT = { has_variable = is_imperial_tagma } }
+			set_variable = { name = is_imperial_tagma  value = 1 }
+		}
+	}
+
+	# Keep the military outfit on the office holder (vanilla can clear it).
+	# Never on the emperor: if the title is transiently parked on the top liege he
+	# must not wear the Megas Domestikos military gear.
+	if = {
+		limit = {
+			NOT = { has_character_flag = need_military_outfit }
+			NOT = { is_independent_ruler = yes }
+		}
+		add_character_flag = need_military_outfit
+	}
+
+	# Ensure spouse flag is applied to the current spouse in case of marriage during office.
+	if = {
+		limit = {
+			exists = primary_spouse
+			primary_spouse = { NOT = { has_character_flag = basileus_megas_domestikos_spouse } }
+		}
+		primary_spouse = { add_character_flag = basileus_megas_domestikos_spouse }
+	}
+
+	# Self-heal: the office holder must be on Roman Imperial government (else they
+	# lose our contract group + the tagma obligation). Catches any holder that was
+	# reset to plain administrative when they became a vassal.
+	if = {
+		limit = { NOT = { has_government = roman_imperial_government } }
+		change_government = roman_imperial_government
+	}
+
+	# Ensure the standing-army contract is at its ACTIVE level, so its free-upkeep
+	# and cap modifiers actually apply. If it ever drops to "off", the AI sees a
+	# costly army and disbands it. Guarded (only re-set when actually dropped) to
+	# avoid any per-pulse contract churn.
+	if = {
+		limit = { NOT = { vassal_contract_has_flag = basileus_tagma_active } }
+		add_character_flag = basileus_tagma_contract_setup
+		vassal_contract_set_obligation_level = { type = basileus_tagma_maa  level = basileus_tagma_maa_on }
+		remove_character_flag = basileus_tagma_contract_setup
+	}
+
+	# Keep the office on its dedicated "Tagma" administration type (the only theme
+	# shown for k_megas_domestikos). Heals older saves that were on admin_theme_military.
+	# Guarded so it only re-sets on a real mismatch (no per-pulse churn). The setup
+	# flag bypasses the can_be_changed hard lock.
+	if = {
+		limit = { NOT = { vassal_contract_has_flag = admin_theme_tagma } }
+		add_character_flag = basileus_tagma_contract_setup
+		vassal_contract_set_obligation_level = { type = administrative_themes  level = admin_theme_tagma }
+		remove_character_flag = basileus_tagma_contract_setup
+	}
+
+	# --- Bureaucracy tier (0-3): drives both the tagma SIZE and the emperor upkeep. ---
+	save_scope_value_as = { name = cur_tier  value = basileus_tagma_tier }
+
+	# Seed/repair the tagma. Composition is FIXED (3 Cataphracts + 2 Skoutatoi +
+	# 1 Akritai + 1 Ballistrai = 7 title regiments); per-regiment SIZE now SCALES
+	# with the realm's Imperial Bureaucracy tier (basileus_tagma_tier), so the
+	# standing army grows with administrative reach instead of arriving full in 867.
+	# Rebuilds when the office fields fewer than 7 title regiments, the culture
+	# variant is wrong, OR the bureaucracy tier changed since the last seed (stable
+	# tiers = no-op). create_maa_regiment size needs a parse-time value, so the tier
+	# branch passes LITERAL sizes to the helper. >>> EDIT PER-TIER SIZES HERE <<<
+	if = {
+		limit = {
+			OR = {
+				NOT = { any_maa_regiment = { is_title_maa_regiment = yes  count >= 7 } }
+				AND = {
+					OR = { culture = culture:eastern_roman  top_liege ?= { culture = culture:eastern_roman } }
+					NOT = { title:k_megas_domestikos = { has_variable = tagma_roman } }
+				}
+				AND = {
+					NOR = { culture = culture:eastern_roman  top_liege ?= { culture = culture:eastern_roman } }
+					title:k_megas_domestikos = { has_variable = tagma_roman }
+				}
+				# Bureaucracy tier changed since the last seed -- resize the tagma.
+				NOT = { title:k_megas_domestikos = { var:tagma_applied_tier = scope:cur_tier } }
+			}
+		}
+		every_maa_regiment = {
+			limit = { is_title_maa_regiment = yes }
+			destroy_maa_regiment = yes
+		}
+		if = {
+			limit = { NOT = { any_maa_regiment = { is_title_maa_regiment = no } } }
+			create_maa_regiment = { type = light_footmen  size = 1 }
+		}
+		# Per-tier sizes (cataphract / skoutatoi / akritai / ballistrai).
+		if = {
+			limit = { scope:cur_tier = 3 }
+			basileus_seed_tagma_regiments_effect = { CATA = 4  SKOUT = 8  AKRITAI = 6  BALL = 4 }
+		}
+		else_if = {
+			limit = { scope:cur_tier = 2 }
+			basileus_seed_tagma_regiments_effect = { CATA = 3  SKOUT = 6  AKRITAI = 5  BALL = 3 }
+		}
+		else_if = {
+			limit = { scope:cur_tier = 1 }
+			basileus_seed_tagma_regiments_effect = { CATA = 2  SKOUT = 4  AKRITAI = 3  BALL = 2 }
+		}
+		else = {
+			basileus_seed_tagma_regiments_effect = { CATA = 1  SKOUT = 3  AKRITAI = 2  BALL = 1 }
+		}
+		# Remember the tier we seeded at.
+		title:k_megas_domestikos = { set_variable = { name = tagma_applied_tier  value = scope:cur_tier } }
+	}
+
+	# Keep the emperor's tagma upkeep modifier in sync every pulse (cheap & guarded):
+	# catches tier changes AND a new emperor inheriting the realm at the same tier.
+	basileus_apply_tagma_upkeep_effect = yes
+}
+
+# Scope: the departing Grand Marshal (the councillor losing the seat).
+# Returns the title to the emperor's pool so a dismissed ex-marshal does not keep
+# commanding the tagma. (Death is handled first by appointment succession.)
+basileus_return_tagma_command_effect = {
+	if = {
+		limit = {
+			has_title = title:k_megas_domestikos
+			exists = liege
+			liege = { government_has_flag = government_is_roman_imperial }
+		}
+		liege = { save_scope_as = tagma_emperor }
+		create_title_and_vassal_change = {
+			type = appointment
+			save_scope_as = tagma_return_change
+			add_claim_on_loss = no
+		}
+		title:k_megas_domestikos = {
+			change_title_holder = {
+				holder = scope:tagma_emperor
+				change = scope:tagma_return_change
+			}
+		}
+		resolve_title_and_vassal_change = scope:tagma_return_change
+
+		# The office now rests with the emperor until it is re-granted. Strip the
+		# Megas Domestikos military gear so he is not depicted in soldier's armor
+		# while merely holding the vacant command. (Cloak is handled in the
+		# portrait modifier; flavor name is already suppressed via top_liege = no.)
+		scope:tagma_emperor = { remove_character_flag = need_military_outfit }
+
+		# Strip flags from the departing marshal and their spouse ONLY if the marshal is alive.
+		# If they died in office, they keep the flags so they are depicted in military/court gear in death.
+		if = {
+			limit = { is_alive = yes }
+			remove_character_flag = basileus_is_megas_domestikos
+			remove_character_flag = need_military_outfit
+			if = {
+				limit = { exists = primary_spouse }
+				primary_spouse = { remove_character_flag = basileus_megas_domestikos_spouse }
+			}
+		}
+	}
+}
+
+
+# Seeds the 7 tagma title regiments at the per-type sizes passed as parameters
+# ($CATA$ x3, $SKOUT$ x2, $AKRITAI$, $BALL$), in the culture-appropriate variant.
+# Called by basileus_reconcile_tagma_effect's tier branch with literal sizes
+# (create_maa_regiment size needs a parse-time value). Scope: the Megas Domestikos.
+basileus_seed_tagma_regiments_effect = {
+	if = {
+		limit = { OR = { culture = culture:eastern_roman  top_liege ?= { culture = culture:eastern_roman } } }
+		create_maa_regiment = { type = cataphract_roman  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = cataphract_roman  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = cataphract_roman  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = skoutatoi_roman   check_can_recruit = no  title = title:k_megas_domestikos  size = $SKOUT$ }
+		create_maa_regiment = { type = skoutatoi_roman   check_can_recruit = no  title = title:k_megas_domestikos  size = $SKOUT$ }
+		create_maa_regiment = { type = akritai_roman     check_can_recruit = no  title = title:k_megas_domestikos  size = $AKRITAI$ }
+		create_maa_regiment = { type = ballistrai_roman  check_can_recruit = no  title = title:k_megas_domestikos  size = $BALL$ }
+		title:k_megas_domestikos = { set_variable = tagma_roman }
+	}
+	else = {
+		create_maa_regiment = { type = cataphract  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = cataphract  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = cataphract  check_can_recruit = no  title = title:k_megas_domestikos  size = $CATA$ }
+		create_maa_regiment = { type = skoutatoi   check_can_recruit = no  title = title:k_megas_domestikos  size = $SKOUT$ }
+		create_maa_regiment = { type = skoutatoi   check_can_recruit = no  title = title:k_megas_domestikos  size = $SKOUT$ }
+		create_maa_regiment = { type = akritai     check_can_recruit = no  title = title:k_megas_domestikos  size = $AKRITAI$ }
+		create_maa_regiment = { type = ballistrai  check_can_recruit = no  title = title:k_megas_domestikos  size = $BALL$ }
+		title:k_megas_domestikos = { remove_variable = tagma_roman }
+	}
+}
+
+# Keeps exactly the matching tier upkeep modifier on the EMPEROR (gold + influence
+# drain for the standing army). Caller saves scope:cur_tier (0-3) and scope:tagma_emperor.
+basileus_apply_tagma_upkeep_effect = {
+	if = {
+		limit = {
+			exists = scope:tagma_emperor
+			# Act only when the emperor isn't already on the correct tier modifier.
+			NOR = {
+				AND = { scope:cur_tier = 0  scope:tagma_emperor = { has_character_modifier = basileus_tagma_upkeep_0 } }
+				AND = { scope:cur_tier = 1  scope:tagma_emperor = { has_character_modifier = basileus_tagma_upkeep_1 } }
+				AND = { scope:cur_tier = 2  scope:tagma_emperor = { has_character_modifier = basileus_tagma_upkeep_2 } }
+				AND = { scope:cur_tier = 3  scope:tagma_emperor = { has_character_modifier = basileus_tagma_upkeep_3 } }
+			}
+		}
+		scope:tagma_emperor = {
+			remove_character_modifier = basileus_tagma_upkeep_0
+			remove_character_modifier = basileus_tagma_upkeep_1
+			remove_character_modifier = basileus_tagma_upkeep_2
+			remove_character_modifier = basileus_tagma_upkeep_3
+		}
+		if = {
+			limit = { scope:cur_tier = 3 }
+			scope:tagma_emperor = { add_character_modifier = basileus_tagma_upkeep_3 }
+		}
+		else_if = {
+			limit = { scope:cur_tier = 2 }
+			scope:tagma_emperor = { add_character_modifier = basileus_tagma_upkeep_2 }
+		}
+		else_if = {
+			limit = { scope:cur_tier = 1 }
+			scope:tagma_emperor = { add_character_modifier = basileus_tagma_upkeep_1 }
+		}
+		else = {
+			scope:tagma_emperor = { add_character_modifier = basileus_tagma_upkeep_0 }
+		}
+	}
+}

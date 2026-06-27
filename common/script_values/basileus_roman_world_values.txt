@@ -1,0 +1,23 @@
+roman_world_participant_score = {
+	value = 0
+	# 1. Influence (if administrative government character)
+	if = {
+		limit = { has_variable = influence }
+		add = var:influence
+	}
+	# 2. Army size (Max military strength)
+	add = {
+		value = max_military_strength
+		multiply = 0.5
+	}
+	# 3. Prestige
+	add = {
+		value = prestige
+		multiply = 0.1
+	}
+	# 4. Gold
+	add = {
+		value = gold
+		multiply = 0.05
+	}
+}

@@ -1,0 +1,55 @@
+# =====================================================================
+# BASILEUS — IMPERIAL RECONSTRUCTION great project — per-county payoff.
+# ---------------------------------------------------------------------
+# Called from the project's on_complete for EACH de jure county of the
+# targeted duchy: scope:province.duchy = { every_de_jure_county = {
+#     basileus_reconstruct_county_effect = yes } }.
+#
+# root  = the de jure county title.
+# scope:owner = the project owner (the reigning Basileus).
+#
+# Full four-part Romanisation, converting to the EMPEROR's own culture/faith:
+#   1) culture  -> emperor's culture (always, regardless of heritage)
+#   2) faith    -> emperor's faith (Orthodox)
+#   3) development bump
+#   4) county control bump (integration)
+#   + tribal/herder holders folded into administrative government.
+# =====================================================================
+
+basileus_reconstruct_county_effect = {
+	# 1. CULTURE — convert outright to the emperor's culture, regardless of heritage.
+	if = {
+		limit = {
+			culture = { this != scope:owner.top_liege.culture }
+		}
+		set_county_culture = scope:owner.top_liege.culture
+	}
+
+	# 2. FAITH — convert to the emperor's faith.
+	if = {
+		limit = { faith != scope:owner.top_liege.faith }
+		set_county_faith = scope:owner.top_liege.faith
+	}
+
+	# 3. DEVELOPMENT — restored Roman order raises the county's development.
+	change_development_level = 2
+
+	# 4. CONTROL — the new administration tightens its grip (integration).
+	change_county_control = 25
+
+	# 5. Fold tribal / herder frontier holders into the administrative realm.
+	if = {
+		limit = {
+			holder ?= {
+				OR = {
+					government_has_flag = government_is_tribal
+					government_has_flag = government_is_nomadic
+					government_has_flag = government_is_herder
+				}
+			}
+		}
+		holder = {
+			change_to_administrative_effect = yes
+		}
+	}
+}

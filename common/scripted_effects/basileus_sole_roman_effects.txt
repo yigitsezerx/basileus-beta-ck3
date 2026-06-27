@@ -1,0 +1,27 @@
+# =====================================================================
+# BASILEUS — SOLE ROMAN EMPEROR effects.
+# ---------------------------------------------------------------------
+# Permanently renames the eastern_roman culture to "Roman" (the payoff of the
+# papal-recognition story cycle). Uses set_culture_name, the same mechanism the
+# mod already uses to rename greek -> Rhomaios (see ercf_culture_init.txt).
+# =====================================================================
+
+basileus_rename_culture_to_roman_effect = {
+	culture:eastern_roman = {
+		set_culture_name = {
+			noun            = basileus_roman_culture_noun
+			collective_noun = basileus_roman_culture_collective
+			prefix          = basileus_roman_culture_prefix
+		}
+	}
+	# Recognised as THE Roman Empire: force e_byzantium to display under the
+	# h_roman_empire name (h_roman_empire / h_roman_empire_adj), overriding any
+	# game-rule or manual rename it carried before.
+	if = {
+		limit = { exists = title:e_byzantium }
+		title:e_byzantium = { set_title_name = h_roman_empire }
+	}
+	# Permanent marker — keeps the story from re-triggering and records that the
+	# Roman name has been bestowed.
+	set_global_variable = basileus_sole_roman_recognition_done
+}

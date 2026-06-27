@@ -1,0 +1,37 @@
+﻿# =====================================================================
+# BASILEUS — IMPERIAL GOVERNMENT REASSERT
+# ---------------------------------------------------------------------
+# Vanilla repeatedly demotes characters in the imperial realm to plain
+# administrative_government, because none of its conversion paths know
+# roman_imperial_government exists:
+#   * engine base-government pick on becoming landed (use_as_base_on_landed
+#     tie at fallback = 3 — vanilla administrative_government wins the tie)
+#   * change_to_administrative_effect's else-ladder (prison release,
+#     ministry projects, factions, ...) — no roman branch
+#   * the EP3 noble-family branch in title_on_actions
+# Symptom (community-reported): a house head who gains a duchy-level title
+# and/or a noble family title becomes "regular old admin" and drops out of
+# the imperial government.
+#
+# This effect converts a character BACK to roman_imperial_government when:
+#   * they are exactly plain administrative_government (never converts
+#     feudal/clan/republic/theocracy/meritocratic/celestial characters), and
+#   * their top liege rules with roman_imperial_government (so China and
+#     ordinary admin realms elsewhere are untouched).
+# Fired from on_title_gain (the moment RICKTER's bug occurs) plus a yearly
+# realm sweep that catches the non-title conversion paths.
+# =====================================================================
+
+basileus_reassert_imperial_government_effect = {
+	if = {
+		limit = {
+			has_government = administrative_government
+			NOT = { government_has_flag = government_is_roman_imperial }
+			top_liege = {
+				NOT = { this = root }
+				government_has_flag = government_is_roman_imperial
+			}
+		}
+		change_government = roman_imperial_government
+	}
+}

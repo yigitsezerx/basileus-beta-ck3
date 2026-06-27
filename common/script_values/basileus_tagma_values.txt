@@ -1,0 +1,24 @@
+# =====================================================================
+# BASILEUS — Imperial Tagma scaling values.
+# ---------------------------------------------------------------------
+# basileus_tagma_tier: the realm's Imperial Bureaucracy law level (0-3),
+# read from the office's TOP LIEGE (the emperor sets the realm law). Drives
+# both the tagma's per-regiment size and the emperor's upkeep cost, so the
+# standing army grows with administrative reach instead of arriving fully
+# formed in 867. Evaluate in the Megas Domestikos (character) scope.
+# =====================================================================
+basileus_tagma_tier = {
+	value = 0
+	if = {
+		limit = { top_liege = { has_realm_law = imperial_bureaucracy_1 } }
+		value = 1
+	}
+	else_if = {
+		limit = { top_liege = { has_realm_law = imperial_bureaucracy_2 } }
+		value = 2
+	}
+	else_if = {
+		limit = { top_liege = { has_realm_law = imperial_bureaucracy_3 } }
+		value = 3
+	}
+}

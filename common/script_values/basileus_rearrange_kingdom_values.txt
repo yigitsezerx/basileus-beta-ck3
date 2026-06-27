@@ -1,0 +1,29 @@
+# =====================================================================
+# BASILEUS — REARRANGE THE KINGDOMS: candidate ranking.
+# ---------------------------------------------------------------------
+# Orders the k_eastern_anatolia candidate pool in basileus_rearrange_kingdoms.0003.
+# Higher = more suitable governor: administrative/martial skill, standing, and a
+# nudge toward the emperor's own kin (root = the granting emperor).
+# =====================================================================
+basileus_eanatolia_candidate_score = {
+	value = 0
+	add = martial
+	add = stewardship
+	add = {
+		value = prestige_level
+		multiply = 5
+	}
+	# Favour the emperor's own dynasty / extended family.
+	if = {
+		limit = {
+			exists = dynasty
+			exists = root.dynasty
+			dynasty = root.dynasty
+		}
+		add = 10
+	}
+	if = {
+		limit = { is_close_or_extended_family_of = root }
+		add = 5
+	}
+}

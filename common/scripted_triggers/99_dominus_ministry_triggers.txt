@@ -1,0 +1,235 @@
+# Trigger to enable ministry features in script - Made into a scripted trigger for ease of changing it if needed
+tgp_has_access_to_ministry_trigger = {
+	OR = {
+		AND = {
+			has_title = title:h_china
+			government_has_flag = government_is_celestial
+		}
+		AND = {
+            has_title = title:e_byzantium
+            government_has_flag = government_is_administrative
+		}
+		# The restored Roman Empire (hegemony titles) also runs the ministry.
+		# No capital condition — holding the imperial title + an administrative
+		# (incl. Imperial Autocracy) government is enough.
+		AND = {
+			has_title = title:h_roman_empire
+			government_has_flag = government_is_administrative
+		}
+		AND = {
+			has_title = title:h_eastern_roman_empire
+			government_has_flag = government_is_administrative
+		}
+	}
+}
+
+# Alias kept so the renamed council-position files keep working.
+basileus_has_ministry_access = {
+	tgp_has_access_to_ministry_trigger = yes
+}
+
+# Shared "is an imperial Roman court" test — every Roman imperial title the mod
+# treats as the Basileus's court. Used for the ministry/council positions'
+# naming, tooltips and on_get_position flavor so restored empires get the same
+# Byzantine minister titles as e_byzantium.
+basileus_is_imperial_roman_court_trigger = {
+	OR = {
+		has_title = title:e_byzantium
+		has_title = title:h_roman_empire
+		has_title = title:h_eastern_roman_empire
+	}
+}
+
+# tgp_can_be_a_minister_trigger is intentionally NOT overridden here.
+# The mod previously redefined it (added administrative support, a lowered
+# merit bar, and a hook bypass), but all Byzantine ministry/council seats now
+# call basileus_can_be_a_minister_trigger (below). Leaving tgp_ to its vanilla
+# definition in 10_tgp_triggers.txt keeps the TGP base pristine for
+# non-Byzantine admin/celestial courts (e.g. China) and lets it inherit future
+# TGP patches automatically. Do NOT re-add an override unless a non-Byzantine
+# consumer genuinely needs the Byzantine rules.
+
+# =====================================================================
+# Basileus FORK of tgp_can_be_a_minister_trigger.
+# ---------------------------------------------------------------------
+# Our Byzantine ministry & council positions call THIS trigger instead of the
+# TGP base one, so we fully own minister eligibility and can diverge freely
+# without editing the shared tgp_ trigger (which other admin/celestial courts
+# may still use). Behaviour is currently identical to our customized tgp_
+# version: kingdom-tier merit bar + relation/hook bypass (anti-AI-spam gate).
+# Competence under Roman Imperial Government is now a SOFT preference (vanilla
+# appointment AI ranks by skill), not a hard valid_character bar.
+# =====================================================================
+basileus_can_be_a_minister_trigger = {
+	can_be_councillor_basics_trigger = yes
+	# Has to be celestial/admin or a non-ruler
+	OR = {
+		is_ruler = no
+		government_has_flag = government_is_celestial
+		government_has_flag = government_is_administrative
+	}
+	# Gender is based on laws of the liege, but Imperial Autocracy is strictly male-only
+	trigger_if = {
+		limit = {
+			$COURT_OWNER$ = { has_government = roman_imperial_government }
+		}
+		is_male = yes
+	}
+	trigger_else = {
+		OR = {
+			has_variable = can_be_councillor_override
+			AND = {
+				is_female = yes
+				$COURT_OWNER$ = {
+					NOR = {
+						has_realm_law = male_only_law
+						has_realm_law = male_preference_law
+					}
+				}
+			}
+			AND = {
+				is_male = yes
+				$COURT_OWNER$ = {
+					NOR = {
+						has_realm_law = female_only_law
+						has_realm_law = female_preference_law
+					}
+				}
+			}
+		}
+	}
+	# Anti-spam gate: a human candidate requesting a seat from an AI court owner
+	# must clear a merit bar (or have a relation / hook). This stops the AI from
+	# "randomly" requesting the player onto their council.
+	#   * Byzantine (administrative) courts get the RELAXED bar: kingdom-tier merit,
+	#     with a hook on the court owner as an extra bypass.
+	#   * Every other ministry-capable court (e.g. celestial China) keeps the
+	#     vanilla bar: empire-tier merit, relation only, no hook.
+	trigger_if = {
+		limit = {
+			is_ai = no
+			$COURT_OWNER$ = { is_ai = yes }
+			NOT = { is_councillor_of = $COURT_OWNER$ }
+		}
+		trigger_if = {
+			limit = { $COURT_OWNER$ = { government_has_flag = government_is_administrative } }
+			OR = {
+				merit_level >= merit_level_expected_kingdom_value
+				has_relation_friend = $COURT_OWNER$
+				has_relation_disciple = $COURT_OWNER$
+				has_relation_elder = $COURT_OWNER$
+				has_hook = $COURT_OWNER$
+			}
+		}
+		trigger_else = {
+			OR = {
+				merit_level >= merit_level_expected_empire_value
+				has_relation_friend = $COURT_OWNER$
+				has_relation_disciple = $COURT_OWNER$
+				has_relation_elder = $COURT_OWNER$
+			}
+		}
+	}
+	# Competence is a soft preference, not a hard gate: any eligible candidate is a
+	# valid holder. The vanilla council/ministry appointment AI already ranks
+	# candidates by the seat's governing skill, so the autocrat still fields
+	# competent ministers without vassals being barred from requesting a seat.
+}
+
+# =====================================================================
+# Imperial Autocracy = strictly MALE-ONLY council & ministry seats.
+# ---------------------------------------------------------------------
+# Inserted at the TOP LEVEL of every Byzantine council/ministry position's
+# valid_character (NOT inside the basileus_has_ministry_access branch), so the
+# bar holds no matter which eligibility path a seat falls through. The buried
+# male gate in basileus_can_be_a_minister_trigger only fires on the ministry
+# branch; seats fall back to the vanilla can_be_*_trigger (which has NO gender
+# rule) whenever basileus_has_ministry_access is false -- and it IS false for
+# restored-empire holders (e_roman_empire etc.), because roman_imperial_government
+# is STICKY and survives onto titles the ministry-access title list does not
+# cover. Keying this gate on the government FLAG (always present whenever the
+# court shows "Imperial Autocracy") closes that gap regardless of which imperial
+# title the court owner holds.
+basileus_imperial_court_male_only_trigger = {
+	trigger_if = {
+		limit = { $COURT_OWNER$ ?= { government_has_flag = government_is_roman_imperial } }
+		is_male = yes
+		is_adult = yes
+	}
+}
+
+# tgp_can_be_grand_marshal_trigger is intentionally NOT overridden here.
+# Its only caller is vanilla's minister_grand_marshal position, which our
+# 99_dominus_ministry_positions.txt overrides (and ours uses
+# basileus_can_be_a_minister_trigger instead). The override was therefore dead
+# code. Vanilla's definition in 10_tgp_triggers.txt remains authoritative.
+
+# Check if character is the Byzantine Emperor
+dominus_is_basileus_trigger = {
+	has_title = title:e_byzantium
+}
+
+# Trigger for the Emperor specifically - Used for position NAMES and TOOLTIPS.
+# Covers all Roman imperial titles (incl. the restored h_roman_empire /
+# h_eastern_roman_empire) so the dynamic Byzantine minister names/tooltips apply
+# to restored empires exactly as to e_byzantium.
+dominus_is_byzantine_ruler_trigger = {
+	OR = {
+		# Case 1: The scope is a character (The Emperor or a candidate)
+		AND = {
+			is_character = yes
+			is_ruler = yes
+			OR = {
+				has_title = title:e_byzantium
+				has_title = title:e_roman_empire
+				has_title = title:h_roman_empire
+				has_title = title:h_eastern_roman_empire
+			}
+		}
+		# Case 2: The scope is a title
+		AND = {
+			is_landed_title = yes
+			OR = {
+				this = title:e_byzantium
+				this = title:e_roman_empire
+				this = title:h_roman_empire
+				this = title:h_eastern_roman_empire
+			}
+		}
+		# Case 3: The scope is a councillor serving the Emperor
+		AND = {
+			is_character = yes
+			is_councillor = yes
+			liege_or_court_owner = {
+				OR = {
+					has_title = title:e_byzantium
+					has_title = title:e_roman_empire
+					has_title = title:h_roman_empire
+					has_title = title:h_eastern_roman_empire
+				}
+			}
+		}
+	}
+}
+
+# Legacy alias
+dominus_is_byzantine_ministry_trigger = {
+	dominus_is_byzantine_ruler_trigger = yes
+}
+
+# Court trigger (For observers viewing the Emperor)
+dominus_is_byzantine_court_trigger = {
+	OR = {
+		dominus_is_byzantine_ruler_trigger = yes
+		# Fallback for observers/empty slots in the UI
+		AND = {
+			NOT = { exists = this }
+			any_player = {
+				OR = {
+					has_title = title:e_byzantium
+					has_title = title:e_roman_empire
+				}
+			}
+		}
+	}
+}

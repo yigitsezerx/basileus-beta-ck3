@@ -1,0 +1,64 @@
+# =====================================================================
+# BASILEUS — ROMAN IMPERIAL default realm laws, applied ONCE per realm.
+# ---------------------------------------------------------------------
+# The government on_actions used to re-stamp imperial_bureaucracy_2 +
+# province_war_law_1 + province_border_law_2 on EVERY imperial title gain
+# (every succession / usurpation / formation), which reset player & decree
+# law choices and could downgrade a realm from imperial_bureaucracy_3 -> 2.
+#
+# These effects apply the imperial defaults EXACTLY ONCE per realm: the guard
+# variable lives on the imperial TITLE (e_byzantium / h_roman_empire /
+# h_eastern_roman_empire), which persists across succession, so heirs inherit
+# the laws (admin realm laws are inherited) without re-stamping them. A
+# genuinely new realm (title destroyed then re-created) is a fresh object with
+# no guard variable, so it gets the defaults once again.
+#
+# Called from basileus_government_on_actions.txt (on_game_start sweep and the
+# imperial-holder branch of on_title_gain). Root = the imperial ruler.
+# =====================================================================
+
+basileus_initialize_imperial_laws_effect = {
+	# Guard on whichever imperial title the ruler holds; set the defaults only
+	# the first time that title becomes Roman Imperial.
+	if = {
+		limit = {
+			has_title = title:e_byzantium
+			title:e_byzantium = { NOT = { has_variable = basileus_imperial_laws_initialized } }
+		}
+		title:e_byzantium = { set_variable = basileus_imperial_laws_initialized }
+		basileus_apply_imperial_law_defaults_effect = yes
+	}
+	else_if = {
+		limit = {
+			has_title = title:h_roman_empire
+			title:h_roman_empire = { NOT = { has_variable = basileus_imperial_laws_initialized } }
+		}
+		title:h_roman_empire = { set_variable = basileus_imperial_laws_initialized }
+		basileus_apply_imperial_law_defaults_effect = yes
+	}
+	else_if = {
+		limit = {
+			has_title = title:h_eastern_roman_empire
+			title:h_eastern_roman_empire = { NOT = { has_variable = basileus_imperial_laws_initialized } }
+		}
+		title:h_eastern_roman_empire = { set_variable = basileus_imperial_laws_initialized }
+		basileus_apply_imperial_law_defaults_effect = yes
+	}
+}
+
+# Apply the imperial default realm laws to the ruler (root). Bureaucracy is set
+# FIRST (province_border_law_2's can_keep requires imperial_bureaucracy >= 2)
+# and NEVER downgraded (only raised to 2 if currently below it).
+basileus_apply_imperial_law_defaults_effect = {
+	if = {
+		limit = {
+			NOR = {
+				has_realm_law = imperial_bureaucracy_2
+				has_realm_law = imperial_bureaucracy_3
+			}
+		}
+		add_realm_law = imperial_bureaucracy_2
+	}
+	add_realm_law = province_war_law_1
+	add_realm_law = province_border_law_2
+}

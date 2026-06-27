@@ -1,0 +1,32 @@
+# =====================================================================
+# BASILEUS — "all themes restructured" gate for Cleave the Empire.
+# ---------------------------------------------------------------------
+# True once every theme the Restructure the Themes decision can form has been
+# formed (each stamps its lock flag into the unavailable_unique_decisions global
+# list). This is the exact set the reorganize decision's is_shown tests, with two
+# corrections: theme_palestina_formed (the reorganize is_shown has a typo,
+# "palestine", which is never set), and croatia is omitted (its option is
+# disabled / commented out, so theme_croatia_formed is never set). haemimontus /
+# paristrion are covered by theme_bulgarian_frontier_formed.
+#
+# Keep this list in sync with the theme lock flags if themes are added/removed.
+# =====================================================================
+basileus_all_themes_restructured_trigger = {
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bulgarian_frontier_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_hellas_frontier_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_thrace_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dioclea_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dalmatia_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_syria_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_palestina_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_africa_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_aegypt_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_pannonia_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bavaria_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_mauretania_formed }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_italia_reunified }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_francogallia_incorporated }
+	is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_spania }
+}

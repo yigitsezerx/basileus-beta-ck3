@@ -1,0 +1,30 @@
+# =====================================================================
+# BASILEUS — suppress vanilla Roman-restoration de jure split (override).
+# ---------------------------------------------------------------------
+# Overrides vanilla split_byzantine_empire_effect (game/common/scripted_effects/
+# 00_major_decisions_scripted_effects.txt). Scripted effects are keyed by name
+# and the LAST definition loaded wins; the "zzz_" prefix guarantees this file
+# sorts after vanilla's "00_..." and after every basileus_* file, so this body
+# replaces vanilla's.
+#
+# Called by all three create_roman_empire_*_scripted_effect when h_roman_empire
+# is reformed (NOT by create_eastern_roman_empire — ERE restoration is untouched).
+#
+# Vanilla used this to spawn the e_illyria / e_macedonia / e_anatolia / e_oriens /
+# e_aegyptus / e_africa prefecture empires and rearrange de jure on reform.
+#
+# We deliberately do NOTHING here:
+#   * The six prefecture empires stay dormant/titular (never spawned).
+#   * No kingdoms are drifted under e_byzantium and no competing empires are
+#     destroyed — reforming the Roman Empire leaves the de jure map untouched.
+#
+# (An earlier version grew e_byzantium's de jure footprint outward / destroyed
+#  fully-controlled rival empires; that produced unwanted de jure outcomes and
+#  was reverted to this no-op.)
+#
+# !! If a major patch changes split_byzantine_empire_effect's responsibilities,
+#    re-check this override. As of writing vanilla's body is purely de jure. !!
+# =====================================================================
+
+split_byzantine_empire_effect = {
+}

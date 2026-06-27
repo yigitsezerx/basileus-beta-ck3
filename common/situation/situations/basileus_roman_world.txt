@@ -1,0 +1,126 @@
+# =====================================================================
+# BASILEUS — "THE ROMAN WORLD" situation — skeleton + themed effect sets.
+# Crash-safe baseline: window = situation + map_mode = participant_groups;
+# participant group gated by FLAT trigger only (scope-switch CTDs at world-gen).
+# Stage 1: phase effects split into themed named sets (Warfare/Subjects/Realm)
+# each with a placeholder icon, like the great steppe's effect groupings.
+# =====================================================================
+basileus_roman_world = {
+	illustration = "gfx/interface/illustrations/event_story/fp2_compromise.dds"
+	situation_group_type = major
+
+	window = situation
+	gui_window_name = "window_basileus_roman_world"
+	map_mode = sub_regions
+
+	is_unique = yes
+
+	on_start = {
+		basileus_roman_world_update_top_participants_effect = yes
+	}
+
+	on_monthly = {
+		basileus_roman_world_update_top_participants_effect = yes
+	}
+
+	sub_regions = {
+		roman_balkans_situation = {
+			illustration = "gfx/interface/illustrations/event_story/ep3_story_constantinople.dds"
+			map_color = { 120 20 40 }
+			geographical_regions = { basileus_dynasty_renaissance_region }
+		}
+		roman_anatolia_situation = {
+			illustration = "gfx/interface/illustrations/event_scenes/ep3_story_constantinople.dds"
+			map_color = { 200 50 50 }
+			geographical_regions = { basileus_anatolia_unified_region }
+		}		
+		roman_east_situation = {
+			illustration = "gfx/interface/illustrations/event_scenes/bp1_desert.dds"
+			map_color = { 160 50 30 }
+			geographical_regions = { custom_roman_syria custom_roman_palestina custom_roman_aegypt }
+		}
+	}
+
+	participant_groups = {
+		romans = {
+			auto_add_landless_rulers = no
+			is_character_valid = {
+				government_has_flag = government_is_roman_imperial
+				highest_held_title_tier >= tier_county
+			}
+			map_color = { 180 40 60 }
+		}
+	}
+
+	start_phase = basileus_rw_imperial_order
+
+	phases = {
+		# ---- IMPERIAL ORDER ----
+		basileus_rw_imperial_order = {
+			illustration = "gfx/interface/illustrations/event_story/fp2_compromise.dds"
+			icon = "gfx/interface/icons/situations/situation_modifier_subject.dds"
+			max_duration = { days = 3650 }
+			max_duration_next_phase = random_non_takeover
+
+			future_phases = {
+				basileus_rw_imperial_decline = {}
+			}
+
+			modifier_sets = {
+				basileus_rw_warfare_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_military.dds"
+					romans = {
+						character_modifier = { levy_size = 0.1 }
+					}
+				}
+				basileus_rw_subject_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_subject.dds"
+					romans = {
+						character_modifier = { vassal_opinion = 10 }
+						parameters = { basileus_rw_stable = yes }
+					}
+				}
+				basileus_rw_realm_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_character.dds"
+					romans = {
+						county_modifier = { development_growth_factor = 0.1 }
+					}
+				}
+			}
+		}
+
+		# ---- IMPERIAL DECLINE ----
+		basileus_rw_imperial_decline = {
+			illustration = "gfx/interface/illustrations/event_story/fp2_hostility.dds"
+			icon = "gfx/interface/icons/situations/situation_modifier_character.dds"
+			max_duration = { days = 3650 }
+			max_duration_next_phase = random_non_takeover
+
+			future_phases = {
+				basileus_rw_imperial_order = {}
+			}
+
+			modifier_sets = {
+				basileus_rw_warfare_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_military.dds"
+					romans = {
+						character_modifier = { levy_size = -0.15 }
+					}
+				}
+				basileus_rw_subject_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_subject.dds"
+					romans = {
+						character_modifier = { vassal_opinion = -5 }
+						parameters = { basileus_rw_decline = yes }
+					}
+				}
+				basileus_rw_realm_effects = {
+					icon = "gfx/interface/icons/situations/situation_modifier_character.dds"
+					romans = {
+						county_modifier = { monthly_county_control_growth_add = -0.2 }
+					}
+				}
+			}
+		}
+	}
+}

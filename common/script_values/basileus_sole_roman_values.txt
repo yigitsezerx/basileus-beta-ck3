@@ -1,0 +1,13 @@
+# =====================================================================
+# BASILEUS — SOLE ROMAN EMPEROR values.
+# ---------------------------------------------------------------------
+# Used to expose story state variables to the UI/localization layer.
+# =====================================================================
+
+basileus_is_roman_recognition_done_val = {
+	value = 0
+	if = {
+		limit = { has_global_variable = basileus_sole_roman_recognition_done }
+		value = 1
+	}
+}

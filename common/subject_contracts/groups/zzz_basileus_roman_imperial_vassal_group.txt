@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# Dedicated subject-contract group for roman_imperial_government.
+# ----------------------------------------------------------------------------
+# Modelled on TFE's `roman_imperial_vassal` group: a private group so we never
+# touch the shared vanilla `admin_vassal`. It replicates the three vanilla
+# administrative obligations (verbatim behaviour) and adds our `basileus_tagma_maa`
+# obligation for the Megas Domestikos's standing army.
+#
+# Our government points here via `vassal_contract_group = basileus_roman_imperial_vassal`.
+# If vanilla ever changes the admin obligations themselves, those live in
+# game/.../subject_contracts/contracts/administrative.txt and are unaffected;
+# only re-sync this group if vanilla changes the admin_vassal GROUP layout.
+# ============================================================================
+
+basileus_roman_imperial_vassal = {
+	admin_province_contract = administrative_themes
+
+	contracts = {
+		administrative_obligations
+		administrative_themes
+		administrative_salary_rank
+		basileus_tagma_maa
+	}
+	modify_contract_layout = admin
+}

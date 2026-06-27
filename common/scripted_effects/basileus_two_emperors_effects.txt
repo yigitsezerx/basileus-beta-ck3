@@ -1,0 +1,90 @@
+# =====================================================================
+# BASILEUS — THE TWO EMPERORS — resolution effects.
+# ---------------------------------------------------------------------
+# Called from the casus belli (basileus_imperial_supremacy_cb) and the
+# dispute events (basileus_two_emperors_events.txt). Character scope = the
+# Basileus (the victor / challenger) unless noted.
+#
+# Globals used as cross-scope signals for the story cycle:
+#   basileus_two_emperors_resolved      — settled in our favour (permanent;
+#                                         hides the decision, ends the story).
+#   basileus_two_emperors_failed        — dispute ended without victory
+#                                         (cleared on_end; decision retryable).
+#   basileus_two_emperors_war_unlocked  — the supremacy CB is available.
+#   basileus_two_emperors_heat          — accumulated belligerence (steers AI).
+#   basileus_two_emperors_challenger    — the disputing Basileus (for portraits).
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# STRIP THE FALSE EMPEROR — war victory. root = the victorious Basileus.
+# The Holy Roman Empire is dissolved; its kings fall independent. With no
+# e_hre left, the Basileus becomes eligible for the Sole Roman recognition.
+# ---------------------------------------------------------------------
+basileus_strip_false_emperor_effect = {
+	# Record the humbled pretender for the victory message before it is gone.
+	if = {
+		limit = { exists = title:e_hre.holder }
+		title:e_hre.holder = { save_scope_as = false_emperor }
+	}
+
+	# The Western imperial dignity is abolished.
+	if = {
+		limit = { exists = title:e_hre }
+		destroy_title = title:e_hre
+	}
+
+	# Bury the idea of a Western empire: e_hre cannot be refounded while a Roman
+	# Emperor reigns (enforced by the can_create block on e_hre in landed_titles).
+	# Permanent flag; the block itself lifts only if every Roman imperial title
+	# ceases to exist.
+	set_global_variable = { name = basileus_hre_abolished value = yes }
+
+	# The Basileus stands as the sole Roman Emperor in Christendom.
+	add_legitimacy_effect = { LEGITIMACY = major_legitimacy_gain }
+	add_prestige = major_prestige_value
+	add_prestige_experience = major_prestige_value
+
+	# Settle the dispute permanently and retire the war footing.
+	set_global_variable = { name = basileus_two_emperors_resolved value = yes }
+	basileus_two_emperors_clear_transient_globals_effect = yes
+}
+
+# ---------------------------------------------------------------------
+# RIVAL CONCEDES — diplomatic victory. root = the Basileus.
+# The pretender renounces the Roman crown without a sword drawn: the Western
+# empire is DISSOLVED and barred from refounding, exactly as a war victory —
+# only achieved through pressure and diplomacy. No "senior emperor" modifier,
+# since no rival emperor remains to outrank.
+# ---------------------------------------------------------------------
+basileus_two_emperors_concede_precedence_effect = {
+	basileus_strip_false_emperor_effect = yes
+}
+
+# ---------------------------------------------------------------------
+# DISPUTE FAILS — war lost / white peace / public climb-down. root = Basileus.
+# No permanent settlement; the decision may be attempted again later.
+# ---------------------------------------------------------------------
+basileus_two_emperors_fail_effect = {
+	add_legitimacy_effect = { LEGITIMACY = minor_legitimacy_loss }
+	add_prestige = {
+		value = medium_prestige_value
+		multiply = -1.0
+	}
+	set_global_variable = { name = basileus_two_emperors_failed value = yes }
+	basileus_two_emperors_clear_transient_globals_effect = yes
+}
+
+# ---------------------------------------------------------------------
+# Clear the per-dispute transient globals (war unlock, heat, challenger).
+# The win/lose markers (resolved/failed) are handled by the story's on_end.
+# ---------------------------------------------------------------------
+basileus_two_emperors_clear_transient_globals_effect = {
+	if = {
+		limit = { has_global_variable = basileus_two_emperors_war_unlocked }
+		remove_global_variable = basileus_two_emperors_war_unlocked
+	}
+	if = {
+		limit = { has_global_variable = basileus_two_emperors_heat }
+		remove_global_variable = basileus_two_emperors_heat
+	}
+}

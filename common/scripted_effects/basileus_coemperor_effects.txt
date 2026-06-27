@@ -1,0 +1,95 @@
+###########################################################
+# BASILEUS — CO-EMPEROR TRAITS
+# Auto-assigns basileus_senior_emperor to the holder of e_byzantium /
+# h_roman_empire / h_eastern_roman_empire when they hold a co-emperorship
+# (a vanilla co_emperorship diarchy), and basileus_junior_emperor to their
+# co-emperor (their diarch). Both traits are stripped when the
+# co-emperorship ends or the senior loses their empire title.
+#
+# Detection:
+#   basileus_is_imperial_roman_court_trigger  -> holds one of the 3 titles
+#   character_has_co_emperorship_trigger      -> vanilla: active co_emperorship
+#   diarch                                    -> scope to the junior partner
+#
+# Hooked from on_action/basileus_coemperor_on_actions.txt.
+###########################################################
+
+# Run on the senior partner (diarchy owner / empire holder).
+# Grants senior to self and junior to the diarch.
+basileus_grant_coemperor_traits_effect = {
+	if = {
+		limit = { NOT = { has_trait = basileus_senior_emperor } }
+		add_trait = basileus_senior_emperor
+	}
+	if = {
+		limit = { has_active_diarchy = yes }
+		diarch = {
+			if = {
+				limit = { NOT = { has_trait = basileus_junior_emperor } }
+				add_trait = basileus_junior_emperor
+			}
+		}
+	}
+}
+
+# Remove the senior trait from this character (if present).
+basileus_strip_senior_emperor_trait_effect = {
+	if = {
+		limit = { has_trait = basileus_senior_emperor }
+		remove_trait = basileus_senior_emperor
+	}
+}
+
+# Remove the junior trait from this character (if present).
+basileus_strip_junior_emperor_trait_effect = {
+	if = {
+		limit = { has_trait = basileus_junior_emperor }
+		remove_trait = basileus_junior_emperor
+	}
+}
+
+# Reconcile a single (potential) senior ruler.
+#  - Reigning emperor WITH a co-emperor -> grant senior (+ junior to the diarch).
+#  - Reigning emperor WITHOUT a co-emperor -> preserve an existing senior trait
+#    (e.g. one gained on ascension from junior); never strip while they reign.
+#  - Not a reigning emperor at all -> clean up any stray hierarchy traits.
+basileus_reconcile_coemperor_traits_effect = {
+	if = {
+		limit = {
+			basileus_is_imperial_roman_court_trigger = yes
+			character_has_co_emperorship_trigger = yes
+		}
+		basileus_grant_coemperor_traits_effect = yes
+	}
+	else = {
+		if = {
+			limit = { basileus_is_imperial_roman_court_trigger = no }
+			basileus_strip_senior_emperor_trait_effect = yes
+			if = {
+				limit = { has_active_diarchy = yes }
+				diarch = { basileus_strip_junior_emperor_trait_effect = yes }
+			}
+		}
+		# else: reigning emperor without a co-emperor -> keep senior as-is.
+	}
+}
+
+# Run on a (former) co-emperor whose co-emperorship just ended. If they have
+# ascended to an imperial title they become the new senior emperor; otherwise,
+# if they are no longer a co-emperor at all, they shed the junior trait.
+basileus_resolve_former_junior_effect = {
+	if = {
+		limit = { has_trait = basileus_junior_emperor }
+		if = {
+			limit = { basileus_is_imperial_roman_court_trigger = yes }
+			# Ascended to the throne -> promote to senior (add_trait auto-removes
+			# the opposite junior trait, but strip explicitly for clarity).
+			remove_trait = basileus_junior_emperor
+			add_trait = basileus_senior_emperor
+		}
+		else_if = {
+			limit = { NOT = { character_has_co_emperorship_trigger = yes } }
+			remove_trait = basileus_junior_emperor
+		}
+	}
+}

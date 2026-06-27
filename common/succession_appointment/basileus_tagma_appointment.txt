@@ -1,0 +1,81 @@
+# ============================================================================
+# Appointment type for the Megas Domestikos (k_megas_domestikos).
+# ----------------------------------------------------------------------------
+# In practice the title is force-assigned to whoever holds the Grand Marshal
+# council seat (see basileus_grant_tagma_command_effect), so this candidate
+# scoring is mostly a fallback for engine-driven vacancies. Kept lean — a
+# martial-weighted score with a hard gate on martial education, mirroring
+# TFE's roman_imperial_military_minister but far smaller.
+# ============================================================================
+
+basileus_tagma_commander = {
+	allow_same_tier_candidates = yes
+	default_candidates = {
+		holder_close_family
+		holder_house_member
+		landed_vassal
+		holder_councilor
+		holder_court_position
+		unlanded_noble_house_head
+	}
+
+	candidate_score = {
+		value = {
+			# Martial skill is the core qualification.
+			add = {
+				value = martial
+				desc = "[martial_skill|E]"
+			}
+			# Prowess (x0.5) and commander traits (x25 each).
+			add = {
+				value = prowess
+				multiply = 0.5
+				desc = prowess_concept
+			}
+			add = {
+				value = number_of_commander_traits
+				multiply = 25
+				desc = number_of_commander_traits_desc
+			}
+			# Prestige standing (+10 per level above 1).
+			add = {
+				value = 10
+				multiply = {
+					value = prestige_level
+					subtract = 1
+				}
+				desc = PRESTIGE_LEVEL_CONCEPT
+			}
+			# Hard gate: the Megas Domestikos is a MALE-ONLY military command,
+			# matching the male-only council Grand Marshal seat under Imperial
+			# Autocracy (basileus_can_be_a_minister_trigger). The engine has NO
+			# hard gender filter for appointment succession (gender is only ever a
+			# candidate_score factor -- see vanilla admin_governor), and the title
+			# law's gender_law field is silently ignored for appointments, so the
+			# bar must live here. Unconditional (not keyed to a realm gender law)
+			# because the realm runs male_preference, not male_only.
+			if = {
+				limit = { is_female = yes }
+				add = { value = -10000 desc = basileus_tagma_male_only_desc }
+			}
+			# Hard gate: must be a trained soldier.
+			if = {
+				limit = {
+					NOR = {
+						has_trait = education_martial_1
+						has_trait = education_martial_2
+						has_trait = education_martial_3
+						has_trait = education_martial_4
+						has_trait = education_martial_5
+					}
+				}
+				add = { value = -10000 desc = lacks_martial_education }
+			}
+			# Cannot appoint the emperor himself.
+			if = {
+				limit = { is_independent_ruler = yes }
+				add = { value = -10000 desc = appointment_is_top_liege }
+			}
+		}
+	}
+}

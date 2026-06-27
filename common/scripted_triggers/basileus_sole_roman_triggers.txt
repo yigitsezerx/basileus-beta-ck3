@@ -1,0 +1,35 @@
+# =====================================================================
+# BASILEUS — SOLE ROMAN EMPEROR (papal recognition) eligibility.
+# ---------------------------------------------------------------------
+# True for the e_byzantium holder when the empire has fully become Roman and
+# there is no rival Western Roman claimant — the preconditions for the
+# story_sole_roman_recognition cycle to auto-start (see the yearly pulse in
+# basileus_yearly_on_actions.txt). Character scope.
+# =====================================================================
+
+basileus_sole_roman_eligible_trigger = {
+	# The reigning emperor, already turned Roman by the Renovatio.
+	has_title = title:e_byzantium
+	culture = culture:eastern_roman
+
+	# Renovatio Linguae Latinae completed (flag set in pandects_renovatio.0007.a).
+	has_global_variable = basileus_renovatio_latina_complete
+
+	# Not already recognised.
+	NOT = { has_global_variable = basileus_sole_roman_recognition_done }
+
+	# No rival Roman emperor in the West — the Holy Roman Empire must not exist.
+	NOT = { exists = title:e_hre.holder }
+
+	# Leverage: Roman armies astride southern Italy, on the Pope's doorstep.
+	completely_controls_region = world_europe_south_italy
+
+	# Restoration proven — Theodosian Triumph OR Justinian's borders.
+	OR = {
+		is_target_in_global_variable_list = {
+			name = unavailable_unique_decisions
+			target = flag:retake_eastern_provinces_decision
+		}
+		completely_controls_region = custom_justinian_ere
+	}
+}

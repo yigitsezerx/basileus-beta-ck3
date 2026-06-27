@@ -1,0 +1,14 @@
+# Helper for GUI visibility
+ercf_is_byzantine_ruler_value = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				has_title = title:e_byzantium
+				has_title = title:h_roman_empire
+				has_title = title:h_eastern_roman_empire
+			}
+		}
+		add = 1
+	}
+}

@@ -1,0 +1,172 @@
+story_sole_roman_recognition = {
+	# The campaign for papal recognition of the Basileus as the one true Roman
+	# Emperor — and, with it, the renaming of the eastern_roman culture to
+	# "Roman". Auto-started by the yearly pulse when
+	# basileus_sole_roman_eligible_trigger is met (see basileus_yearly_on_actions.txt).
+	#
+	# Throne-bound, like the Bulgarian Gambit: it follows whoever holds
+	# e_byzantium. It can only FAIL by losing eligibility (the HRE forms, southern
+	# Italy slips, the emperor ceases to be eastern_roman) — the Pope resists but,
+	# under sustained pressure, ultimately yields.
+	visible = yes
+	icon = {
+		reference = "gfx/interface/icons/government_types/roman_imperial_government.dds"
+	}
+	background = {
+		reference = "gfx/interface/illustrations/event_scenes/ep3_byzantine_throne_room.dds"
+	}
+	visualization = {
+		custom_string_key = "SOLE_ROMAN_INFO_STRING"
+		character = {
+			variable_name = "the_pope"
+			label = "SR_POPE"
+		}
+		basic_counter = {
+			variable_name = "recognition_stage"
+			min = 0
+			max = 3
+			label = "SR_PROGRESS"
+			min_label = "SR_PROGRESS_MIN"
+			max_label = "SR_PROGRESS_MAX"
+		}
+	}
+
+	on_setup = {
+		set_variable = { name = recognition_stage value = 0 }
+		if = {
+			limit = { exists = title:k_papal_state.holder }
+			set_variable = { name = the_pope value = title:k_papal_state.holder }
+		}
+		# Opening: the petition is dispatched to Rome.
+		story_owner = { trigger_event = basileus_sole_roman.0001 }
+	}
+
+	# Throne-bound: pass to the next Basileus rather than ending on death.
+	on_owner_death = {
+		if = {
+			limit = {
+				exists = title:e_byzantium.holder
+				title:e_byzantium.holder = { is_alive = yes }
+			}
+			make_story_owner = title:e_byzantium.holder
+		}
+		else = { end_story = yes }
+	}
+
+	# Keep the story bound to whoever holds e_byzantium.
+	effect_group = {
+		days = 30
+		trigger = {
+			exists = title:e_byzantium.holder
+			NOT = { story_owner = title:e_byzantium.holder }
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = { make_story_owner = title:e_byzantium.holder }
+		}
+	}
+
+	# Recognition achieved — close the story for good. Robust backstop: fires
+	# whether or not the 0010 event's own end_story ran (the rename effect sets
+	# this global), so the cycle never lingers after the payoff.
+	effect_group = {
+		days = 7
+		trigger = {
+			has_global_variable = basileus_sole_roman_recognition_done
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = { end_story = yes }
+		}
+	}
+
+	# Validity guard — eligibility loss is the only real failure. End the story
+	# (without recognition) if the empire is gone, the HRE forms, southern Italy
+	# slips, or the emperor is no longer Roman. The finale is exempt.
+	effect_group = {
+		days = 30
+		trigger = {
+			NOT = { has_variable = sole_roman_finale_done }
+			OR = {
+				NOT = { exists = title:e_byzantium.holder }
+				exists = title:e_hre.holder
+				story_owner = {
+					OR = {
+						NOT = { has_title = title:e_byzantium }
+						NOT = { culture = culture:eastern_roman }
+						NOT = { completely_controls_region = world_europe_south_italy }
+					}
+				}
+			}
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = { end_story = yes }
+		}
+	}
+
+	# Panel refresh — keep the tracked Pope current.
+	effect_group = {
+		days = 60
+		trigger = { exists = title:k_papal_state.holder }
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = the_pope value = title:k_papal_state.holder }
+			}
+		}
+	}
+
+	# 1. Rome stalls — the Curia receives the petition coldly.
+	effect_group = {
+		days = { 60 120 }
+		chance = 100
+		trigger = {
+			var:recognition_stage = 0
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = recognition_stage value = 1 }
+				story_owner = { trigger_event = basileus_sole_roman.0002 }
+			}
+		}
+	}
+
+	# 2. Pressure mounts — the Latin West, lacking an emperor of its own, wavers.
+	effect_group = {
+		days = { 200 360 }
+		chance = 100
+		trigger = {
+			var:recognition_stage = 1
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = recognition_stage value = 2 }
+				story_owner = { trigger_event = basileus_sole_roman.0003 }
+			}
+		}
+	}
+
+	# 3. Recognition — the Pope yields and proclaims the sole Roman Emperor.
+	effect_group = {
+		days = { 200 360 }
+		chance = 100
+		trigger = {
+			var:recognition_stage >= 2
+			NOT = { has_variable = sole_roman_finale_done }
+			story_owner = {
+				basileus_sole_roman_eligible_trigger = yes
+			}
+		}
+		triggered_effect = {
+			trigger = { always = yes }
+			effect = {
+				set_variable = { name = sole_roman_finale_done value = yes }
+				set_variable = { name = recognition_stage value = 3 }
+				story_owner = { trigger_event = basileus_sole_roman.0010 }
+			}
+		}
+	}
+}

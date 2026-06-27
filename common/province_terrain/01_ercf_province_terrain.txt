@@ -1,0 +1,14 @@
+﻿default_land=plains
+default_sea=sea
+default_coastal_sea=coastal_sea
+3761=farmlands
+13273=hills
+13285=farmlands
+13286=hills
+13287=hills
+13288=hills
+13289=farmlands
+13290=hills
+13291=farmlands
+13292=farmlands
+13293=plains

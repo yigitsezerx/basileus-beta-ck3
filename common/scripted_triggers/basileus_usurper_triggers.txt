@@ -1,0 +1,43 @@
+###########################################################
+# BASILEUS — USURPER CIVIL WARS
+# Triggers for the periodic usurpation system. A powerful, ambitious vassal
+# under a Roman emperor (e_byzantium / h_roman_empire / h_eastern_roman_empire)
+# can rise as a pretender and form a claimant faction for the throne.
+###########################################################
+
+# Is `this` a ruler whose imperial throne can be challenged by a usurper?
+basileus_usurpable_emperor_trigger = {
+	is_alive = yes
+	is_landed = yes
+	is_ruler = yes
+	basileus_is_imperial_roman_court_trigger = yes
+}
+
+# Is `this` a credible usurper candidate against $LIEGE$?
+# Powerful + ambitious/disloyal, and NOT the heir / close family / co-emperor.
+# (Faction create/join capability is checked separately by the caller.)
+basileus_eligible_usurper_trigger = {
+	is_adult = yes
+	is_alive = yes
+	is_landed = yes
+	NOT = { has_trait = basileus_usurper }
+	NOT = { this = $LIEGE$ }
+
+	# Powerful — at least a duke-tier vassal.
+	highest_held_title_tier >= tier_duchy
+
+	# Ambitious or disloyal.
+	OR = {
+		has_trait = ambitious
+		has_trait = proud
+		opinion = {
+			target = $LIEGE$
+			value < 0
+		}
+	}
+
+	# Exclude the designated heir, close family, and the co-emperor (diarch).
+	NOT = { is_primary_heir_of = $LIEGE$ }
+	NOT = { is_diarch_of_target = $LIEGE$ }
+	NOT = { is_close_family_of = $LIEGE$ }
+}

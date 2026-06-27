@@ -1,0 +1,79 @@
+# =====================================================================
+# BASILEUS — FACTION TRIGGER OVERRIDES
+# ---------------------------------------------------------------------
+# File loads after vanilla's 00_faction_triggers.txt by virtue of the 05_ prefix.
+# Redefining common_character_validity_trigger to block the Akolouthos.
+# =====================================================================
+
+common_character_validity_trigger = {
+	is_imprisoned = no
+	NOR = { #No prince-bishop can ever join
+		government_has_flag = government_is_theocracy
+		trigger_if = {
+			limit = { exists = cp:councillor_court_chaplain }
+			this = cp:councillor_court_chaplain
+		}
+	}
+	OR = {
+		$FACTION_TARGET$ = liege
+		any_character_active_contract = {
+			task_contract_target = $FACTION_TARGET$
+		}
+	}
+	highest_held_title_tier > tier_barony
+
+	#Not blocked through events
+	custom_description = {
+		text = character_blocked_from_joining
+		NOT = {
+			has_character_flag = joining_faction_block
+		}
+	}
+	
+	# You cannot start a faction against your bloc members
+	trigger_if = {
+		limit = {
+			government_is_japanese_trigger = yes
+			$FACTION_TARGET$ = { government_is_japanese_trigger = yes }
+			exists = house.house_confederation
+			exists = $FACTION_TARGET$.house.house_confederation
+		}
+		custom_tooltip = {
+			text = house_confederation_faction_blocker_tt
+			house.house_confederation != $FACTION_TARGET$.house.house_confederation
+		}
+	}
+	
+	NOT = { has_relation_blood_brother = $FACTION_TARGET$ }
+
+	# Akolouthos loyalty gate: cannot join/create a faction against their employer/liege
+	custom_description = {
+		text = akolouthos_faction_block_tt
+		NOT = {
+			AND = {
+				has_court_position = akolouthos_court_position
+				is_court_position_employer = {
+					court_position = akolouthos_court_position
+					who = $FACTION_TARGET$
+				}
+			}
+		}
+	}
+
+	# Megas Domestikos loyalty gate: the commander of the standing tagma cannot
+	# join or create a faction against his liege/top liege (the emperor). Mirrors
+	# the Akolouthos gate. Harmless while the office is transiently parked on the
+	# emperor himself (he has no liege, so the AND can never be true for him).
+	custom_description = {
+		text = megas_domestikos_faction_block_tt
+		NOT = {
+			AND = {
+				has_title = title:k_megas_domestikos
+				OR = {
+					$FACTION_TARGET$ = liege
+					$FACTION_TARGET$ = top_liege
+				}
+			}
+		}
+	}
+}

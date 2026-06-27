@@ -1,0 +1,86 @@
+﻿# =====================================================================
+# BASILEUS — THE MACEDONIAN RENAISSANCE: casting + reward + debug effects.
+# ---------------------------------------------------------------------
+# A single capstone moment. The cast effect surfaces the court's leading scholar
+# (the new Photios) for the prose + the artifact's authorship, with a guaranteed
+# fallback to the emperor so the event stays standalone-safe (console-firable).
+# root = the reigning emperor.
+# =====================================================================
+
+# --- The most learned figure of the court (the new Photios / Leo the Mathematician). ---
+basileus_macren_cast_scholar_effect = {
+	if = {
+		limit = { NOT = { exists = scope:renaissance_scholar } }
+		# The new Photios: prefer a courtier already INSPIRED to a great work,
+		# then the most learned scholars and theologians of the court.
+		random_courtier = {
+			limit = { is_adult = yes  is_alive = yes  NOT = { this = root } }
+			weight = {
+				base = 1
+				modifier = { add = 100  has_inspiration = yes }
+				modifier = { add = learning }
+				modifier = { add = 25  has_trait = scholar }
+				modifier = { add = 15  has_trait = theologian }
+			}
+			save_scope_as = renaissance_scholar
+		}
+		# Fallbacks so the prose never blanks: a learned vassal, then the emperor.
+		if = {
+			limit = { NOT = { exists = scope:renaissance_scholar } }
+			random_vassal = {
+				limit = { is_adult = yes  is_alive = yes }
+				weight = { base = 1  modifier = { add = learning } }
+				save_scope_as = renaissance_scholar
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:renaissance_scholar } }
+			save_scope_as = renaissance_scholar
+		}
+	}
+}
+
+# --- The "both" capstone payoff: cultural acceleration + dynastic legacy + artifact. ---
+basileus_macren_reward_effect = {
+	# One-time imperial honors.
+	add_prestige = 1000
+	add_legitimacy = 500
+	add_learning_lifestyle_xp = 300
+	give_nickname = nick_the_wise
+
+	# The reigning patron (permanent) + the dynastic golden age (permanent,
+	# carrying the cultural-acceleration multipliers).
+	add_character_modifier = { modifier = basileus_macren_patron_modifier }
+	dynasty ?= {
+		add_dynasty_modifier = basileus_macren_dynasty_modifier
+		add_dynasty_prestige = 2500
+	}
+}
+
+# =====================================================================
+# DEBUG / console helpers (run on the player = the reigning emperor):
+#   effect basileus_macren_debug_seed_streak_effect = yes  # fake the 3-emperor streak
+#   effect basileus_macren_debug_fire_effect = yes         # seed + fire the capstone (bypass gates)
+#   effect basileus_macren_debug_end_effect = yes          # clear the once-per-game lock so it can re-fire
+#   event  basileus_macedonian_renaissance.0001            # fire the capstone standalone
+# =====================================================================
+basileus_macren_debug_seed_streak_effect = {
+	set_global_variable = { name = basileus_macren_streak_count  value = 3 }
+	if = {
+		limit = { exists = dynasty }
+		set_global_variable = { name = basileus_macren_streak_dynasty  value = dynasty }
+	}
+	set_global_variable = { name = basileus_macren_last_holder  value = root }
+}
+
+basileus_macren_debug_fire_effect = {
+	basileus_macren_debug_seed_streak_effect = yes
+	trigger_event = basileus_macedonian_renaissance.0001
+}
+
+basileus_macren_debug_end_effect = {
+	remove_list_global_variable = {
+		name = unavailable_unique_decisions
+		target = flag:basileus_macren_achieved
+	}
+}

@@ -1,0 +1,35 @@
+# =====================================================================
+# BASILEUS — SENATE OF MAGNAURA access.
+# ---------------------------------------------------------------------
+# Who may convene/use the Senate of Magnaura. Character scope (the court owner).
+#   * the e_byzantium holder, always; OR
+#   * a RESTORED Roman Empire (h_roman_empire / h_eastern_roman_empire) holder,
+#     but ONLY while the imperial capital remains in Constantinople (c_byzantion)
+#     — the Senate is an institution of the City itself.
+# =====================================================================
+
+basileus_can_use_senate_trigger = {
+	OR = {
+		has_title = title:e_byzantium
+		AND = {
+			OR = {
+				has_title = title:h_roman_empire
+				has_title = title:h_eastern_roman_empire
+			}
+			capital_county = title:c_byzantion
+		}
+	}
+}
+
+# Is this character a valid pick for a senate dignity (AI auto-appointment).
+# Evaluated in a candidate (vassal/courtier) scope; mirrors the senate court
+# positions' valid_character eligibility (noble, male, adult, not already seated).
+basileus_senate_ai_candidate_trigger = {
+	is_alive = yes
+	is_adult = yes
+	is_male = yes
+	is_lowborn = no
+	NOT = { has_court_position = hypatus_court_position }
+	NOT = { has_court_position = senator_court_position }
+	NOT = { has_court_position = patrician_court_position }
+}

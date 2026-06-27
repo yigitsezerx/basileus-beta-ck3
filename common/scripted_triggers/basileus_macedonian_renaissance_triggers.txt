@@ -1,0 +1,57 @@
+﻿# =====================================================================
+# BASILEUS — THE MACEDONIAN RENAISSANCE: eligibility triggers.
+# ---------------------------------------------------------------------
+# A single auto-firing capstone (basileus_macedonian_renaissance.0001),
+# gated on a dynasty holding e_byzantium for several consecutive
+# generations plus the cultural/institutional prerequisites of the age.
+# The streak is maintained by basileus_macedonian_renaissance_on_actions.txt.
+# root = the reigning emperor.
+# =====================================================================
+
+# Three (or more) consecutive same-dynasty holders of e_byzantium, the
+# current holder still of that house.
+basileus_macren_streak_trigger = {
+	exists = global_var:basileus_macren_streak_count
+	global_var:basileus_macren_streak_count >= 3
+	exists = title:e_byzantium.holder
+	exists = global_var:basileus_macren_streak_dynasty
+	title:e_byzantium.holder.dynasty = global_var:basileus_macren_streak_dynasty
+}
+
+# The full golden-age gate (checked yearly on the e_byzantium holder).
+basileus_macedonian_renaissance_eligible_trigger = {
+	has_title = title:e_byzantium
+	OR = {
+		culture = culture:greek
+		culture = culture:eastern_roman
+	}
+
+	# Dynastic continuity: several same-dynasty emperors in a row.
+	basileus_macren_streak_trigger = yes
+
+	# The institution stands: the Pandidakterion in Constantinople.
+	title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
+
+	# Prosperity: the City is richly developed.
+	title:c_byzantion = { development >= 30 }
+
+	# The schools are endowed & FUNCTIONING (a Paideia faculty law), not merely built.
+	OR = {
+		has_realm_law = basileus_paideia_law_nomoi
+		has_realm_law = basileus_paideia_law_philosophia
+	}
+
+	# Imperial wealth: the golden age was an expensive, state-funded enterprise.
+	gold >= 1000
+
+	# Stability: no vassal in open revolt against Us.
+	NOT = {
+		any_character_war = {
+			primary_defender = root
+			any_war_attacker = { is_vassal_or_below_of = root }
+		}
+	}
+
+	# Once per game.
+	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:basileus_macren_achieved } }
+}

@@ -1,0 +1,1726 @@
+# =====================================================================
+# BASILEUS — THEME FORMATION EFFECTS
+# ---------------------------------------------------------------------
+# Called by basileus_reorganize_themes_decision. Each effect merges a
+# region's duchies' de jure counties into one surviving duchy, renames the
+# survivor to the theme (set_title_name — its adjective comes from the
+# <KEY>_adj loc convention), destroys the emptied parent duchies, and locks
+# the theme via the unavailable_unique_decisions global list.
+#
+# On reorganization, counties not of the reorganizer's culture get a one-shot
+# partial conversion toward it (basileus_theme_convert_region_effect).
+# =====================================================================
+
+# One-shot culture nudge: each county in REGION not already of root's culture
+# has a chance to flip to it. (root = the decision-taking emperor.)
+basileus_theme_convert_region_effect = {
+	every_county_in_region = {
+		region = $REGION$
+		limit = { NOT = { culture = root.culture } }
+		random = {
+			chance = 10
+			set_county_culture = root.culture
+		}
+	}
+}
+basileus_theme_convert_region_effect_big = {
+	every_county_in_region = {
+		region = $REGION$
+		limit = { NOT = { culture = root.culture } }
+		random = {
+			chance = 50
+			set_county_culture = root.culture
+		}
+	}
+}
+
+# Bake a culture-appropriate theme name onto a title at FORMATION time, so the
+# stored name is a fixed string. (A live [GetPlayer.Custom(...)] title name
+# renders empty in De Jure map mode / some tooltips when GetPlayer is null.)
+# Branches on the former emperor's culture (root). $ER$/$GREEK$ are static keys
+# whose <KEY>_adj siblings supply the adjective.
+basileus_set_theme_name_effect = {
+	if = {
+		limit = { culture = culture:eastern_roman }
+		$TITLE$ = { set_title_name = $ER$ }
+	}
+	else = {
+		$TITLE$ = { set_title_name = $GREEK$ }
+	}
+}
+
+# Haemimontus — custom_roman_haemimontus (d_bulgaria + d_philippopolis).
+# Survivor: d_philippopolis. Merged & destroyed: d_bulgaria.
+basileus_form_theme_haemimontus_effect = {
+	title:d_bulgaria = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_philippopolis
+		}
+	}
+	basileus_set_theme_name_effect = { TITLE = title:d_philippopolis  ER = BASILEUS_THEME_HAEMIMONTUS_NAME_ER  GREEK = BASILEUS_THEME_HAEMIMONTUS_NAME_GREEK }
+	# Recolor survivor d_philippopolis (olive-gold) + a unique shade per county
+	# (native + the counties absorbed from the destroyed d_bulgaria).
+	title:d_philippopolis      = { set_title_color = { 102 63  84 } }
+	#title:c_philippopolis        = { set_title_color = { 103 127  37 } }
+	#title:c_sredets              = { set_title_color = { 140 180  66 } }
+	#title:c_aytos                = { set_title_color = {  96 152  95 } }
+	#title:c_mesembria            = { set_title_color = { 133 124  43 } }
+	#title:c_kran                 = { set_title_color = { 170 177  72 } }
+	#title:c_beroe                = { set_title_color = { 126 149 101 } }
+	#title:c_burgas               = { set_title_color = { 163 121  49 } }
+	#title:c_zherkovo             = { set_title_color = { 119 174  78 } }
+	#title:c_rhodopes             = { set_title_color = { 156 146 107 } }
+	#title:c_naissus              = { set_title_color = { 112 118  55 } }
+	#title:c_pomoravlje           = { set_title_color = { 149 171  84 } }
+	#title:c_velbazhd             = { set_title_color = { 105 143  32 } }
+	#title:c_pirin                = { set_title_color = { 142 115  61 } }
+	#title:c_strumica             = { set_title_color = {  98 168  90 } }
+	#title:c_skopje               = { set_title_color = { 135 140  38 } }
+	#title:c_ohrid                = { set_title_color = {  91 112  67 } }
+	#title:c_debar                = { set_title_color = { 128 165  96 } }
+	destroy_title = title:d_bulgaria
+	basileus_theme_convert_region_effect = { REGION = custom_roman_haemimontus }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_haemimontus_formed
+	}
+}
+
+# Paristrion — custom_roman_paristrion (d_turnovo + d_dobrudja).
+# Survivor: d_turnovo. Merged & destroyed: d_dobrudja.
+basileus_form_theme_paristrion_effect = {
+	title:d_dobrudja = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_turnovo
+		}
+	}
+	basileus_set_theme_name_effect = { TITLE = title:d_turnovo  ER = BASILEUS_THEME_PARISTRION_NAME_ER  GREEK = BASILEUS_THEME_PARISTRION_NAME_GREEK }
+	# Recolor survivor d_turnovo
+	# (native + c_constanta absorbed from the destroyed d_dobrudja).
+	title:k_bulgaria = { set_title_color = { 102 78 91} }
+	title:d_turnovo            = { set_title_color = {  122 61  94 } }
+	#title:c_turnovo              = { set_title_color = {  63 117  62 } }
+	#title:c_nikopolis            = { set_title_color = { 100 170  91 } }
+	#title:c_dorostorum           = { set_title_color = {  56 142 120 } }
+	#title:c_vratsa               = { set_title_color = {  93 114  68 } }
+	#title:c_constanta            = { set_title_color = { 130 167  97 } }
+	destroy_title = title:d_dobrudja
+	basileus_theme_convert_region_effect = { REGION = custom_roman_paristrion }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_paristrion_formed
+	}
+}
+
+# Peloponnese — every duchy in custom_roman_peloponnese becomes de jure part of
+# k_krete (counties follow their duchies; the kingdom is then renamed). The lock
+# flag is set by the decision's effect, not here.
+basileus_form_theme_peloponnese_effect = {
+	every_county_in_region = {
+		region = custom_roman_peloponnese
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_krete
+		}
+	}
+	title:k_krete = {
+		set_capital_county = title:c_korinthos
+	}
+	basileus_set_theme_name_effect = { TITLE = title:k_krete  ER = BASILEUS_THEME_PELOPONNESE_NAME_ER  GREEK = BASILEUS_THEME_PELOPONNESE_NAME_GREEK }
+	# then a unique shade per county.
+	title:k_krete = { set_title_color = { 179 53 137 } }
+	title:d_achaia             = { set_title_color = {  107  32 82 } }
+	title:d_krete              = { set_title_color = {  122  41 128 } }
+	title:d_aegean_islands     = { set_title_color = {  122  34 91 } }
+	## d_achaia
+	#title:c_achaia               = { set_title_color = {  20  82 102 } }
+	#title:c_korinthos            = { set_title_color = {  55 135 131 } }
+	#title:c_messenia             = { set_title_color = {  20 107 160 } }
+	#title:c_laconia              = { set_title_color = {  48  79 108 } }
+	## d_krete
+	#title:c_chandax              = { set_title_color = {  36  52 106 } }
+	#title:c_chania               = { set_title_color = {  73 105 135 } }
+	## d_aegean_islands
+	#title:c_naxos                = { set_title_color = {  20  49 149 } }
+	#title:c_chios                = { set_title_color = {  30 102 178 } }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_peloponnese }
+}
+
+basileus_form_theme_hellas_effect = {
+	every_county_in_region = {
+		region = custom_roman_hellas
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_hellas
+		}
+	}	
+	title:k_hellas = {
+		set_capital_county = title:c_attica
+	}
+	# Recolor the kingdom + its 2 duchies into a teal-green family ({ 55 125 110 });
+	# then a unique shade per county.
+	title:k_hellas = { set_title_color = { 111 20 61 } }
+	title:d_athens             = { set_title_color = {  155 20 61 } }
+	title:d_thessaly           = { set_title_color = {  142  32 111 } }
+	## d_athens
+	#title:c_attica               = { set_title_color = {  28 112  77 } }
+	#title:c_boeotia              = { set_title_color = {  65 165 106 } }
+	#title:c_euboea               = { set_title_color = {  21 137 135 } }
+	## d_thessaly
+	#title:c_thessalia            = { set_title_color = {  46  82  81 } }
+	#title:c_demetrias            = { set_title_color = {  83 135 110 } }
+	#title:c_neopatras            = { set_title_color = {  39 107 139 } }
+	#title:c_thessaliotis         = { set_title_color = {  76  79  87 } }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_hellas }
+}
+
+basileus_form_theme_macedonia_effect = {
+	every_county_in_region = {
+		region = custom_roman_macedonia
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_thessalonika
+		}
+	}
+	title:k_thessalonika = {
+		set_capital_county = title:c_thessalonika
+	}
+	basileus_set_theme_name_effect = { TITLE = title:k_thessalonika  ER = BASILEUS_THEME_MACEDONIA_NAME_ER  GREEK = BASILEUS_THEME_MACEDONIA_NAME_GREEK }
+	# Recolor the kingdom + its 2 duchies into a steel-blue family ({ 70 100 155 });
+	# then a unique shade per county.
+	title:k_thessalonika = { set_title_color = { 49 42 135 } }
+	title:d_thessalonika       = { set_title_color = {  59  54 132 } }
+	title:d_strymon            = { set_title_color = {  86  65 142 } }
+	## d_thessalonika
+	#title:c_thessalonika         = { set_title_color = {  43  87 122 } }
+	#title:c_chalkidike           = { set_title_color = {  80 140 151 } }
+	#title:c_veria                = { set_title_color = {  36 112 180 } }
+	## d_strymon
+	#title:c_mosynopolis          = { set_title_color = {  61  57 126 } }
+	#title:c_adrianopolis         = { set_title_color = {  98 110 155 } }
+	#title:c_serres               = { set_title_color = {  54  82 184 } }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_macedonia }
+}
+
+# Thrace — elevates d_thrace into the new titular kingdom k_thrace (de jure
+# under e_byzantium), granted to the reorganizer. Name is culture-dynamic via loc.
+basileus_form_theme_thrace_effect = {
+	title:k_thrace = { set_de_jure_liege_title = title:e_byzantium }
+	title:d_thrace = { set_de_jure_liege_title = title:k_thrace }
+	create_title_and_vassal_change = {
+		type = created
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	title:k_thrace = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+	basileus_set_theme_name_effect = { TITLE = title:k_thrace  ER = BASILEUS_THEME_THRAKE_NAME_ER  GREEK = BASILEUS_THEME_THRAKE_NAME_GREEK }
+	# Recolor the kingdom + d_thrace into an indigo-purple family ({ 95 75 145 });
+	# then a unique shade per county.
+	title:k_thrace = { set_title_color = { 119 41 70 } }
+	title:d_thrace             = { set_title_color = {  119  41 70 } }
+	title:c_byzantion            = { set_title_color = {  85  20 34 } }
+	title:c_kalliopolis          = { set_title_color = { 117 41 90 } }
+	title:c_brysis               = { set_title_color = {  124  35 105 } }
+	title:c_derkoi               = { set_title_color = {  120  40 104 } }
+	# One-shot culture nudge across d_thrace's counties.
+	title:d_thrace = {
+		every_de_jure_county = {
+			limit = { NOT = { culture = root.culture } }
+			random = {
+				chance = 33
+				set_county_culture = root.culture
+			}
+		}
+	}
+}
+
+basileus_form_theme_dioclea_effect = {
+	title:d_rashka = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_duklja
+		}
+	}
+	basileus_set_theme_name_effect = { TITLE = title:d_duklja  ER = BASILEUS_THEME_DIOCLEA_NAME_ER  GREEK = BASILEUS_THEME_DIOCLEA_NAME_GREEK }
+	# Recolor survivor d_duklja (brown) + a unique shade per county
+	# (native + the counties absorbed from the destroyed d_rashka).
+	title:k_serbia             = { set_title_color = { 140 100  65 } }
+	title:d_duklja             = { set_title_color = { 140 100  65 } }
+	title:c_duklja               = { set_title_color = { 113  87  32 } }
+	title:c_pomorje              = { set_title_color = { 150 140  61 } }
+	title:c_travunia             = { set_title_color = { 106 112  90 } }
+	title:c_rashka               = { set_title_color = { 143  84  38 } }
+	title:c_beograd              = { set_title_color = { 180 137  67 } }
+	title:c_zlatibor             = { set_title_color = { 136 109  96 } }
+	title:c_sumadija             = { set_title_color = { 173  81  44 } }
+	title:c_podrinje             = { set_title_color = { 129 134  73 } }
+	title:c_hvosno               = { set_title_color = { 166 106 102 } }
+	destroy_title = title:d_rashka
+	basileus_theme_convert_region_effect = { REGION = custom_roman_dioclea }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_dioclea_formed
+	}
+}
+
+basileus_form_theme_dalmatia_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_dalmatia
+		set_de_jure_liege_title = title:d_dalmatia
+	}
+	every_county_in_region = {
+		region = custom_roman_croatia
+		set_de_jure_liege_title = title:d_dalmatia
+	}	
+
+	destroy_title = title:d_ragusa
+	destroy_title = title:d_usora
+	destroy_title = title:d_croatia
+	destroy_title = title:d_bosna
+	destroy_title = title:d_lower_bosna
+	# Recolor survivor d_dalmatia (slate-blue) + a unique shade per county — native
+	# plus everything absorbed from the destroyed d_ragusa/d_usora/d_croatia/d_bosna/
+	# d_lower_bosna (and the loose Dalmatia/Croatia counties).
+	title:d_dalmatia           = { set_title_color = {  85 115 135 } }
+	title:c_zadar                = { set_title_color = {  58 102 102 } }
+	title:c_knin                 = { set_title_color = {  95 155 131 } }
+	title:c_cetina               = { set_title_color = {  51 127 160 } }
+	title:c_ragusa               = { set_title_color = {  88  99 108 } }
+	title:c_zachlumia            = { set_title_color = { 125 152 137 } }
+	title:c_zelengora            = { set_title_color = {  81 124 166 } }
+	title:c_zavrsje              = { set_title_color = { 118  96 114 } }
+	title:c_pagania              = { set_title_color = {  74 149 143 } }
+	title:c_gacka                = { set_title_color = { 111 121 172 } }
+	title:c_ljubljana            = { set_title_color = {  67  93 120 } }
+	title:c_lika                 = { set_title_color = { 104 146 149 } }
+	title:c_cherso               = { set_title_color = {  60 118  97 } }
+	title:c_modrus               = { set_title_color = {  97  90 126 } }
+	title:c_rama                 = { set_title_color = {  53 143 155 } }
+	title:c_donjikraji           = { set_title_color = {  90 115 103 } }
+	title:c_vhrbosna             = { set_title_color = {  46  87 132 } }
+	title:c_pset                 = { set_title_color = {  83 140 161 } }
+	title:c_soli                 = { set_title_color = { 120 112 109 } }
+	title:c_usora                = { set_title_color = {  76  84 138 } }
+	title:c_vodica               = { set_title_color = { 113 137 167 } }
+	title:c_vrbas                = { set_title_color = {  69 109 115 } }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_dalmatia }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_dalmatia_formed
+	}
+}
+basileus_form_theme_croatia_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_croatia
+		set_de_jure_liege_title = title:d_croatia
+	}
+	basileus_set_theme_name_effect = { TITLE = title:d_croatia  ER = BASILEUS_THEME_CROATIA_NAME_ER  GREEK = BASILEUS_THEME_CROATIA_NAME_GREEK }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_croatia }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_croatia_formed
+	}
+}
+
+basileus_form_theme_syria_effect = {
+
+	every_county_in_region = {
+		region = custom_roman_syria
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_syria
+		}
+	}
+
+	title:k_syria = {
+		set_capital_county = title:c_antiocheia
+		set_title_color = { 151 40 38 }
+	}
+
+	# Recolor the 10 Syrian duchies into a deep-red family anchored on k_syria's
+	# { 151 40 38 }, spread (brick / maroon / rose / terracotta / coral / wine) so
+	# adjacent duchies read apart; then a unique shade per county of its own duchy.
+	title:d_cyprus      = { set_title_color = { 185 70 55 } }   # brick-red
+	title:d_antioch     = { set_title_color = { 151 40 38 } }   # base (capital)
+	title:d_edessa      = { set_title_color = { 120 30 35 } }   # dark maroon
+	title:d_diyarbakr   = { set_title_color = { 175 55 70 } }   # rose-red
+	title:d_diyarmudar  = { set_title_color = { 195 90 60 } }   # terracotta
+	title:d_aleppo      = { set_title_color = { 165 45 45 } }   # medium red
+	title:d_palmyra     = { set_title_color = { 205 100 80 } }  # coral
+	title:d_homs        = { set_title_color = { 135 35 55 } }   # wine
+	title:d_lebanon     = { set_title_color = { 180 65 90 } }   # pink-rose
+	title:d_damascus    = { set_title_color = { 110 35 50 } }   # dark wine
+	# d_cyprus
+	title:c_nicosia            = { set_title_color = { 158  57  22 } }
+	title:c_famagusta          = { set_title_color = { 195 110  51 } }
+	# d_antioch
+	title:c_antiocheia         = { set_title_color = { 124  27  20 } }
+	title:c_alexandretta       = { set_title_color = { 161  80  34 } }
+	# d_edessa
+	title:c_edessa             = { set_title_color = {  93  20  20 } }
+	title:c_samosata           = { set_title_color = { 130  70  31 } }
+	title:c_marash             = { set_title_color = {  86  42  60 } }
+	title:c_aintab             = { set_title_color = { 123  20  20 } }
+	# d_diyarbakr
+	title:c_amida              = { set_title_color = { 148  42  37 } }
+	title:c_tall_basma         = { set_title_color = { 185  95  66 } }
+	title:c_mayyafariqin       = { set_title_color = { 141  67  95 } }
+	title:c_bakriya            = { set_title_color = { 178  39  43 } }
+	# d_diyarmudar
+	title:c_raqqa              = { set_title_color = { 168  77  27 } }
+	title:c_upper_khabur       = { set_title_color = { 205 130  56 } }
+	title:c_harran             = { set_title_color = { 161 102  85 } }
+	title:c_dausar             = { set_title_color = { 198  74  33 } }
+	# d_aleppo
+	title:c_aleppo             = { set_title_color = { 138  32  20 } }
+	title:c_suriya             = { set_title_color = { 175  85  41 } }
+	title:c_syrrusafa          = { set_title_color = { 131  57  70 } }
+	title:c_qinnasrin          = { set_title_color = { 168  29  20 } }
+	# d_palmyra
+	title:c_palmyra            = { set_title_color = { 178  87  47 } }
+	title:c_sukhna             = { set_title_color = { 215 140  76 } }
+	title:c_qaryatan           = { set_title_color = { 171 112 105 } }
+	# d_homs
+	title:c_homs               = { set_title_color = { 108  22  22 } }
+	title:c_shayzar            = { set_title_color = { 145  75  51 } }
+	title:c_hama               = { set_title_color = { 101  47  80 } }
+	# d_lebanon
+	title:c_beirut             = { set_title_color = { 153  52  57 } }
+	title:c_tripoli            = { set_title_color = { 190 105  86 } }
+	# d_damascus
+	title:c_damascus           = { set_title_color = {  83  22  20 } }
+	title:c_juwair             = { set_title_color = { 120  75  46 } }
+	title:c_baalbek            = { set_title_color = {  76  47  75 } }
+	title:c_hauran             = { set_title_color = { 113  20  23 } }
+
+	destroy_title = title:k_cyprus
+	basileus_theme_convert_region_effect = { REGION = custom_roman_syria }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_syria_formed
+	}
+}
+
+basileus_form_theme_palestina_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_palestina
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_jerusalem
+		}
+	}
+
+	title:k_jerusalem = {
+		set_title_color = { 129 28 54 }
+	}
+
+	# Recolor the 5 Palestinian duchies into a crimson family anchored on
+	# k_jerusalem's { 129 28 54 }, spread (rose / wine-purple / brick / magenta) so
+	# adjacent duchies read apart; then a unique shade per county of its own duchy.
+	title:d_palestine      = { set_title_color = { 129 28 54 } }   # base (capital, holds Jerusalem)
+	title:d_amman          = { set_title_color = { 170 55 75 } }   # rose-red
+	title:d_urdunn         = { set_title_color = { 95 25 60 } }    # dark wine-purple
+	title:d_oultrejourdain = { set_title_color = { 185 70 65 } }   # brick-coral
+	title:d_sinai          = { set_title_color = { 150 40 100 } }  # magenta-purple
+	# d_palestine
+	title:c_jerusalem          = { set_title_color = { 102  20  21 } }
+	title:c_ghazza             = { set_title_color = { 139  68  50 } }
+	title:c_jaffa              = { set_title_color = {  95  40  79 } }
+	# d_amman
+	title:c_balqa              = { set_title_color = { 143  42  42 } }
+	title:c_maab               = { set_title_color = { 180  95  71 } }
+	# d_urdunn
+	title:c_tiberias           = { set_title_color = {  68  20  27 } }
+	title:c_acre               = { set_title_color = { 105  65  56 } }
+	title:c_irbid              = { set_title_color = {  61  37  85 } }
+	# d_oultrejourdain
+	title:c_kerak              = { set_title_color = { 158  57  32 } }
+	title:c_negev              = { set_title_color = { 195 110  61 } }
+	title:c_al_aqabah          = { set_title_color = { 151  82  90 } }
+	title:c_maan               = { set_title_color = { 188  54  38 } }
+	# d_sinai
+	title:c_farama             = { set_title_color = { 123  27  67 } }
+	title:c_sinai              = { set_title_color = { 160  80  96 } }
+	title:c_firaun             = { set_title_color = { 116  52 125 } }
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_palestina }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_palestina_formed
+	}
+}
+
+basileus_form_theme_africa_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_africae
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_africa
+		}
+	}
+
+	title:k_africa = {
+		set_capital_county = title:c_tunis
+		set_title_color = { 147 55 106 }
+		set_de_jure_liege_title = title:e_byzantium
+	}
+
+	basileus_set_theme_name_effect = { TITLE = title:k_africa  ER = BASILEUS_THEME_AFRICA_NAME_ER  GREEK = BASILEUS_THEME_AFRICA_NAME_GREEK }
+
+	# Recolor the 8 African duchies into a magenta/purple family anchored on
+	# k_africa's { 147 55 106 }; then a unique shade per county of its own duchy.
+	title:d_syrte              = { set_title_color = { 104  28  67 } }
+	title:d_tripolitania       = { set_title_color = { 165  25 110 } }
+	title:d_gabes              = { set_title_color = { 106  22 153 } }
+	title:d_kairouan           = { set_title_color = { 167  20  96 } }
+	title:d_tunis              = { set_title_color = { 147  55 106 } }
+	title:d_kroumerie          = { set_title_color = { 169  20  82 } }
+	title:d_bejaia             = { set_title_color = { 110  20 125 } }
+	title:d_alger              = { set_title_color = { 171  20  68 } }
+	# d_syrte
+	title:c_syrte              = { set_title_color = {  77  20  34 } }
+	title:c_labda              = { set_title_color = { 114  68  63 } }
+	# d_tripolitania
+	title:c_tripolitana        = { set_title_color = { 138  20  77 } }
+	title:c_djerba             = { set_title_color = { 175  65 106 } }
+	title:c_jafara             = { set_title_color = { 131  37 135 } }
+	# d_gabes
+	title:c_gabes              = { set_title_color = {  79  20 120 } }
+	# d_kairouan
+	title:c_kairwan            = { set_title_color = { 140  20  63 } }
+	title:c_west_qamuda        = { set_title_color = { 177  60  92 } }
+	title:c_tabassa            = { set_title_color = { 133  32 121 } }
+	title:c_sfax               = { set_title_color = { 170  20  69 } }
+	# d_tunis
+	title:c_tunis              = { set_title_color = { 120  42  73 } }
+	title:c_satfura            = { set_title_color = { 157  95 102 } }
+	title:c_medjerda           = { set_title_color = { 113  67 131 } }
+	title:c_mahdiya            = { set_title_color = { 150  39  79 } }
+	# d_kroumerie
+	title:c_constantine        = { set_title_color = { 142  20  49 } }
+	title:c_bilizma            = { set_title_color = { 179  60  78 } }
+	title:c_annaba             = { set_title_color = { 135  32 107 } }
+	# d_bejaia
+	title:c_bejaia             = { set_title_color = {  83  20  92 } }
+	title:c_satif              = { set_title_color = { 120  60 121 } }
+	# d_alger
+	title:c_algier             = { set_title_color = { 144  20  35 } }
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_africae }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_africa_formed
+	}
+}
+
+basileus_form_theme_aegypt_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_aegypt
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_egypt
+		}
+	}
+
+	title:k_egypt = {
+		set_capital_county = title:c_alexandria
+		set_title_color = { 106 42 73 }
+	}
+
+	# Recolor the 7 Egyptian duchies into a plum/violet family anchored on k_egypt's
+	# { 106 42 73 }, spread (magenta / violet / mauve / purple / rose) so adjacent
+	# duchies read apart; then a unique shade per county of its own duchy.
+	title:d_alexandria     = { set_title_color = { 106 42 73 } }   # base (capital)
+	title:d_delta          = { set_title_color = { 145 60 95 } }   # lighter plum-magenta
+	title:d_cairo          = { set_title_color = { 90 35 90 } }    # violet
+	title:d_cyrenaica      = { set_title_color = { 160 70 70 } }   # mauve-red
+	title:d_al-wahat       = { set_title_color = { 120 55 120 } }  # purple
+	title:d_al-said        = { set_title_color = { 80 30 55 } }    # dark plum
+	title:d_eastern_desert = { set_title_color = { 175 85 105 } }  # dusty rose
+	# d_alexandria
+	title:c_alexandria         = { set_title_color = {  79  29  40 } }
+	title:c_sullum             = { set_title_color = { 116  82  69 } }
+	title:c_siwa               = { set_title_color = {  72  54  98 } }
+	# d_delta
+	title:c_damietta           = { set_title_color = { 118  47  62 } }
+	title:c_al-buhaira         = { set_title_color = { 155 100  91 } }
+	title:c_al-gharbiya        = { set_title_color = { 111  72 120 } }
+	title:c_sharkiya           = { set_title_color = { 148  44  68 } }
+	# d_cairo
+	title:c_cairo              = { set_title_color = {  63  22  57 } }
+	title:c_giza               = { set_title_color = { 100  75  86 } }
+	title:c_fayyum             = { set_title_color = {  56  47 115 } }
+	# d_cyrenaica
+	title:c_barqa              = { set_title_color = { 133  57  37 } }
+	title:c_derna              = { set_title_color = { 170 110  66 } }
+	title:c_tobruk             = { set_title_color = { 126  82  95 } }
+	# d_al-wahat
+	title:c_bahriya            = { set_title_color = {  93  42  87 } }
+	title:c_farafra            = { set_title_color = { 130  95 116 } }
+	title:c_dakhla             = { set_title_color = {  86  67 145 } }
+	title:c_kharga             = { set_title_color = { 123  39  93 } }
+	# d_al-said
+	title:c_qus                = { set_title_color = {  53  20  22 } }
+	title:c_bahnasa            = { set_title_color = {  90  70  51 } }
+	title:c_ushmun             = { set_title_color = {  46  42  80 } }
+	title:c_asyut              = { set_title_color = {  83  20  28 } }
+	title:c_aswan              = { set_title_color = { 120  67  57 } }
+	# d_eastern_desert
+	title:c_qusayr             = { set_title_color = { 148  72  72 } }
+	title:c_jabal_quzlum       = { set_title_color = { 185 125 101 } }
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_aegypt }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_aegypt_formed
+	}
+}
+
+# Pannonia — elevates the new titular kingdom k_pannonia (de jure under
+# e_byzantium) and grants it to the reorganizer. Duchies become de jure children;
+# the loose counties are distributed by geography. The lock flag is set by the
+# decision's effect, not here (mirrors the Thrace/Peloponnese pattern).
+basileus_form_theme_pannonia_effect = {
+	title:k_pannonia = { set_de_jure_liege_title = title:e_byzantium }
+
+	title:d_slavonia = { set_de_jure_liege_title = title:k_pannonia }
+	title:d_somogy   = { set_de_jure_liege_title = title:k_pannonia }
+	title:d_gyor     = { set_de_jure_liege_title = title:k_pannonia }
+	title:d_syrmia     = { set_de_jure_liege_title = title:k_pannonia }
+
+	# title:c_szerem         = { set_de_jure_liege_title = title:d_slavonia }
+	title:c_szekesfehervar = { set_de_jure_liege_title = title:d_gyor }
+	title:c_visegrad       = { set_de_jure_liege_title = title:d_gyor }
+	title:c_esztergom      = { set_de_jure_liege_title = title:d_gyor }
+	title:c_komarom        = { set_de_jure_liege_title = title:d_gyor }
+
+	title:k_pannonia = { set_capital_county = title:c_visegrad }
+
+	create_title_and_vassal_change = {
+		type = created
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	title:k_pannonia = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	# Recolor the kingdom + its 3 duchies into a muted brown-red family anchored on
+	# k_pannonia's native { 130 77 70 }; then a unique shade per county. The four
+	# counties moved into d_gyor are tinted with d_gyor.
+	title:k_pannonia = { set_title_color = { 130 77 70 } }
+	title:d_slavonia           = { set_title_color = {  87  50  31 } }
+	title:d_somogy             = { set_title_color = { 148  47  74 } }
+	title:d_gyor               = { set_title_color = { 130  77  70 } }
+	# d_slavonia
+	title:c_zagreb               = { set_title_color = {  60  37  20 } }
+	title:c_zagorje              = { set_title_color = {  97  90  27 } }
+	title:c_pozega               = { set_title_color = {  53  62  56 } }
+	title:c_vukovar              = { set_title_color = {  90  34  20 } }
+	# d_somogy
+	title:c_somogy               = { set_title_color = { 121  34  41 } }
+	title:c_kolon                = { set_title_color = { 158  87  70 } }
+	title:c_tolna                = { set_title_color = { 114  59  99 } }
+	title:c_baranya              = { set_title_color = { 151  31  47 } }
+	# d_gyor
+	title:c_gyor                 = { set_title_color = { 103  64  37 } }
+	title:c_sopron               = { set_title_color = { 140 117  66 } }
+	title:c_vas                  = { set_title_color = {  96  89  95 } }
+	title:c_veszprem             = { set_title_color = { 133  61  43 } }
+	title:c_szekesfehervar       = { set_title_color = { 170 114  72 } }
+	title:c_visegrad             = { set_title_color = { 126  86 101 } }
+	title:c_komarom              = { set_title_color = { 163  58  49 } }
+	title:c_esztergom            = { set_title_color = { 119 111  78 } }
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_pannonia }
+}
+
+# Noricum — elevates the new titular kingdom k_noricum (de jure under
+# e_byzantium) and grants it to the reorganizer.
+basileus_form_theme_noricum_effect = {
+	title:k_noricum = { set_de_jure_liege_title = title:e_byzantium }
+
+	title:d_steyermark = { set_de_jure_liege_title = title:k_noricum }
+	title:d_krain      = { set_de_jure_liege_title = title:k_noricum }
+	title:d_carinthia  = { set_de_jure_liege_title = title:k_noricum }
+	title:d_salzburg   = { set_de_jure_liege_title = title:k_noricum }
+
+	title:c_vienna       = { set_de_jure_liege_title = title:d_steyermark }
+	title:c_sankt_polten = { set_de_jure_liege_title = title:d_steyermark }
+	title:c_amstetten    = { set_de_jure_liege_title = title:d_steyermark }
+
+	title:k_noricum = { set_capital_county = title:c_vienna }
+
+	create_title_and_vassal_change = {
+		type = created
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	title:k_noricum = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_noricum }
+}
+
+# Raetia — elevates the new titular kingdom k_raetia (de jure under e_byzantium)
+# and grants it to the reorganizer. d_tyrol / d_augsburg / d_currezia join as full
+# duchies. d_bavaria also joins, but c_ingolstadt is FIRST evicted to the
+# neighbouring d_nordgau (outside Raetia) so Bavaria enters minus Ingolstadt.
+basileus_form_theme_raetia_effect = {
+	title:k_raetia = { set_de_jure_liege_title = title:e_byzantium }
+
+	title:d_tyrol    = { set_de_jure_liege_title = title:k_raetia }
+	title:d_augsburg = { set_de_jure_liege_title = title:k_raetia }
+	title:d_currezia = { set_de_jure_liege_title = title:k_raetia }
+
+	# Evict Ingolstadt to Nordgau, then fold Bavaria (with its remaining 8
+	# counties) into Raetia.
+	title:c_ingolstadt = { set_de_jure_liege_title = title:d_nordgau }
+	title:d_bavaria    = { set_de_jure_liege_title = title:k_raetia }
+
+	# Guarantee the two Currezia counties sit under d_currezia (no-op if already).
+	title:c_grunningen  = { set_de_jure_liege_title = title:d_currezia }
+	title:c_furstenberg = { set_de_jure_liege_title = title:d_currezia }
+
+	title:k_raetia = { set_capital_county = title:c_augsburg }
+
+	create_title_and_vassal_change = {
+		type = created
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	title:k_raetia = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_raetia }
+}
+
+# BAVARIA — merged Raetia + Noricum. Does NOT create k_raetia/k_noricum anymore;
+# instead it consolidates the whole Raetia+Noricum footprint under k_bavaria (which
+# already natively holds most of it), creating/granting k_bavaria to the reorganizer
+# if it is unheld. Out-of-region land that ends up inside k_bavaria (c_ingolstadt,
+# d_nordgau, the eastern half of d_osterreich) is evicted to its nearest neighbour
+# OUTSIDE k_bavaria (Francogallia-style multi-hop), and the emptied foreign duchies
+# are destroyed — so k_bavaria ends up = exactly the Raetia+Noricum region.
+# root = the reorganizing emperor.
+basileus_form_theme_bavaria_effect = {
+	# 1. Create k_bavaria if unheld and grant it to the reorganizer.
+	if = {
+		limit = { NOT = { exists = title:k_bavaria.holder } }
+		create_title_and_vassal_change = {
+			type = created
+			save_scope_as = change
+			add_claim_on_loss = no
+		}
+		title:k_bavaria = {
+			change_title_holder = {
+				holder = root
+				change = scope:change
+			}
+		}
+		resolve_title_and_vassal_change = scope:change
+	}
+	title:k_bavaria = { set_de_jure_liege_title = title:e_byzantium }
+
+	# 2. Pull the in-region duchies under k_bavaria. d_currezia is the only one
+	#    not already natively Bavarian; the rest are defensive no-ops.
+	title:d_bavaria    = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_tyrol      = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_augsburg   = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_currezia   = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_steyermark = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_krain      = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_carinthia  = { set_de_jure_liege_title = title:k_bavaria }
+	title:d_salzburg   = { set_de_jure_liege_title = title:k_bavaria }
+
+	# 3. Loose in-region counties: the three Noricum counties (split out of the
+	#    straddling d_osterreich) join d_steyermark; guarantee the Currezia pair.
+	title:c_vienna       = { set_de_jure_liege_title = title:d_steyermark }
+	title:c_sankt_polten = { set_de_jure_liege_title = title:d_steyermark }
+	title:c_amstetten    = { set_de_jure_liege_title = title:d_steyermark }
+	title:c_grunningen   = { set_de_jure_liege_title = title:d_currezia }
+	title:c_furstenberg  = { set_de_jure_liege_title = title:d_currezia }
+
+	title:k_bavaria = { set_capital_county = title:c_regensburg }
+
+	# 4. Evict out-of-region land. Mark every county actually inside the Bavaria
+	#    region, then collect every county now de jure under k_bavaria that ISN'T
+	#    one of them (c_ingolstadt, d_nordgau, the rest of d_osterreich, …).
+	every_county_in_region = {
+		region = custom_roman_bavaria
+		add_to_temporary_list = bavaria_region_counties
+	}
+	title:k_bavaria = {
+		every_in_de_jure_hierarchy = {
+			limit = {
+				tier = tier_county
+				NOT = { is_in_list = bavaria_region_counties }
+			}
+			add_to_temporary_list = bavaria_orphans
+		}
+	}
+	# Multi-hop drift: each orphan still inside k_bavaria moves to a neighbouring
+	# county's duchy that lies OUTSIDE k_bavaria. As border orphans leave, interior
+	# ones gain an outside neighbour and follow. count is a generous upper bound.
+	while = {
+		count = 20
+		every_in_list = {
+			list = bavaria_orphans
+			limit = {
+				exists = de_jure_liege.de_jure_liege
+				de_jure_liege.de_jure_liege = title:k_bavaria
+			}
+			save_temporary_scope_as = bav_orphan
+			random_neighboring_county = {
+				limit = {
+					exists = de_jure_liege.de_jure_liege
+					NOT = { de_jure_liege.de_jure_liege = title:k_bavaria }
+				}
+				de_jure_liege = {
+					save_temporary_scope_as = bav_target_duchy
+					scope:bav_orphan = { set_de_jure_liege_title = scope:bav_target_duchy }
+				}
+			}
+		}
+	}
+
+	# 5. Destroy any foreign duchy left empty under k_bavaria by the eviction.
+	title:k_bavaria = {
+		every_in_de_jure_hierarchy = {
+			limit = {
+				tier = tier_duchy
+				NOT = { any_de_jure_county = { always = yes } }
+			}
+			add_to_temporary_list = bavaria_empty_duchies
+		}
+	}
+	every_in_list = {
+		list = bavaria_empty_duchies
+		destroy_title = this
+	}
+
+	# 6. Rename: greek (and other cultures) -> "Baiouaroi"; eastern_roman -> "Bavaria".
+	basileus_set_theme_name_effect = { TITLE = title:k_bavaria  ER = BASILEUS_THEME_BAVARIA_NAME_ER  GREEK = BASILEUS_THEME_BAVARIA_NAME_GREEK }
+
+	# 7. Recolor the kingdom + its duchies. Anchored on the Raetia maroon but spread
+	#    wide (purple / terracotta / ochre / rose / slate) so adjacent duchies are
+	#    clearly distinct on the de jure map.
+	title:k_bavaria    = { set_title_color = { 107 37 44 } }
+	title:d_bavaria    = { set_title_color = { 165 55 65 } }   # maroon-red
+	title:d_tyrol      = { set_title_color = { 95 65 120 } }   # indigo-purple
+	title:d_augsburg   = { set_title_color = { 200 100 70 } }  # terracotta
+	title:d_currezia   = { set_title_color = { 130 60 130 } }  # violet
+	title:d_steyermark = { set_title_color = { 175 130 60 } }  # ochre
+	title:d_krain      = { set_title_color = { 200 85 120 } }  # rose-pink
+	title:d_carinthia  = { set_title_color = { 80 70 100 } }   # slate-purple
+	title:d_salzburg   = { set_title_color = { 215 130 105 } } # salmon
+
+	# Per-county unique shades of each duchy's color (literals). c_ingolstadt is
+	# omitted — it is evicted out of k_bavaria, so it keeps its foreign color.
+	# d_bavaria
+	title:c_regensburg           = { set_title_color = { 138  42  32 } }
+	title:c_munchen              = { set_title_color = { 175  95  61 } }
+	title:c_eschenlohe           = { set_title_color = { 131  67  90 } }
+	title:c_rothenburg           = { set_title_color = { 168  39  38 } }
+	title:c_geisenhausen         = { set_title_color = { 205  92  67 } }
+	title:c_frontenhausen        = { set_title_color = { 161  64  96 } }
+	title:c_falkenstein          = { set_title_color = { 198  36  44 } }
+	title:c_passau               = { set_title_color = { 154  89  73 } }
+	# d_tyrol
+	title:c_innsbruck            = { set_title_color = {  68  52  87 } }
+	title:c_brixen               = { set_title_color = { 105 105 116 } }
+	title:c_lienz                = { set_title_color = {  61  77 145 } }
+	# d_augsburg
+	title:c_augsburg             = { set_title_color = { 173  87  37 } }
+	title:c_alpsee               = { set_title_color = { 210 140  66 } }
+	title:c_kempten              = { set_title_color = { 166 112  95 } }
+	title:c_ravensburg           = { set_title_color = { 203  84  43 } }
+	title:c_burgau               = { set_title_color = { 240 137  72 } }
+	# d_currezia
+	title:c_grisons              = { set_title_color = { 103  47  97 } }
+	title:c_sankt_gallen         = { set_title_color = { 140 100 126 } }
+	title:c_zurich               = { set_title_color = {  96  72 155 } }
+	title:c_grunningen           = { set_title_color = { 133  44 103 } }
+	title:c_furstenberg          = { set_title_color = { 170  97 132 } }
+	# d_steyermark
+	title:c_graz                 = { set_title_color = { 148 117  27 } }
+	title:c_pitten               = { set_title_color = { 185 170  56 } }
+	title:c_liebnitz             = { set_title_color = { 141 142  85 } }
+	title:c_murzzuschlag         = { set_title_color = { 178 114  33 } }
+	title:c_vienna               = { set_title_color = { 215 167  62 } }
+	title:c_sankt_polten         = { set_title_color = { 171 139  91 } }
+	title:c_amstetten            = { set_title_color = { 208 111  39 } }
+	# d_krain
+	title:c_kranj                = { set_title_color = { 173  72  87 } }
+	# d_carinthia
+	title:c_karnten              = { set_title_color = {  53  57  67 } }
+	title:c_kammersberg          = { set_title_color = {  90 110  96 } }
+	title:c_knittelfeld          = { set_title_color = {  46  82 125 } }
+	title:c_villach              = { set_title_color = {  83  54  73 } }
+	# d_salzburg
+	title:c_salzburg             = { set_title_color = { 188 117  72 } }
+	title:c_berchtesgaden        = { set_title_color = { 225 170 101 } }
+	title:c_hallstatt            = { set_title_color = { 181 142 130 } }
+	title:c_linz                 = { set_title_color = { 218 114  78 } }
+	title:c_schaumberg           = { set_title_color = { 240 167 107 } }
+
+	# 8. Culture nudge over the theme + lock the widget.
+	basileus_theme_convert_region_effect = { REGION = custom_roman_bavaria }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_bavaria_formed
+	}
+}
+
+# Mauretania — elevates the EXISTING titular kingdom k_mauretania (de jure under
+# e_byzantium) and grants it to the reorganizer. First creates the de jure tree of
+# the NEW d_caesariensis duchy (declared in landed_titles) by pulling the eastern
+# counties out of d_tlemcen, then folds d_caesariensis + d_rif under k_mauretania.
+basileus_form_theme_mauretania_effect = {
+	title:k_mauretania = { set_de_jure_liege_title = title:e_byzantium }
+
+	# Build the Caesariensis duchy from the eastern Mauretanian counties.
+	title:c_hunyan = { set_de_jure_liege_title = title:d_caesariensis }
+	title:c_orania = { set_de_jure_liege_title = title:d_caesariensis }
+	title:c_tanas  = { set_de_jure_liege_title = title:d_caesariensis }
+
+	# Caesariensis + Rif become the kingdom's de jure duchies.
+	title:d_caesariensis = { set_de_jure_liege_title = title:k_mauretania }
+	title:d_rif          = { set_de_jure_liege_title = title:k_mauretania }
+
+	title:d_caesariensis = { set_capital_county = title:c_tanas }
+	title:k_mauretania   = { set_capital_county = title:c_tangiers }
+
+	create_title_and_vassal_change = {
+		type = created
+		save_scope_as = change
+		add_claim_on_loss = no
+	}
+	title:k_mauretania = {
+		change_title_holder = {
+			holder = root
+			change = scope:change
+		}
+	}
+	resolve_title_and_vassal_change = scope:change
+
+	# Recolor the kingdom + its two duchies into a dark-red family anchored on
+	# k_mauretania's native { 112 25 23 }; then a unique shade per county.
+	title:k_mauretania   = { set_title_color = { 112 25 23 } }
+	title:d_rif          = { set_title_color = { 112  25  23 } }
+	title:d_caesariensis = { set_title_color = { 130  20  27 } }
+	# d_rif
+	title:c_tangiers             = { set_title_color = {  85  20  20 } }
+	title:c_ceuta                = { set_title_color = { 122  65  20 } }
+	title:c_melilla              = { set_title_color = {  78  37  48 } }
+	# d_caesariensis
+	title:c_hunyan               = { set_title_color = { 103  20  20 } }
+	title:c_orania               = { set_title_color = { 140  60  23 } }
+	title:c_tanas                = { set_title_color = {  96  32  52 } }
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_mauretania_2 }
+}
+
+# ITALIA, REUNIFIED
+basileus_italia_reunified_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_italia_reunified
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_italy
+		}
+	}
+
+	title:k_italy = {
+		set_capital_county = title:c_roma
+		set_title_color = { 154 50 49 }
+	}
+
+	title:k_italy = { set_de_jure_liege_title = title:e_byzantium }
+
+	destroy_title = title:k_romagna
+	destroy_title = title:k_venice
+	destroy_title = title:k_sardinia
+	destroy_title = title:k_sicily
+	destroy_title = title:e_italy
+
+	# Recolor the 22 Italian duchies into a red family anchored on k_italy's
+	# { 154 50 49 }, spread so adjacent duchies read apart; then a unique shade per
+	# county of its own duchy.
+	title:d_istria             = { set_title_color = { 111  23  20 } }
+	title:d_friuli             = { set_title_color = { 172  20  53 } }
+	title:d_verona             = { set_title_color = { 113  20  96 } }
+	title:d_venice             = { set_title_color = { 174  20  39 } }
+	title:d_lombardia          = { set_title_color = { 115  20  82 } }
+	title:d_piedmonte          = { set_title_color = { 176  20  25 } }
+	title:d_genoa              = { set_title_color = { 117  20  68 } }
+	title:d_emilia             = { set_title_color = { 178  20  20 } }
+	title:d_romagna            = { set_title_color = { 119  99  54 } }
+	title:d_ancona             = { set_title_color = { 180  96  97 } }
+	title:d_toscana            = { set_title_color = { 121  93  40 } }
+	title:d_pisa               = { set_title_color = { 182  90  83 } }
+	title:d_corsica            = { set_title_color = { 123  87  26 } }
+	title:d_sardinia           = { set_title_color = { 184  84  69 } }
+	title:d_spoleto            = { set_title_color = { 125  81  20 } }
+	title:d_latium             = { set_title_color = { 154  50  49 } }
+	title:d_capua              = { set_title_color = { 127  75  98 } }
+	title:d_benevento          = { set_title_color = { 188  72  41 } }
+	title:d_apulia             = { set_title_color = { 129  69  84 } }
+	title:d_salerno            = { set_title_color = { 190  66  27 } }
+	title:d_calabria           = { set_title_color = { 131  63  70 } }
+	title:d_sicily             = { set_title_color = { 192  60  20 } }
+	# d_istria
+	title:c_pula               = { set_title_color = {  84  20  20 } }
+	# d_friuli
+	title:c_aquileia           = { set_title_color = { 145  20  20 } }
+	title:c_friuli             = { set_title_color = { 182  60  49 } }
+	title:c_gorz               = { set_title_color = { 138  32  78 } }
+	# d_verona
+	title:c_verona             = { set_title_color = {  86  20  63 } }
+	title:c_treviso            = { set_title_color = { 123  60  92 } }
+	title:c_padua              = { set_title_color = {  79  32 121 } }
+	title:c_polesine           = { set_title_color = { 116  20  69 } }
+	# d_venice
+	title:c_venezia            = { set_title_color = { 147  20  20 } }
+	title:c_veneto             = { set_title_color = { 184  60  35 } }
+	# d_lombardia
+	title:c_lombardia          = { set_title_color = {  88  20  49 } }
+	title:c_brescia            = { set_title_color = { 125  60  78 } }
+	title:c_como               = { set_title_color = {  81  32 107 } }
+	title:c_trent              = { set_title_color = { 118  20  55 } }
+	title:c_pavia              = { set_title_color = { 155  57  84 } }
+	title:c_cremona            = { set_title_color = { 111  29 113 } }
+	title:c_parma              = { set_title_color = { 148  20  61 } }
+	title:c_tortona            = { set_title_color = { 104  54  90 } }
+	# d_piedmonte
+	title:c_monferrato         = { set_title_color = { 149  20  20 } }
+	title:c_turin              = { set_title_color = { 186  60  21 } }
+	title:c_novara             = { set_title_color = { 142  32  50 } }
+	title:c_cuneo              = { set_title_color = { 179  20  20 } }
+	# d_genoa
+	title:c_genoa              = { set_title_color = {  90  20  35 } }
+	title:c_luni               = { set_title_color = { 127  60  64 } }
+	# d_emilia
+	title:c_modena             = { set_title_color = { 151  20  20 } }
+	title:c_mantua             = { set_title_color = { 188  60  20 } }
+	# d_romagna
+	title:c_ravenna            = { set_title_color = {  92  86  21 } }
+	title:c_bologna            = { set_title_color = { 129 139  50 } }
+	title:c_ferrara            = { set_title_color = {  85 111  79 } }
+	title:c_casentino          = { set_title_color = { 122  83  27 } }
+	# d_ancona
+	title:c_ancona             = { set_title_color = { 153  83  64 } }
+	title:c_urbino             = { set_title_color = { 190 136  93 } }
+	title:c_fermo              = { set_title_color = { 146 108 122 } }
+	# d_toscana
+	title:c_firenze            = { set_title_color = {  94  80  20 } }
+	title:c_lucca              = { set_title_color = { 131 133  36 } }
+	title:c_arezzo             = { set_title_color = {  87 105  65 } }
+	title:c_siena              = { set_title_color = { 124  77  20 } }
+	title:c_orbetello          = { set_title_color = { 161 130  42 } }
+	# d_pisa
+	title:c_pisa               = { set_title_color = { 155  77  50 } }
+	# d_corsica
+	title:c_ajaccio            = { set_title_color = {  96  74  20 } }
+	title:c_bastia             = { set_title_color = { 133 127  22 } }
+	title:c_vecchio            = { set_title_color = {  89  99  51 } }
+	# d_sardinia
+	title:c_cagliari           = { set_title_color = { 157  71  36 } }
+	title:c_arborea            = { set_title_color = { 194 124  65 } }
+	title:c_gallura            = { set_title_color = { 150  96  94 } }
+	title:c_logudoro           = { set_title_color = { 187  68  42 } }
+	title:c_tortoli            = { set_title_color = { 224 121  71 } }
+	# d_spoleto
+	title:c_spoleto            = { set_title_color = {  98  68  20 } }
+	title:c_orvieto            = { set_title_color = { 135 121  20 } }
+	title:c_teramo             = { set_title_color = {  91  93  45 } }
+	title:c_lanciano           = { set_title_color = { 128  65  20 } }
+	title:c_abruzzi            = { set_title_color = { 165 118  22 } }
+	# d_latium
+	title:c_roma               = { set_title_color = { 127  37  20 } }
+	title:c_viterbo            = { set_title_color = { 164  90  45 } }
+	title:c_tivoli             = { set_title_color = { 120  62  74 } }
+	# d_capua
+	title:c_capua              = { set_title_color = { 100  62  65 } }
+	title:c_napoli             = { set_title_color = { 137 115  94 } }
+	# d_benevento
+	title:c_benevento          = { set_title_color = { 161  59  20 } }
+	title:c_foggia             = { set_title_color = { 198 112  37 } }
+	# d_apulia
+	title:c_apulia             = { set_title_color = { 102  56  51 } }
+	title:c_bari               = { set_title_color = { 139 109  80 } }
+	title:c_lecce              = { set_title_color = {  95  81 109 } }
+	# d_salerno
+	title:c_salerno            = { set_title_color = { 163  53  20 } }
+	title:c_camarda            = { set_title_color = { 200 106  23 } }
+	# d_calabria
+	title:c_reggio_calabria    = { set_title_color = { 104  50  37 } }
+	title:c_cosenza            = { set_title_color = { 141 103  66 } }
+	title:c_rossano            = { set_title_color = {  97  75  95 } }
+	# d_sicily
+	title:c_palermo            = { set_title_color = { 165  47  20 } }
+	title:c_messina            = { set_title_color = { 202 100  20 } }
+	title:c_siracusa           = { set_title_color = { 158  72  45 } }
+	title:c_agrigento          = { set_title_color = { 195  44  20 } }
+	title:c_malta              = { set_title_color = { 232  97  22 } }
+
+	basileus_theme_convert_region_effect_big = { REGION = custom_roman_italia_reunified }
+	title:c_roma = {
+		set_county_culture = root.culture
+	}
+	title:c_viterbo = {
+		set_county_culture = root.culture
+	}	
+	title:c_tivoli = {
+		set_county_culture = root.culture
+	}	
+	title:c_capua = {
+		set_county_culture = root.culture
+	}	
+	title:c_napoli = {
+		set_county_culture = root.culture
+	}	
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:roman_italia_reunified
+	}
+}
+
+# FRANCOGALLIA, REINCORPORATED
+basileus_francogallia_effect = {
+	
+	every_county_in_region = {
+		region = custom_roman_northern_francogallia
+		limit = {
+			exists = de_jure_liege
+			# Don't drift d_west_franconia into France: it's a German duchy
+			# whose only region-counties are the Rhineland four below. Drifting
+			# the whole duchy would drag its German half into k_france. Those
+			# four counties are re-homed individually right after this loop.
+			NOT = { de_jure_liege = title:d_west_franconia }
+		}
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_france
+		}
+	}
+
+	# Re-home the d_west_franconia Rhineland counties (Speyer, Kaiserslautern,
+	# Worms, Mainz) to the nearest duchy that is now de jure within k_france,
+	# leaving d_west_franconia itself under its original (German) kingdom.
+	# A guard keeps it idempotent; the while loop lets an interior county follow
+	# once a neighbour has already moved (multi-hop). Counties with no French
+	# neighbour are simply left in d_west_franconia (harmless fallback).
+	title:c_speyer = { add_to_temporary_list = frank_orphan_counties }
+	title:c_kaiserslautern = { add_to_temporary_list = frank_orphan_counties }
+	title:c_worms = { add_to_temporary_list = frank_orphan_counties }
+	title:c_mainz = { add_to_temporary_list = frank_orphan_counties }
+	while = {
+		count = 4
+		every_in_list = {
+			list = frank_orphan_counties
+			limit = {
+				exists = de_jure_liege
+				de_jure_liege = title:d_west_franconia
+			}
+			save_temporary_scope_as = frank_orphan
+			random_neighboring_county = {
+				limit = {
+					exists = de_jure_liege.de_jure_liege
+					de_jure_liege.de_jure_liege = title:k_france
+				}
+				de_jure_liege = {
+					save_temporary_scope_as = frank_target_duchy
+					scope:frank_orphan = { set_de_jure_liege_title = scope:frank_target_duchy }
+				}
+			}
+		}
+	}
+
+	every_county_in_region = {
+		region = custom_roman_southern_francogallia
+		limit = { exists = de_jure_liege }
+		de_jure_liege = {
+			set_de_jure_liege_title = title:k_aquitaine
+		}
+	}	
+
+	title:k_france = {
+		set_title_color = { 73 23 24 }
+	}
+
+	title:k_aquitaine = {
+		set_title_color = { 99 32 54 }
+	}
+
+	title:k_france = { set_de_jure_liege_title = title:e_byzantium }
+	title:k_aquitaine = { set_de_jure_liege_title = title:e_byzantium }
+
+	# Recolor the duchies + counties. France = dark-red family ({ 73 23 24 });
+	# Aquitaine = dark-wine family ({ 99 32 54 }). Each duchy a distinct shade of
+	# its kingdom, each county of its duchy. d_gelre (dragged in via c_guelders) and
+	# the four Rhineland counties re-homed into France get France-family shades.
+	# --- France (northern Francogallia) duchies ---
+	title:d_lower_lorraine     = { set_title_color = {  30  20  20 } }
+	title:d_julich             = { set_title_color = {  91  20  28 } }
+	title:d_luxembourg         = { set_title_color = {  32  20  71 } }
+	title:d_brabant            = { set_title_color = {  93  20  20 } }
+	title:d_flanders           = { set_title_color = {  34  20  57 } }
+	title:d_upper_lorraine     = { set_title_color = {  95  20  20 } }
+	title:d_bar                = { set_title_color = {  36  20  43 } }
+	title:d_champagne          = { set_title_color = {  97  20  20 } }
+	title:d_valois             = { set_title_color = {  73  23  24 } }
+	title:d_normandy           = { set_title_color = {  99  69  72 } }
+	title:d_brittany           = { set_title_color = {  40  66  20 } }
+	title:d_anjou              = { set_title_color = { 101  63  58 } }
+	title:d_orleans            = { set_title_color = {  42  60  20 } }
+	title:d_burgundy           = { set_title_color = { 103  57  44 } }
+	title:d_upper_burgundy     = { set_title_color = {  44  54  20 } }
+	title:d_alsace             = { set_title_color = { 105  51  30 } }
+	title:d_berry              = { set_title_color = {  46  48  73 } }
+	title:d_gelre              = { set_title_color = { 107  45  20 } }
+	# d_lower_lorraine
+	title:c_cologne              = { set_title_color = {  20  20  20 } }
+	title:c_koblenz              = { set_title_color = {  40  60  20 } }
+	# d_julich
+	title:c_aachen               = { set_title_color = {  64  20  20 } }
+	title:c_cleves               = { set_title_color = { 101  60  24 } }
+	title:c_maastricht           = { set_title_color = {  57  32  53 } }
+	# d_luxembourg
+	title:c_luxembourg           = { set_title_color = {  20  20  38 } }
+	title:c_bouillon             = { set_title_color = {  42  60  67 } }
+	title:c_liege                = { set_title_color = {  20  32  96 } }
+	title:c_namur                = { set_title_color = {  35  20  44 } }
+	# d_brabant
+	title:c_brabant              = { set_title_color = {  66  20  20 } }
+	title:c_antwerpen            = { set_title_color = { 103  60  20 } }
+	title:c_hainaut              = { set_title_color = {  59  32  45 } }
+	title:c_cambray              = { set_title_color = {  96  20  20 } }
+	# d_flanders
+	title:c_brugge               = { set_title_color = {  20  20  24 } }
+	title:c_yperen               = { set_title_color = {  44  60  53 } }
+	title:c_guines               = { set_title_color = {  20  32  82 } }
+	title:c_lille                = { set_title_color = {  37  20  30 } }
+	title:c_boulogne             = { set_title_color = {  74  57  59 } }
+	# d_upper_lorraine
+	title:c_trier                = { set_title_color = {  68  20  20 } }
+	title:c_nancy                = { set_title_color = { 105  60  20 } }
+	title:c_metz                 = { set_title_color = {  61  32  45 } }
+	title:c_saarbrucken          = { set_title_color = {  98  20  20 } }
+	title:c_puttlingen           = { set_title_color = { 135  57  22 } }
+	title:c_neufchateau          = { set_title_color = {  91  29  51 } }
+	# d_bar
+	title:c_bar                  = { set_title_color = {  20  20  20 } }
+	title:c_briey                = { set_title_color = {  46  60  39 } }
+	title:c_vaucouleurs          = { set_title_color = {  20  32  68 } }
+	# d_champagne
+	title:c_reims                = { set_title_color = {  70  20  20 } }
+	title:c_troyes               = { set_title_color = { 107  60  20 } }
+	title:c_coulommiers          = { set_title_color = {  63  32  45 } }
+	title:c_meaux                = { set_title_color = { 100  20  20 } }
+	title:c_chalons              = { set_title_color = { 137  57  22 } }
+	title:c_rethel               = { set_title_color = {  93  29  51 } }
+	title:c_sens                 = { set_title_color = { 130  20  20 } }
+	# d_valois
+	title:c_ile_de_france        = { set_title_color = {  46  20  20 } }
+	title:c_brie_francaise       = { set_title_color = {  83  63  20 } }
+	title:c_vermandois           = { set_title_color = {  39  35  49 } }
+	title:c_valois               = { set_title_color = {  76  20  20 } }
+	title:c_amiens               = { set_title_color = { 113  60  26 } }
+	title:c_beaumont             = { set_title_color = {  69  32  55 } }
+	title:c_clermont             = { set_title_color = { 106  20  20 } }
+	# d_normandy
+	title:c_rouen                = { set_title_color = {  72  56  39 } }
+	title:c_evreux               = { set_title_color = { 109 109  68 } }
+	title:c_bayeux               = { set_title_color = {  65  81  97 } }
+	title:c_avranches            = { set_title_color = { 102  53  45 } }
+	title:c_alencon              = { set_title_color = { 139 106  74 } }
+	title:c_lisieux              = { set_title_color = {  95  78 103 } }
+	title:c_eu                   = { set_title_color = { 132  50  51 } }
+	# d_brittany
+	title:c_vannes               = { set_title_color = {  20  53  20 } }
+	title:c_nantes               = { set_title_color = {  50 106  20 } }
+	title:c_cornouaille          = { set_title_color = {  20  78  45 } }
+	title:c_french_leon          = { set_title_color = {  43  50  20 } }
+	title:c_penthievre           = { set_title_color = {  80 103  22 } }
+	title:c_rennes               = { set_title_color = {  36  75  51 } }
+	# d_anjou
+	title:c_anjou                = { set_title_color = {  74  50  25 } }
+	title:c_saumur               = { set_title_color = { 111 103  54 } }
+	title:c_maine                = { set_title_color = {  67  75  83 } }
+	title:c_sable                = { set_title_color = { 104  47  31 } }
+	# d_orleans
+	title:c_orleans              = { set_title_color = {  20  47  20 } }
+	title:c_montargis            = { set_title_color = {  52 100  20 } }
+	title:c_vendome              = { set_title_color = {  20  72  45 } }
+	title:c_chartres             = { set_title_color = {  45  44  20 } }
+	title:c_sancerre             = { set_title_color = {  82  97  22 } }
+	# d_burgundy
+	title:c_dijon                = { set_title_color = {  76  44  20 } }
+	title:c_chalon               = { set_title_color = { 113  97  40 } }
+	title:c_auxerre              = { set_title_color = {  69  69  69 } }
+	title:c_tonnerrois           = { set_title_color = { 106  41  20 } }
+	title:c_avalois              = { set_title_color = { 143  94  46 } }
+	title:c_macon                = { set_title_color = {  99  66  75 } }
+	title:c_nevers               = { set_title_color = { 136  38  23 } }
+	title:c_langres              = { set_title_color = {  92  91  52 } }
+	# d_upper_burgundy
+	title:c_besancon             = { set_title_color = {  20  41  20 } }
+	title:c_bresse               = { set_title_color = {  54  94  20 } }
+	title:c_dole                 = { set_title_color = {  20  66  45 } }
+	# d_alsace
+	title:c_strassburg           = { set_title_color = {  78  38  20 } }
+	title:c_breisgau             = { set_title_color = { 115  91  26 } }
+	title:c_colmar               = { set_title_color = {  71  63  55 } }
+	title:c_sundgau              = { set_title_color = { 108  35  20 } }
+	# d_berry
+	title:c_berry                = { set_title_color = {  20  35  40 } }
+	title:c_tourraine            = { set_title_color = {  56  88  69 } }
+	title:c_blois                = { set_title_color = {  20  60  98 } }
+	title:c_issoudun             = { set_title_color = {  49  32  46 } }
+	# d_gelre + the re-homed Rhineland counties (France family)
+	title:c_guelders             = { set_title_color = {  80  32  20 } }
+	title:c_speyer               = { set_title_color = {  95  40  35 } }
+	title:c_kaiserslautern       = { set_title_color = {  60  28  30 } }
+	title:c_worms                = { set_title_color = { 110  48  28 } }
+	title:c_mainz                = { set_title_color = {  72  24  40 } }
+	# --- Aquitaine (southern Francogallia) duchies ---
+	title:d_poitou             = { set_title_color = {  56  20  20 } }
+	title:d_bourbon            = { set_title_color = { 117  20  58 } }
+	title:d_aquitaine          = { set_title_color = {  99  32  54 } }
+	title:d_auvergne           = { set_title_color = { 119  20  44 } }
+	title:d_gascogne           = { set_title_color = {  60  20  87 } }
+	title:d_armagnac           = { set_title_color = { 121  20  30 } }
+	title:d_languedoc          = { set_title_color = {  62  20  73 } }
+	title:d_toulouse           = { set_title_color = { 123  20  20 } }
+	title:d_provence           = { set_title_color = {  64  81  59 } }
+	title:d_dauphine           = { set_title_color = { 125  78 102 } }
+	title:d_savoie             = { set_title_color = {  66  75  45 } }
+	title:d_transjurania       = { set_title_color = { 127  72  88 } }
+	# d_poitou
+	title:c_poitiers             = { set_title_color = {  29  20  20 } }
+	title:c_lusignan             = { set_title_color = {  66  60  20 } }
+	title:c_montaigu             = { set_title_color = {  22  32  45 } }
+	title:c_thouars              = { set_title_color = {  59  20  20 } }
+	# d_bourbon
+	title:c_bourbon              = { set_title_color = {  90  20  25 } }
+	title:c_bellac               = { set_title_color = { 127  60  54 } }
+	title:c_jaligny              = { set_title_color = {  83  32  83 } }
+	title:c_la_marche            = { set_title_color = { 120  20  31 } }
+	# d_aquitaine
+	title:c_angouleme            = { set_title_color = {  72  20  21 } }
+	title:c_perigord             = { set_title_color = { 109  72  50 } }
+	title:c_limousin             = { set_title_color = {  65  44  79 } }
+	title:c_saintonge            = { set_title_color = { 102  20  27 } }
+	title:c_aunis                = { set_title_color = { 139  69  56 } }
+	# d_auvergne
+	title:c_auvergne             = { set_title_color = {  92  20  20 } }
+	title:c_clermont_sur_allier  = { set_title_color = { 129  60  40 } }
+	title:c_thiers               = { set_title_color = {  85  32  69 } }
+	title:c_velay                = { set_title_color = { 122  20  20 } }
+	# d_gascogne
+	title:c_bordeaux             = { set_title_color = {  33  20  54 } }
+	title:c_labourd              = { set_title_color = {  70  60  83 } }
+	title:c_albret               = { set_title_color = {  26  32 112 } }
+	title:c_marsan               = { set_title_color = {  63  20  60 } }
+	title:c_agenais              = { set_title_color = { 100  57  89 } }
+	# d_armagnac
+	title:c_armagnac             = { set_title_color = {  94  20  20 } }
+	title:c_bigorre              = { set_title_color = { 131  60  26 } }
+	title:c_bearn                = { set_title_color = {  87  32  55 } }
+	title:c_comminges            = { set_title_color = { 124  20  20 } }
+	# d_languedoc
+	title:c_albi                 = { set_title_color = {  35  20  40 } }
+	title:c_uses                 = { set_title_color = {  72  60  69 } }
+	title:c_montpellier          = { set_title_color = {  28  32  98 } }
+	title:c_carcassonne          = { set_title_color = {  65  20  46 } }
+	title:c_beziers              = { set_title_color = { 102  57  75 } }
+	title:c_foix                 = { set_title_color = {  58  29 104 } }
+	# d_toulouse
+	title:c_toulouse             = { set_title_color = {  96  20  20 } }
+	title:c_quercy               = { set_title_color = { 133  60  20 } }
+	title:c_gevaudan             = { set_title_color = {  89  32  45 } }
+	title:c_rouergue             = { set_title_color = { 126  20  20 } }
+	title:c_millau               = { set_title_color = { 163  57  22 } }
+	# d_provence
+	title:c_venaissin            = { set_title_color = {  37  68  26 } }
+	title:c_provence             = { set_title_color = {  74 121  55 } }
+	title:c_nice                 = { set_title_color = {  30  93  84 } }
+	title:c_forcalquier          = { set_title_color = {  67  65  32 } }
+	# d_dauphine
+	title:c_lyon                 = { set_title_color = {  98  65  69 } }
+	title:c_forez                = { set_title_color = { 135 118  98 } }
+	title:c_viviers              = { set_title_color = {  91  90 127 } }
+	title:c_viennois             = { set_title_color = { 128  62  75 } }
+	title:c_valentinois          = { set_title_color = { 165 115 104 } }
+	# d_savoie
+	title:c_savoie               = { set_title_color = {  39  62  20 } }
+	title:c_aosta                = { set_title_color = {  76 115  41 } }
+	title:c_geneva               = { set_title_color = {  32  87  70 } }
+	title:c_canavese             = { set_title_color = {  69  59  20 } }
+	# d_transjurania
+	title:c_bern                 = { set_title_color = { 100  59  55 } }
+	title:c_aargau               = { set_title_color = { 137 112  84 } }
+	title:c_neuchatel            = { set_title_color = {  93  84 113 } }
+
+	destroy_title = title:e_france
+
+
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_francogallia }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:roman_francogallia_incorporated
+	}
+}
+
+# SPANIA — folds the two Iberia regions into two EXISTING kingdoms:
+#   custom_roman_northern_iberia -> k_aragon    (renamed Tarraconensis, cap. Tarraco/c_barcelona)
+#   custom_roman_southern_iberia -> k_andalusia (renamed Baetica, cap. Hispalis/c_sevilla)
+# Both set de jure under e_byzantium. Loose region counties drift to the
+# duchies marked in basileus_geographical_region.txt BEFORE the duchy reparent,
+# so their original duchies aren't dragged along.
+basileus_form_theme_spania_effect = {
+	# 0. Capture the region's current de jure kingdoms so the emptied ones can
+	#    be destroyed after the reparent (survivors excluded).
+	every_county_in_region = {
+		region = custom_roman_northern_iberia
+		limit = { exists = de_jure_liege.de_jure_liege }
+		de_jure_liege.de_jure_liege = { add_to_list = spania_old_kingdoms }
+	}
+	every_county_in_region = {
+		region = custom_roman_southern_iberia
+		limit = { exists = de_jure_liege.de_jure_liege }
+		de_jure_liege.de_jure_liege = { add_to_list = spania_old_kingdoms }
+	}
+
+	# 1. Loose counties -> their target duchies first.
+	title:c_teruel    = { set_de_jure_liege_title = title:d_aragon }
+	title:c_castellon = { set_de_jure_liege_title = title:d_aragon }
+	title:c_plasencia = { set_de_jure_liege_title = title:d_toledo }
+	title:c_mora      = { set_de_jure_liege_title = title:d_cordoba }
+	title:c_malagon   = { set_de_jure_liege_title = title:d_cordoba }
+
+	# 2. Northern Iberia duchies -> k_aragon (Tarraconensis survivor).
+	every_county_in_region = {
+		region = custom_roman_northern_iberia
+		limit = { exists = de_jure_liege }
+		de_jure_liege = { set_de_jure_liege_title = title:k_aragon }
+	}
+	# 3. Southern Iberia duchies -> k_andalusia (Baetica survivor).
+	every_county_in_region = {
+		region = custom_roman_southern_iberia
+		limit = { exists = de_jure_liege }
+		de_jure_liege = { set_de_jure_liege_title = title:k_andalusia }
+	}
+
+	# 4. Capitals, de jure under e_byzantium, culture-dynamic names.
+	title:k_aragon = {
+		set_capital_county = title:c_barcelona
+		set_de_jure_liege_title = title:e_byzantium
+	}
+	title:k_andalusia = {
+		set_capital_county = title:c_sevilla
+		set_de_jure_liege_title = title:e_byzantium
+	}
+	title:d_aragon = {
+		set_de_jure_liege_title = title:k_aragon
+	}
+	title:d_toledo = {
+		set_de_jure_liege_title = title:k_aragon
+	}
+
+	# recolors. Aragon/Tarraconensis = amber-gold family ({ 175 110 40 }); Andalusia/
+	# Baetica = brick-red family ({ 150 56 42 }). Each duchy a distinct shade of its
+	# kingdom, each county a distinct shade of its duchy. Drifter counties are tinted
+	# with their TARGET duchy (c_teruel/c_castellon->d_aragon, c_plasencia->d_toledo,
+	# c_mora/c_malagon->d_cordoba).
+	title:k_aragon    = { set_title_color = { 175 110 40 } }
+	title:k_andalusia = { set_title_color = { 150 56 42 } }
+	# --- Aragon (Tarraconensis) duchies ---
+	title:d_barcelona          = { set_title_color = { 175 110  40 } }
+	title:d_aragon             = { set_title_color = { 193  80  44 } }
+	title:d_navarra            = { set_title_color = { 134  77  87 } }
+	title:d_viscaya            = { set_title_color = { 195  74  30 } }
+	title:d_cantabria          = { set_title_color = { 136  71  73 } }
+	title:d_asturias           = { set_title_color = { 197  68  20 } }
+	title:d_galicia            = { set_title_color = { 138  65  59 } }
+	title:d_porto              = { set_title_color = { 199  62  20 } }
+	title:d_leon               = { set_title_color = { 140 159  45 } }
+	title:d_castilla           = { set_title_color = { 201 156  88 } }
+	title:d_toledo             = { set_title_color = { 142 153  31 } }
+	title:d_coimbra            = { set_title_color = { 203 150  74 } }
+	# d_barcelona
+	title:c_barcelona            = { set_title_color = { 148  97  20 } }
+	title:c_urgell               = { set_title_color = { 185 150  36 } }
+	title:c_pallas               = { set_title_color = { 141 122  65 } }
+	title:c_puigcerda            = { set_title_color = { 178  94  20 } }
+	title:c_girona               = { set_title_color = { 215 147  42 } }
+	title:c_rossello             = { set_title_color = { 171 119  71 } }
+	title:c_lleida               = { set_title_color = { 208  91  20 } }
+	title:c_tarragona            = { set_title_color = { 164 144  48 } }
+	# d_aragon
+	title:c_zaragoza             = { set_title_color = { 166  67  20 } }
+	title:c_albarracin           = { set_title_color = { 203 120  40 } }
+	title:c_alto_aragon          = { set_title_color = { 159  92  69 } }
+	title:c_sobrarbe             = { set_title_color = { 196  64  20 } }
+	title:c_huesca               = { set_title_color = { 233 117  46 } }
+	title:c_calatayud            = { set_title_color = { 189  89  75 } }
+	title:c_fraga                = { set_title_color = { 226  61  23 } }
+	title:c_alcaniz              = { set_title_color = { 182 114  52 } }
+	title:c_teruel               = { set_title_color = { 219  86  81 } }
+	title:c_castellon            = { set_title_color = { 175  58  29 } }
+	# d_navarra
+	title:c_navarra              = { set_title_color = { 107  64  54 } }
+	title:c_najera               = { set_title_color = { 144 117  83 } }
+	title:c_tudela               = { set_title_color = { 100  89 112 } }
+	# d_viscaya
+	title:c_viscaya              = { set_title_color = { 168  61  20 } }
+	title:c_ipuskoa              = { set_title_color = { 205 114  26 } }
+	# d_cantabria
+	title:c_asturias_de_santillana = { set_title_color = { 109  58  40 } }
+	title:c_amaya                = { set_title_color = { 146 111  69 } }
+	# d_asturias
+	title:c_asturias_de_oviedo   = { set_title_color = { 170  55  20 } }
+	title:c_pravia               = { set_title_color = { 207 108  20 } }
+	# d_galicia
+	title:c_coruna               = { set_title_color = { 111  52  26 } }
+	title:c_santiago             = { set_title_color = { 148 105  55 } }
+	title:c_tui                  = { set_title_color = { 104  77  84 } }
+	title:c_astorga              = { set_title_color = { 141  49  32 } }
+	title:c_monterrei            = { set_title_color = { 178 102  61 } }
+	# d_porto
+	title:c_porto                = { set_title_color = { 172  49  20 } }
+	title:c_braganza             = { set_title_color = { 209 102  20 } }
+	# d_leon
+	title:c_leon                 = { set_title_color = { 113 146  20 } }
+	title:c_benavente            = { set_title_color = { 150 199  41 } }
+	title:c_zamora               = { set_title_color = { 106 171  70 } }
+	title:c_salamanca            = { set_title_color = { 143 143  20 } }
+	title:c_avila                = { set_title_color = { 180 196  47 } }
+	# d_castilla
+	title:c_burgos               = { set_title_color = { 174 143  55 } }
+	title:c_valladolid           = { set_title_color = { 211 196  84 } }
+	title:c_soria                = { set_title_color = { 167 168 113 } }
+	title:c_cuellar              = { set_title_color = { 204 140  61 } }
+	title:c_olmedo               = { set_title_color = { 235 193  90 } }
+	# d_toledo
+	title:c_toledo               = { set_title_color = { 115 140  20 } }
+	title:c_madrid               = { set_title_color = { 152 193  27 } }
+	title:c_molina               = { set_title_color = { 108 165  56 } }
+	title:c_cuenca               = { set_title_color = { 145 137  20 } }
+	title:c_plasencia            = { set_title_color = { 182 190  33 } }
+	# d_coimbra
+	title:c_coimbra              = { set_title_color = { 176 137  41 } }
+	title:c_viseu                = { set_title_color = { 213 190  70 } }
+	title:c_aveiro               = { set_title_color = { 169 162  99 } }
+	title:c_castelo_branco       = { set_title_color = { 206 134  47 } }
+	# --- Andalusia (Baetica) duchies ---
+	title:d_beja               = { set_title_color = { 107  29  20 } }
+	title:d_badajoz            = { set_title_color = { 168  26  46 } }
+	title:d_algarve            = { set_title_color = { 109  23  89 } }
+	title:d_sevilla            = { set_title_color = { 150  56  42 } }
+	title:d_cordoba            = { set_title_color = { 111  20  75 } }
+	title:d_granada            = { set_title_color = { 172  20  20 } }
+	title:d_murcia             = { set_title_color = { 113  20  61 } }
+	title:d_valencia           = { set_title_color = { 174  20  20 } }
+	title:d_mallorca           = { set_title_color = { 115 105  47 } }
+	# d_beja
+	title:c_lisboa               = { set_title_color = {  80  20  20 } }
+	title:c_beja                 = { set_title_color = { 117  69  20 } }
+	title:c_alcacer_do_sal       = { set_title_color = {  73  41  45 } }
+	title:c_elvas                = { set_title_color = { 110  20  20 } }
+	# d_badajoz
+	title:c_badajoz              = { set_title_color = { 141  20  20 } }
+	title:c_caceres              = { set_title_color = { 178  66  42 } }
+	title:c_merida               = { set_title_color = { 134  38  71 } }
+	title:c_medellin             = { set_title_color = { 171  20  20 } }
+	# d_algarve
+	title:c_faro                 = { set_title_color = {  82  20  56 } }
+	title:c_silves               = { set_title_color = { 119  63  85 } }
+	# d_sevilla
+	title:c_sevilla              = { set_title_color = { 123  43  20 } }
+	title:c_cadiz                = { set_title_color = { 160  96  38 } }
+	title:c_algeciras            = { set_title_color = { 116  68  67 } }
+	title:c_niebla               = { set_title_color = { 153  40  20 } }
+	title:c_moura                = { set_title_color = { 190  93  44 } }
+	# d_cordoba
+	title:c_cordoba              = { set_title_color = {  84  20  42 } }
+	title:c_calatrava            = { set_title_color = { 121  60  71 } }
+	title:c_almader              = { set_title_color = {  77  32 100 } }
+	title:c_andujar              = { set_title_color = { 114  20  48 } }
+	title:c_mora                 = { set_title_color = { 151  57  77 } }
+	title:c_malagon              = { set_title_color = { 107  29 106 } }
+	# d_granada
+	title:c_granada              = { set_title_color = { 145  20  20 } }
+	title:c_almeria              = { set_title_color = { 182  60  20 } }
+	title:c_cabra                = { set_title_color = { 138  32  45 } }
+	title:c_malaga               = { set_title_color = { 175  20  20 } }
+	# d_murcia
+	title:c_murcia               = { set_title_color = {  86  20  28 } }
+	title:c_alcaraz              = { set_title_color = { 123  60  57 } }
+	title:c_alarcon              = { set_title_color = {  79  32  86 } }
+	# d_valencia
+	title:c_valencia             = { set_title_color = { 147  20  20 } }
+	title:c_denia                = { set_title_color = { 184  60  20 } }
+	title:c_alicante             = { set_title_color = { 140  32  45 } }
+	# d_mallorca
+	title:c_mallorca             = { set_title_color = {  88  92  20 } }
+	title:c_menorca              = { set_title_color = { 125 145  43 } }
+	title:c_iviza                = { set_title_color = {  81 117  72 } }
+	# basileus_set_theme_name_effect = { TITLE = title:k_aragon     ER = BASILEUS_THEME_TARRACONENSIS_NAME_ER  GREEK = BASILEUS_THEME_TARRACONENSIS_NAME_GREEK }
+	# basileus_set_theme_name_effect = { TITLE = title:k_andalusia  ER = BASILEUS_THEME_BAETICA_NAME_ER  GREEK = BASILEUS_THEME_BAETICA_NAME_GREEK }
+
+	# 5. Destroy the now-empty source kingdoms (survivors keep their land).
+	every_in_list = {
+		list = spania_old_kingdoms
+		limit = {
+			tier = tier_kingdom
+			NOR = { this = title:k_aragon  this = title:k_andalusia }
+			NOT = { any_de_jure_county = { always = yes } }
+		}
+		destroy_title = this
+	}
+	# Destroy the dormant Iberian empire (vanilla e_spain — i.e. the "e_hispania").
+	if = {
+		limit = { exists = title:e_spain }
+		destroy_title = title:e_spain
+	}
+
+	basileus_theme_convert_region_effect = { REGION = custom_roman_northern_iberia }
+	basileus_theme_convert_region_effect = { REGION = custom_roman_southern_iberia }
+
+	# 6. End the Iberian struggle if it is still ongoing. With Iberia folded into
+	#    the imperial theme system under restored Roman rule, the centuries-long
+	#    contest between its peoples and faiths is resolved by fiat. Guarded so it
+	#    is a no-op if the struggle has already concluded (or never existed,
+	#    e.g. without Fate of Iberia).
+	if = {
+		limit = { exists = struggle:iberian_struggle }
+		struggle:iberian_struggle = { end_struggle = yes }
+	}
+
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:roman_spania
+	}
+}
+
+# =====================================================================
+# ANATOLIAN DUCHY-MERGE THEMES (Reorganize the Themes widgets)
+# ---------------------------------------------------------------------
+# Consolidate the 14 Anatolian duchies down to 8 survivors. Each merges the
+# doomed duchies' counties into a survivor and destroys the emptied parents,
+# mirroring basileus_form_theme_haemimontus_effect. These four are a hard
+# prerequisite of the Rearrange-the-Kingdoms Anatolia widget. root = the emperor.
+# =====================================================================
+
+# Central Anatolia — d_cappadocia + d_charsianon fold into d_anatolia (Anatolikon
+# keeps its name). Survivor: d_anatolia.
+basileus_merge_anatolia_central_effect = {
+	title:d_cappadocia = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_anatolia
+		}
+	}
+	title:d_charsianon = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_anatolia
+		}
+	}
+	destroy_title = title:d_cappadocia
+	destroy_title = title:d_charsianon
+	basileus_theme_convert_region_effect = { REGION = custom_roman_anatolia_central }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_anatolia_central_done
+	}
+}
+
+# Sebasteia — d_mesopotamia folds into d_sebasteia (keeps its name).
+# Survivor: d_sebasteia.
+basileus_merge_anatolia_sebasteia_effect = {
+	title:d_mesopotamia = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_sebasteia
+		}
+	}
+	destroy_title = title:d_mesopotamia
+	basileus_theme_convert_region_effect = { REGION = custom_roman_anatolia_sebasteia }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_anatolia_sebasteia_done
+	}
+}
+
+# Pontos — d_chaldia folds into d_armeniac, which is RENAMED to Pontos/Pontus
+# (echoing the destroyed k_pontus). Survivor: d_armeniac.
+basileus_merge_anatolia_pontos_effect = {
+	title:d_chaldia = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_armeniac
+		}
+	}
+	basileus_set_theme_name_effect = { TITLE = title:d_armeniac  ER = BASILEUS_THEME_PONTOS_NAME_ER  GREEK = BASILEUS_THEME_PONTOS_NAME_GREEK }
+	destroy_title = title:d_chaldia
+	basileus_theme_convert_region_effect = { REGION = custom_roman_anatolia_pontos }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_anatolia_pontos_done
+	}
+}
+
+# Optimaton — d_paphlagonia + d_bucellaria fold into d_optimatoi (keeps its name).
+# Survivor: d_optimatoi.
+basileus_merge_anatolia_optimaton_effect = {
+	title:d_paphlagonia = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_optimatoi
+		}
+	}
+	title:d_bucellaria = {
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_county }
+			set_de_jure_liege_title = title:d_optimatoi
+		}
+	}
+	destroy_title = title:d_paphlagonia
+	destroy_title = title:d_bucellaria
+	basileus_theme_convert_region_effect = { REGION = custom_roman_anatolia_optimaton }
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:theme_anatolia_optimaton_done
+	}
+}

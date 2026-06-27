@@ -1,0 +1,97 @@
+# =====================================================================
+# BASILEUS — IMPERIAL RECONSTRUCTION great project — scaling values.
+# ---------------------------------------------------------------------
+# Counts the de jure counties of the targeted duchy so the project's gold/
+# influence cost and construction time scale with the area's size.
+# Robust to the scope available at evaluation: scope:province (cost / location)
+# or scope:great_project (construction_time). Falls back to 5 if neither.
+# =====================================================================
+
+basileus_duchy_de_jure_county_count = {
+	if = {
+		limit = { exists = scope:province }
+		scope:province.duchy = {
+			every_de_jure_county = { add = 1 }
+		}
+	}
+	else_if = {
+		limit = { exists = scope:great_project }
+		scope:great_project.great_project_location.duchy = {
+			every_de_jure_county = { add = 1 }
+		}
+	}
+	else = {
+		add = 5
+	}
+	# Never let the multiplier hit zero.
+	max = 30
+	min = 1
+}
+
+# ---------------------------------------------------------------------
+# Counties of the targeted duchy that STILL NEED reconstructing: those whose
+# culture OR faith differs from the reigning Basileus (top liege). A county
+# that already matches BOTH is fully Roman and adds nothing to the timeline.
+# This is what drives construction TIME (replacing the old % head-start
+# multipliers); the gold/influence COST still scales on the full county count.
+# Robust to either evaluation scope: scope:great_project (construction_time)
+# or scope:province; falls back to 5 if neither.
+# ---------------------------------------------------------------------
+basileus_duchy_counties_to_reconstruct = {
+	if = {
+		limit = { exists = scope:great_project }
+		scope:great_project.great_project_location.duchy = {
+			every_de_jure_county = {
+				limit = {
+					OR = {
+						culture != scope:great_project.great_project_owner.top_liege.culture
+						faith != scope:great_project.great_project_owner.top_liege.faith
+					}
+				}
+				add = 1
+			}
+		}
+	}
+	else_if = {
+		limit = { exists = scope:province }
+		scope:province.duchy = {
+			every_de_jure_county = {
+				limit = {
+					OR = {
+						culture != root.top_liege.culture
+						faith != root.top_liege.faith
+					}
+				}
+				add = 1
+			}
+		}
+	}
+	else = {
+		add = 5
+	}
+	max = 30
+	min = 1
+}
+
+# ---------------------------------------------------------------------
+# TIME-ONLY county weighting with diminishing returns.
+# Cost still scales linearly on basileus_duchy_de_jure_county_count
+# (a bigger area should cost more gold/influence), but construction TIME
+# scales on the counties that ACTUALLY need work (counties already matching
+# the Empire's culture AND faith are excluded). On top of that, the first 4
+# such counties carry full weight and every county beyond the fourth counts
+# as roughly a third, so the curve flattens for large frontiers:
+#   to-do=3 -> 3.0   6 -> 4.68   12 -> 6.72   14 -> 7.4   30 -> 12.84
+# ---------------------------------------------------------------------
+basileus_reconstruction_time_factor = {
+	# First four counties-needing-work at full weight.
+	value = basileus_duchy_counties_to_reconstruct
+	max = 4
+	# Plus every further county-needing-work at ~one-third weight.
+	add = {
+		value = basileus_duchy_counties_to_reconstruct
+		subtract = 4
+		min = 0
+		multiply = 0.34
+	}
+}

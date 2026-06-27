@@ -1,0 +1,43 @@
+# =====================================================================
+# BASILEUS — THE TWO EMPERORS (Zweikaiserproblem) — eligibility triggers.
+# ---------------------------------------------------------------------
+# Dramatises the 871 dispute between Basil I and Louis II over who is the
+# true heir of the Roman Empire. The Basileus (player) opens it by decision
+# against the holder of e_hre (the Western "false" emperor).
+#
+# basileus_is_roman_emperor_trigger  — character is the reigning Roman emperor.
+# basileus_two_emperors_eligible_trigger — gate for the dispute decision.
+# Character scope throughout.
+# =====================================================================
+
+# The reigning Roman emperor under the mod's imperial autocracy.
+basileus_is_roman_emperor_trigger = {
+	government_has_flag = government_is_roman_imperial
+	OR = {
+		has_title = title:e_byzantium
+		has_title = title:h_roman_empire
+		has_title = title:h_eastern_roman_empire
+	}
+}
+
+# True when the Basileus may open the dispute: he reigns as Roman emperor, a
+# rival Western emperor (e_hre) exists with a living holder who is NOT himself
+# or his own vassal, the dispute isn't already running, and it hasn't already
+# been settled in his favour once.
+basileus_two_emperors_eligible_trigger = {
+	basileus_is_roman_emperor_trigger = yes
+
+	# A rival Western emperor must exist on the throne of the Holy Roman Empire.
+	exists = title:e_hre
+	exists = title:e_hre.holder
+	NOT = { title:e_hre.holder = this }
+	# The "false emperor" must be a foreign sovereign, not already beneath us.
+	NOT = { title:e_hre.holder = { target_is_liege_or_above = root } }
+	title:e_hre.holder = { is_independent_ruler = yes }
+
+	# Not already in progress.
+	NOT = { any_owned_story = { type = story_two_emperors_dispute } }
+
+	# Once settled in our favour (war won or precedence conceded), never again.
+	NOT = { has_global_variable = basileus_two_emperors_resolved }
+}

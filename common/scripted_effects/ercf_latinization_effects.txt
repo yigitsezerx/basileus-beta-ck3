@@ -1,0 +1,1315 @@
+ercf_latinize_dynasty_name = {
+    # --- Debug Toast ---
+    #send_interface_toast = {
+    #    title = "Latinizer Triggered"
+    #    desc = "Attempting to rename dynasty for [ROOT.Char.GetFirstName]..."
+    #}
+
+    # --- DYNASTY CHECKS ---
+
+    # 1. KOMNENOS
+    if = {
+        limit = { 
+            dynasty = dynasty:634 
+        }
+        # Rename the Dynasty Object (Affects the whole tree)
+        dynasty = { 
+            set_dynasty_name = "dynn_Comnenus" 
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        # Rename the Current House (Affects just this branch)
+        house = { set_house_name = "dynn_Comnenus" }
+    }
+
+    # 2. DOUKAS
+    if = {
+        limit = { 
+            dynasty = dynasty:633 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Ducas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Ducas" }
+    }
+
+    # 3. PALAIOLOGOS
+    if = {
+        limit = { 
+            dynasty = dynasty:628 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Palaeologus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Palaeologus" }
+    }
+
+    # 3. PALAIOLOGOS, again.
+    if = {
+        limit = { 
+            dynasty = dynasty:48 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Palaeologus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Palaeologus" }
+    }    
+
+    # 3. PALAIOLOGOS, again, againnnnnnnnnnnn, how fucking many are there vro?
+    if = {
+        limit = { 
+            dynasty = dynasty:101254 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Palaeologus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Palaeologus" }
+    }    
+
+    # 4. ANGELOS
+    if = {
+        limit = { 
+            dynasty = dynasty:195 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Angelus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Angelus" }
+    }
+
+    # 5. PHOKAS
+    if = {
+        limit = { 
+            dynasty = dynasty:641 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Phocas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Phocas" }
+    }
+
+    # 5. KANTAKOUZENOS
+    if = {
+        limit = { 
+            dynasty = dynasty:46 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cantacuzenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cantacuzenus" }
+    }    
+
+    # 5. MACREMBOLITES
+    if = {
+        limit = { 
+            dynasty = dynasty:630 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Macrembolites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Macrembolites" }
+    }    
+
+    # 5. MACRODUCAS
+    if = {
+        limit = { 
+            dynasty = dynasty:188 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Macroducas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Macroducas" }
+    }     
+
+    # 5. CAMATERUS
+    if = {
+        limit = { 
+            dynasty = dynasty:510 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Camaterus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Camaterus" }
+    }    
+
+    # 5. CAMATERUS, here we go again
+    if = {
+        limit = { 
+            dynasty = dynasty:101099 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Camaterus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Camaterus" }
+    }
+    
+    # 5. CONTOSTEPHANUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101103 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Contostephanus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Contostephanus" }
+    }     
+
+    # 5. BRYENNIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101079 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Bryennius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Bryennius" }
+    }    
+
+    # 5. CAMYTZES
+    if = {
+        limit = { 
+            dynasty = dynasty:101551 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Camytzes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Camytzes" }
+    }     
+
+    # 5. DALASSENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101085 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Dalassenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Dalassenus" }
+    }     
+
+    # 5. SYNADINUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101141 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Synadinus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Synadinus" }
+    }    
+
+    # 5. COMNENODUCAS
+    if = {
+        limit = { 
+            dynasty = dynasty:20075 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Comnenoducas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Comnenoducas" }
+    }     
+
+    # 5. ORANUS
+    if = {
+        limit = { 
+            dynasty = dynasty:8641 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Oranus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Oranus" }
+    }    
+
+    # 5. CARANDENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101312 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Carandenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Carandenus" }
+    }    
+
+    # 5. MELISSENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101399 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Melissenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Melissenus" }
+    }    
+
+    # 5. ARGYRUS
+    if = {
+        limit = { 
+            dynasty = dynasty:639 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Argyrus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Argyrus" }
+    }    
+
+    # 5. BASILIACUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101719 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Basiliacus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Basiliacus" }
+    }    
+
+    # 5. MURZUPHULUS
+    if = {
+        limit = { 
+            dynasty = dynasty:8639 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Murzuphulus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Murzuphulus" }
+    }    
+
+    # 5. SCLERUS
+    if = {
+        limit = { 
+            dynasty = dynasty:5061089 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Sclerus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Sclerus" }
+    }     
+
+    # 5. SCLERUS, baby one more time..
+    if = {
+        limit = { 
+            dynasty = dynasty:627 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Sclerus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Sclerus" }
+    }     
+
+    # 5. MACEDON
+    if = {
+        limit = { 
+            dynasty = dynasty:644 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Macedon"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Macedon" }
+    }    
+
+    # 5. MALEINUS
+    if = {
+        limit = { 
+            dynasty = dynasty:100753 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Maleinus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Maleinus" }
+    }
+    
+    # 5. MALEIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:2001065 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Maleius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Maleius" }
+    }    
+
+    # 5. MAURICIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022145 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Mauricius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Mauricius" }
+    }    
+
+    # 5. ORYPHUS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022275 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Oryphus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Oryphus" }
+    }     
+
+    # 5. LACHANODRACUS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022148 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Lachanodracus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Lachanodracus" }
+    }     
+
+    # 5. SELLOCALAS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022170 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Sellocalas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Sellocalas" }
+    }    
+
+    # 5. CRATERUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101348 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Craterus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Craterus" }
+    }    
+
+    # 5. CATACALITZES
+    if = {
+        limit = { 
+            dynasty = dynasty:1022174 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Catacalitzes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Catacalitzes" }
+    }    
+
+    # 5. CARDIAS
+    if = {
+        limit = { 
+            dynasty = dynasty:2001066 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cardias"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cardias" }
+    }    
+
+    # 5. APLACES
+    if = {
+        limit = { 
+            dynasty = dynasty:1022164 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Aplaces"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Aplaces" }
+    }     
+
+    # 5. HEXABIBLUS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022159 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Hexabiblus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Hexabiblus" }
+    }    
+
+    # 5. AGELASTUS
+    if = {
+        limit = { 
+            dynasty = dynasty:1022161 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Agelastus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Agelastus" }
+    }    
+
+    # 5. CURCUAS
+    if = {
+        limit = { 
+            dynasty = dynasty:640 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Curcuas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Curcuas" }
+    }
+    
+    # Continuing from here
+
+    # 5. DAISORENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101087 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Daisorenius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Daisorenius" }
+    }     
+
+    # 5. DOCEIANUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101088 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Doceianus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Doceianus" }
+    }    
+
+    # 5. CABACES
+    if = {
+        limit = { 
+            dynasty = dynasty:101094 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cabaces"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cabaces" }
+    }    
+
+    # 5. CACADENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101102 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cacadenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cacadenus" }
+    }       
+
+    # 5. PSELLUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101131 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Psellus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Psellus" }
+    }    
+
+    # 5. RADENUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101132 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Radenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Radenus" }
+    }    
+
+    # 5. SPARTALITUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101138 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Spartalitus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Spartalitus" }
+    }     
+
+    # 5. SARANTAPECHUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101134 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Sarantapechus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Sarantapechus" }
+    }    
+
+    # 5. TORNICES
+    if = {
+        limit = { 
+            dynasty = dynasty:101146 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Tornices"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Tornices" }
+    }    
+
+    # 5. TZIMAPLACUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101149 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Tzimaplacus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Tzimaplacus" }
+    }    
+
+    # 5. AMASEIANUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101178 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Amaseianus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Amaseianus" }
+    }     
+
+    # 5. ANTHEMIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101185 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Anthemius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Anthemius" }
+    }    
+
+    # 5. BARSACES
+    if = {
+        limit = { 
+            dynasty = dynasty:101212 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Barsaces"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Barsaces" }
+    }     
+
+    # 5. CHOIROPHACTUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101234 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Choirophactus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Choirophactus" }
+    }    
+
+    # 5. CAPPADOCIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101306 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cappadocius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cappadocius" }
+    }     
+
+    # 5. CEROLARIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101336 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Cerolarius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cerolarius" }
+    }    
+
+    # 5. CRINITUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101349 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Crinitus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Crinitus" }
+    }     
+
+    # 5. THRACESIUS
+    if = {
+        limit = { 
+            dynasty = dynasty:101515 
+        }
+        dynasty = { 
+            set_dynasty_name = "dynn_Thracesius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Thracesius" }
+    }     
+
+    # Botaneiates
+    if = {
+        limit = {
+            dynasty = dynasty:631
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Botaneiates"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Botaneiates" }
+    }
+    # Diogenes
+    if = {
+        limit = {
+            dynasty = dynasty:632
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Diogenes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Diogenes" }
+    }
+    # Monomachus
+    if = {
+        limit = {
+            dynasty = dynasty:636
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Monomachus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Monomachus" }
+    }
+    # Monomachus
+    if = {
+        limit = {
+            dynasty = dynasty:5061090
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Monomachus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Monomachus" }
+    }
+    # Lascaris
+    if = {
+        limit = {
+            dynasty = dynasty:101107
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Lascaris"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Lascaris" }
+    }
+    # Stryphnus
+    if = {
+        limit = {
+            dynasty = dynasty:7302
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Stryphnus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Stryphnus" }
+    }
+    # Asidenus
+    if = {
+        limit = {
+            dynasty = dynasty:20073
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Asidenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Asidenus" }
+    }
+    # Gavalas
+    if = {
+        limit = {
+            dynasty = dynasty:20065
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Gavalas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Gavalas" }
+    }
+    # Camonus
+    if = {
+        limit = {
+            dynasty = dynasty:20072
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Camonus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Camonus" }
+    }
+    # Petraliphes
+    if = {
+        limit = {
+            dynasty = dynasty:101124
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Petraliphes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Petraliphes" }
+    }
+    # Philanthropenus
+    if = {
+        limit = {
+            dynasty = dynasty:101126
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Philanthropenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Philanthropenus" }
+    }
+    # Eparchus
+    if = {
+        limit = {
+            dynasty = dynasty:100489
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Eparchus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Eparchus" }
+    }
+    # Phocas
+    if = {
+        limit = {
+            dynasty = dynasty:1022183
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Phocas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Phocas" }
+    }
+    # Constantopulus
+    if = {
+        limit = {
+            dynasty = dynasty:100742
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Constantopulus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Constantopulus" }
+    }
+    # Lecapenus
+    if = {
+        limit = {
+            dynasty = dynasty:642
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Lecapenus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Lecapenus" }
+    }
+    # Tzimisces
+    if = {
+        limit = {
+            dynasty = dynasty:8637
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Tzimisces"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Tzimisces" }
+    }
+    # Batatzes
+    if = {
+        limit = {
+            dynasty = dynasty:101074
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Batatzes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Batatzes" }
+    }
+    # Gabras
+    if = {
+        limit = {
+            dynasty = dynasty:101091
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Gabras"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Gabras" }
+    }
+    # Gabras
+    if = {
+        limit = {
+            dynasty = dynasty:7314
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Gabras"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Gabras" }
+    }
+    # Branas
+    if = {
+        limit = {
+            dynasty = dynasty:101078
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Branas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Branas" }
+    }
+    # Bringas
+    if = {
+        limit = {
+            dynasty = dynasty:101225
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Bringas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Bringas" }
+    }
+    # Choniates
+    if = {
+        limit = {
+            dynasty = dynasty:101081
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Choniates"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Choniates" }
+    }
+    # Chumnus
+    if = {
+        limit = {
+            dynasty = dynasty:101082
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Chumnus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Chumnus" }
+    }
+    # Maurozomes
+    if = {
+        limit = {
+            dynasty = dynasty:101393
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Maurozomes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Maurozomes" }
+    }
+    # Maurozomes
+    if = {
+        limit = {
+            dynasty = dynasty:100751
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Maurozomes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Maurozomes" }
+    }
+    # Melias
+    if = {
+        limit = {
+            dynasty = dynasty:101398
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Melias"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Melias" }
+    }
+    # Muzalon
+    if = {
+        limit = {
+            dynasty = dynasty:101119
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Muzalon"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Muzalon" }
+    }
+    # Pacurianus
+    if = {
+        limit = {
+            dynasty = dynasty:101436
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Pacurianus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Pacurianus" }
+    }
+    # Panaretus
+    if = {
+        limit = {
+            dynasty = dynasty:101443
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Panaretus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Panaretus" }
+    }
+    # Strategopulus
+    if = {
+        limit = {
+            dynasty = dynasty:101504
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Strategopulus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Strategopulus" }
+    }
+    # Taronites
+    if = {
+        limit = {
+            dynasty = dynasty:101510
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Taronites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Taronites" }
+    }
+    # Tarchaniotes
+    if = {
+        limit = {
+            dynasty = dynasty:101145
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Tarchaniotes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Tarchaniotes" }
+    }
+    # Taticius
+    if = {
+        limit = {
+            dynasty = dynasty:1029094
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Taticius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Taticius" }
+    }
+    # Xiphilinus
+    if = {
+        limit = {
+            dynasty = dynasty:101540
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Xiphilinus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Xiphilinus" }
+    }
+    # Zonaras
+    if = {
+        limit = {
+            dynasty = dynasty:101546
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Zonaras"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Zonaras" }
+    }
+    # Attaliates
+    if = {
+        limit = {
+            dynasty = dynasty:101203
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Attaliates"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Attaliates" }
+    }
+    # Acropolites
+    if = {
+        limit = {
+            dynasty = dynasty:101063
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Acropolites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Acropolites" }
+    }
+    # Argyropulus
+    if = {
+        limit = {
+            dynasty = dynasty:101196
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Argyropulus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Argyropulus" }
+    }
+    # Maniaces
+    if = {
+        limit = {
+            dynasty = dynasty:100744
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Maniaces"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Maniaces" }
+    }
+    # Rhangabe
+    if = {
+        limit = {
+            dynasty = dynasty:8644
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Rhangabe"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Rhangabe" }
+    }
+    # Paphlago
+    if = {
+        limit = {
+            dynasty = dynasty:638
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Paphlago"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Paphlago" }
+    }
+    # Sgurus
+    if = {
+        limit = {
+            dynasty = dynasty:101137
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Sgurus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Sgurus" }
+    }
+    # Gregoras
+    if = {
+        limit = {
+            dynasty = dynasty:200066
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Gregoras"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Gregoras" }
+    }
+    # Calamanus
+    if = {
+        limit = {
+            dynasty = dynasty:101096
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Calamanus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Calamanus" }
+    }
+    # Castamonites
+    if = {
+        limit = {
+            dynasty = dynasty:101321
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Castamonites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Castamonites" }
+    }
+    # Lichudes
+    if = {
+        limit = {
+            dynasty = dynasty:101361
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Lichudes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Lichudes" }
+    }
+    # Styppes
+    if = {
+        limit = {
+            dynasty = dynasty:101507
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Styppes"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Styppes" }
+    }
+    # Xanthus
+    if = {
+        limit = {
+            dynasty = dynasty:101536
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Xanthus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Xanthus" }
+    }
+    # Monomachatus
+    if = {
+        limit = {
+            dynasty = dynasty:101410
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Monomachatus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Monomachatus" }
+    }
+    # Basilacius
+    if = {
+        limit = {
+            dynasty = dynasty:100754
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Basilacius"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Basilacius" }
+    }
+    # Irenicus
+    if = {
+        limit = {
+            dynasty = dynasty:101089
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Irenicus"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Irenicus" }
+    }
+    # Philocales
+    if = {
+        limit = {
+            dynasty = dynasty:101463
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Philocales"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Philocales" }
+    }
+    # Dermocaites
+    if = {
+        limit = {
+            dynasty = dynasty:101086
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Dermocaites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Dermocaites" }
+    }
+    # Pegonites
+    if = {
+        limit = {
+            dynasty = dynasty:101451
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Pegonites"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Pegonites" }
+    }
+    # Cabasilas
+    if = {
+        limit = {
+            dynasty = dynasty:101095
+        }
+        dynasty = {
+            set_dynasty_name = "dynn_Cabasilas"
+            set_variable = { name = ercf_dynasty_already_latinized value = yes }
+        }
+        house = { set_house_name = "dynn_Cabasilas" }
+    }
+}

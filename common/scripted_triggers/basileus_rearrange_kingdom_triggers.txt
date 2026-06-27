@@ -1,0 +1,18 @@
+# =====================================================================
+# BASILEUS — REARRANGE THE KINGDOMS: candidate eligibility.
+# ---------------------------------------------------------------------
+# Used by the k_eastern_anatolia grant event (basileus_rearrange_kingdoms.0003)
+# to build the candidate pool. root = the granting emperor (= top liege).
+# Eligible = an adult, unlanded male of the emperor's culture (courtiers,
+# unlanded vassals, and unlanded extended-family / dynasty members all qualify
+# through this same gate). The emperor himself is excluded.
+# =====================================================================
+basileus_eanatolia_candidate_eligible_trigger = {
+	is_male = yes
+	is_adult = yes
+	is_landed = no
+	is_alive = yes
+	is_imprisoned = no
+	culture = root.culture
+	NOT = { this = root }
+}

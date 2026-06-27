@@ -1,0 +1,60 @@
+# =====================================================================
+# BASILEUS — adult_education_activity_cost OVERRIDE
+# ---------------------------------------------------------------------
+# Verbatim copy of vanilla adult_education_activity_cost
+# (game/common/script_values/00_activity_values.txt) with ONE addition:
+# a Pandidakterion tuition subsidy.
+#
+# This value is the gold cost of the University Visit activity (study at a
+# university / send a child to one). It is used ONLY by university_visit.txt,
+# so overriding it affects nothing else.
+#
+# Once the Empire has chartered one of the Pandidakterion's two faculties
+# (basileus_paideia_law_nomoi — the Didaskaleion ton Nomon, or
+#  basileus_paideia_law_philosophia — the Gymnasion), schooling at that
+# university is partly endowed from the imperial treasury, so studying there —
+# or sending a child there — costs 25% less.
+#
+# Keyed on the DESTINATION (the county carrying pandidakterion_university_modifier)
+# and its top liege's law, NOT on the payer. That way it applies whether a
+# ruler studies in person or sends an unlanded child (a child has no realm law
+# of its own, so a payer-based check would miss exactly that case), and only
+# while a FACULTY law is active — plain Private Grammarians grants no subsidy.
+# The 0.25 figure mirrors vanilla university_cost_reduction_value.
+#
+# Re-sync from vanilla if a patch changes the value.
+# =====================================================================
+
+adult_education_activity_cost = {
+	value = root.major_gold_value_static_max
+	if = {
+		limit = {
+			root = {
+				government_has_flag = government_is_tribal
+			}
+		}
+		multiply = 0.5
+	}
+	# BASILEUS — Pandidakterion tuition subsidy (−25%)
+	if = {
+		limit = {
+			scope:province ?= {
+				county ?= {
+					has_county_modifier = pandidakterion_university_modifier
+					holder ?= {
+						top_liege ?= {
+							OR = {
+								has_realm_law = basileus_paideia_law_nomoi
+								has_realm_law = basileus_paideia_law_philosophia
+							}
+						}
+					}
+				}
+			}
+		}
+		multiply = {
+			value = 0.75
+			desc = basileus_pandidakterion_tuition_subsidy
+		}
+	}
+}

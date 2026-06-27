@@ -1,0 +1,147 @@
+###########################################################
+# BASILEUS — USURPER CIVIL WARS
+# Spawns a pretender against a Roman emperor and forms a vanilla
+# claimant_faction. Organic kickoff: the faction declares war itself once
+# strong enough (vanilla ai_demand_chance). Trait lifecycle:
+#   win throne  -> trait removed (now the legitimate emperor)
+#   lose / fail -> trait kept, basileus_usurper_disgraced flag set ("Disgraced Usurper")
+###########################################################
+
+# Run on the EMPEROR (root). Picks the strongest eligible vassal, makes them a
+# usurper, and forms a claimant faction; other malcontents pile in.
+basileus_spawn_usurper_effect = {
+	save_scope_as = usurpation_emperor
+	primary_title = { save_scope_as = usurpation_throne }
+
+	ordered_vassal = {
+		limit = {
+			basileus_eligible_usurper_trigger = { LIEGE = scope:usurpation_emperor }
+			can_create_faction = {
+				type = claimant_faction
+				target = scope:usurpation_emperor
+			}
+		}
+		order_by = current_military_strength
+		max = 1
+
+		save_scope_as = usurper
+		add_trait = basileus_usurper
+		add_unpressed_claim = scope:usurpation_throne
+
+		create_faction = {
+			type = claimant_faction
+			target = scope:usurpation_emperor
+		}
+		hidden_effect = {
+			joined_faction ?= {
+				save_scope_as = usurper_faction
+				set_special_character = scope:usurper
+				set_special_title = scope:usurpation_throne
+			}
+		}
+	}
+
+	# Other powerful, disloyal vassals rally to the pretender.
+	if = {
+		limit = { exists = scope:usurper_faction }
+		every_vassal = {
+			limit = {
+				this != scope:usurper
+				basileus_eligible_usurper_trigger = { LIEGE = scope:usurpation_emperor }
+				can_join_faction = scope:usurper_faction
+			}
+			join_faction = scope:usurper_faction
+		}
+
+		# Flavor: warn a human emperor that a pretender has risen.
+		if = {
+			limit = { scope:usurpation_emperor = { is_ai = no } }
+			scope:usurpation_emperor = {
+				trigger_event = { id = basileus_usurper.0001 }
+			}
+		}
+	}
+}
+
+# Run on a character that HOLDS basileus_usurper. Resolves their fate.
+basileus_resolve_usurper_traits_effect = {
+	if = {
+		# They now hold a Roman empire -> the usurpation succeeded.
+		limit = { basileus_is_imperial_roman_court_trigger = yes }
+		remove_trait = basileus_usurper
+		remove_character_flag = basileus_usurper_disgraced
+	}
+	else_if = {
+		# No longer pursuing the throne (faction gone, not at war) and not yet
+		# marked -> the attempt failed; brand them a disgraced usurper.
+		limit = {
+			NOT = { has_character_flag = basileus_usurper_disgraced }
+			NOR = {
+				joined_faction ?= { faction_is_type = claimant_faction }
+				is_at_war = yes
+			}
+		}
+		add_character_flag = basileus_usurper_disgraced
+	}
+}
+
+# Run on a PLAYER who opts into usurpation via the decision. Makes them the
+# pretender against their imperial overlord (top liege) and forms a claimant
+# faction; other powerful, disloyal vassals may rally to them. root = the player.
+basileus_become_usurper_effect = {
+	top_liege = { save_scope_as = usurp_target_emperor }
+	scope:usurp_target_emperor = { primary_title = { save_scope_as = usurp_target_throne } }
+
+	add_trait = basileus_usurper
+	add_unpressed_claim = scope:usurp_target_throne
+
+	create_faction = {
+		type = claimant_faction
+		target = scope:usurp_target_emperor
+	}
+	hidden_effect = {
+		joined_faction ?= {
+			save_scope_as = usurp_player_faction
+			set_special_character = root
+			set_special_title = scope:usurp_target_throne
+		}
+	}
+
+	# Rally other powerful, disloyal vassals of the same emperor.
+	if = {
+		limit = { exists = scope:usurp_player_faction }
+		scope:usurp_target_emperor = {
+			every_vassal = {
+				limit = {
+					this != root
+					basileus_eligible_usurper_trigger = { LIEGE = scope:usurp_target_emperor }
+					can_join_faction = scope:usurp_player_faction
+				}
+				join_faction = scope:usurp_player_faction
+			}
+		}
+	}
+}
+
+# Run on the claimant of any claimant-faction war for an imperial title (from
+# on_war_started). Brands them a usurper; if they were a disgraced usurper
+# pressing the claim anew, clears the disgrace so they read as "Usurper" again.
+basileus_tag_imperial_claimant_effect = {
+	if = {
+		limit = { is_alive = yes }
+		if = {
+			limit = { NOT = { has_trait = basileus_usurper } }
+			add_trait = basileus_usurper
+		}
+		remove_character_flag = basileus_usurper_disgraced
+	}
+}
+
+# Run on a character who just GAINED an imperial title (from on_title_gain).
+basileus_usurper_won_throne_effect = {
+	if = {
+		limit = { has_trait = basileus_usurper }
+		remove_trait = basileus_usurper
+		remove_character_flag = basileus_usurper_disgraced
+	}
+}

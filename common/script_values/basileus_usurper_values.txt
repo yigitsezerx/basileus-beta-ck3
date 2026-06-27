@@ -1,0 +1,53 @@
+###########################################################
+# BASILEUS — USURPER CIVIL WARS
+# Per-emperor chance (0-100) that a usurper rises on a five-year roll.
+# Evaluated on the emperor (root). Legitimacy is the dominant lever:
+# a secure, legitimate, capable emperor is almost never challenged.
+###########################################################
+
+basileus_usurpation_chance = {
+	value = 0
+
+	# --- Legitimacy (main driver) ---
+	if = {
+		limit = { legitimacy_level <= 1 }
+		add = 35
+	}
+	else_if = {
+		limit = { legitimacy_level = 2 }
+		add = 15
+	}
+	else_if = {
+		limit = { legitimacy_level = 3 }
+		add = 5
+	}
+	else = {
+		# Legitimacy 4-5: a firmly seated emperor. Vanishingly rare.
+		add = 1
+	}
+
+	# --- A weak or distracted ruler looks beatable ---
+	if = {
+		limit = { is_incapable = yes }
+		add = 15
+	}
+	if = {
+		limit = { is_adult = no }
+		add = 15
+	}
+	if = {
+		limit = { martial < 8 }
+		add = 5
+	}
+	if = {
+		limit = { prestige_level <= 1 }
+		add = 5
+	}
+	if = {
+		limit = { is_at_war = yes }
+		add = 10
+	}
+
+	min = 0
+	max = 75
+}

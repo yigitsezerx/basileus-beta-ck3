@@ -1,0 +1,432 @@
+# =====================================================================
+# BASILEUS — REARRANGE THE KINGDOMS (kingdom-level de jure reshaping)
+# ---------------------------------------------------------------------
+# Called by basileus_rearrange_kingdoms_decision. Where the themes decision
+# reshapes DUCHY-level de jure borders, this reshapes KINGDOM-level borders:
+# it pulls a set of duchies under one surviving kingdom and destroys the
+# emptied parent kingdoms. The survivor is then optionally renamed (rename
+# event) and its duchies recolored into a harmonized family.
+#
+# Adding a widget = one basileus_rearrange_kingdom_X_effect + one
+# basileus_recolor_X_duchies_effect + one lock flag + one decision item + loc.
+#
+# root = the decision-taking emperor.
+# =====================================================================
+
+# --- SHARED: grant a formed title to the reorganizing emperor -------
+# Gives $TITLE$ to root, but ONLY if it is currently unheld (matches the Bavaria
+# guard). Idempotent: a safe no-op when the forming effect already granted it, so
+# it can be called uniformly after every restructuring widget. root = the emperor.
+basileus_grant_title_to_root_if_unheld_effect = {
+	if = {
+		limit = { NOT = { exists = $TITLE$.holder } }
+		create_title_and_vassal_change = {
+			type = created
+			save_scope_as = btgr_change
+			add_claim_on_loss = no
+		}
+		$TITLE$ = {
+			change_title_holder = {
+				holder = root
+				change = scope:btgr_change
+			}
+		}
+		resolve_title_and_vassal_change = scope:btgr_change
+	}
+}
+
+# --- ANATOLIA -------------------------------------------------------
+# Consolidates every de jure duchy of k_nikaea + k_anatolia + k_pontus under
+# k_anatolia, then destroys the now-empty k_nikaea and k_pontus. The 8 duchies
+# already de jure under k_anatolia are harmless no-ops; only the 6 from nikaea
+# and pontus actually move. Membership verified against 00_landed_titles.txt:
+#   k_nikaea = { d_opsikion d_optimatoi }
+#   k_pontus = { d_paphlagonia d_bucellaria d_armeniac d_chaldia }
+# so both kingdoms empty out cleanly and are safe to destroy.
+basileus_rearrange_kingdom_anatolia_effect = {
+	# 1. Move the 8 SURVIVING duchies under k_anatolia. (The four merge themes are
+	#    a hard prerequisite, so d_cappadocia/d_charsianon/d_mesopotamia/d_chaldia/
+	#    d_paphlagonia/d_bucellaria no longer exist by the time this runs.)
+	title:d_thracesia   = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_opsikion    = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_optimatoi   = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_cibyrrhaeot = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_anatolia    = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_sebasteia   = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_armeniac    = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_cilicia     = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_bucellaria    = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_paphlagonia     = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_chaldia     = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_cappadocia     = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_charsianon     = { set_de_jure_liege_title = title:k_anatolia }
+	title:d_mesopotamia    = { set_de_jure_liege_title = title:k_anatolia }
+
+	# 2. Keep the survivor de jure under the empire (defensive; usually a no-op).
+	title:k_anatolia = { set_de_jure_liege_title = title:e_byzantium }
+
+	# 3. Defensive guard: re-home any county still sitting DIRECTLY under the
+	#    soon-destroyed kingdoms (none expected — they only held duchies — but
+	#    this prevents an orphan if the data ever changes).
+	title:k_nikaea = {
+		every_in_de_jure_hierarchy = {
+			limit = {
+				tier = tier_county
+				de_jure_liege = title:k_nikaea
+			}
+			set_de_jure_liege_title = title:k_anatolia
+		}
+	}
+	title:k_pontus = {
+		every_in_de_jure_hierarchy = {
+			limit = {
+				tier = tier_county
+				de_jure_liege = title:k_pontus
+			}
+			set_de_jure_liege_title = title:k_anatolia
+		}
+	}
+
+	# 4. Destroy the emptied kingdoms.
+	destroy_title = title:k_nikaea
+	destroy_title = title:k_pontus
+
+	# 5. Lock the widget.
+	add_to_global_variable_list = {
+		name = unavailable_unique_decisions
+		target = flag:kingdom_anatolia_rearranged
+	}
+}
+
+# Recolor the 8 surviving Anatolian duchies into a harmonized crimson family
+# (k_anatolia itself stays its red { 200 50 50 }). Each shade is distinct but
+# reads as one set. Called from the rename event's `after` block, so it runs
+# after EITHER rename option. Scope-agnostic (operates on title: targets).
+basileus_recolor_anatolia_duchies_effect = {
+	# All 14 possible Anatolian duchies get a distinct hue (warm-anchored but spread)
+	# so adjacent duchies read apart — including the six that the merge themes WOULD
+	# destroy (d_cappadocia … d_bucellaria), since the merges are optional and they
+	# may still exist when unification runs.
+	title:d_thracesia   = { set_title_color = { 205 60 60 } }    # red
+	title:d_opsikion    = { set_title_color = { 215 115 50 } }   # orange
+	title:d_optimatoi   = { set_title_color = { 175 60 115 } }   # magenta-purple
+	title:d_cibyrrhaeot = { set_title_color = { 150 90 60 } }    # brown
+	title:d_anatolia    = { set_title_color = { 205 85 120 } }   # rose-pink
+	title:d_sebasteia   = { set_title_color = { 185 140 55 } }   # gold-ochre
+	title:d_armeniac    = { set_title_color = { 130 45 60 } }    # deep maroon
+	title:d_cilicia     = { set_title_color = { 225 145 110 } }  # salmon
+	title:d_cappadocia  = { set_title_color = { 235 70 90 } }    # bright rose-red
+	title:d_charsianon  = { set_title_color = { 165 50 95 } }    # plum
+	title:d_mesopotamia = { set_title_color = { 200 160 70 } }   # amber-gold
+	title:d_chaldia     = { set_title_color = { 110 40 70 } }    # dark wine
+	title:d_paphlagonia = { set_title_color = { 180 75 50 } }    # rust
+	title:d_bucellaria  = { set_title_color = { 220 110 95 } }   # coral
+
+	# Per-county unique shades, each from its OWN duchy's color (literals —
+	# set_title_color rejects script values). Every county a distinct shade of its
+	# native duchy, so all 14 duchies stay legible. (Pre-split: everything is under
+	# k_anatolia here; the split + east recolor re-tint the eastern half afterward.)
+	# d_thracesia
+	title:c_lydia                = { set_title_color = { 178  47  27 } }
+	title:c_mysia                = { set_title_color = { 215 100  56 } }
+	title:c_prusa                = { set_title_color = { 171  72  85 } }
+	title:c_ionia                = { set_title_color = { 208  44  33 } }
+	title:c_aeolis               = { set_title_color = { 240  97  62 } }
+	title:c_thyatira             = { set_title_color = { 201  69  91 } }
+	title:c_hadrianeia           = { set_title_color = { 238  41  39 } }
+	title:c_chonae               = { set_title_color = { 194  94  68 } }
+	title:c_belokome             = { set_title_color = { 231  66  97 } }
+	# d_opsikion
+	title:c_nikaea               = { set_title_color = { 188 102  20 } }
+	title:c_abydos               = { set_title_color = { 225 155  46 } }
+	title:c_lesbos               = { set_title_color = { 181 127  75 } }
+	title:c_prokonnesos          = { set_title_color = { 218  99  23 } }
+	# d_optimatoi
+	title:c_bithynia             = { set_title_color = { 148  47  82 } }
+	# d_cibyrrhaeot
+	title:c_lycia                = { set_title_color = { 123  77  27 } }
+	title:c_caria                = { set_title_color = { 160 130  56 } }
+	title:c_pamphylia            = { set_title_color = { 116 102  85 } }
+	title:c_rhodos               = { set_title_color = { 153  74  33 } }
+	# d_anatolia
+	title:c_phrygia              = { set_title_color = { 178  72  87 } }
+	title:c_lycaonia             = { set_title_color = { 215 125 116 } }
+	title:c_pacatiana            = { set_title_color = { 171  97 145 } }
+	title:c_pisidia              = { set_title_color = { 208  69  93 } }
+	title:c_selge                = { set_title_color = { 240 122 122 } }
+	title:c_galatia_salutaris    = { set_title_color = { 201  94 151 } }
+	title:c_philomelium          = { set_title_color = { 238  66  99 } }
+	title:c_isauria              = { set_title_color = { 194 119 128 } }
+	# d_sebasteia
+	title:c_azysia               = { set_title_color = { 158 127  22 } }
+	title:c_ablastha             = { set_title_color = { 195 180  51 } }
+	title:c_lycandus             = { set_title_color = { 151 152  80 } }
+	title:c_sebasteia            = { set_title_color = { 188 124  28 } }
+	title:c_zela                 = { set_title_color = { 225 177  57 } }
+	# d_armeniac
+	title:c_sinope               = { set_title_color = { 103  32  27 } }
+	title:c_helenopontus         = { set_title_color = { 140  85  56 } }
+	# d_cilicia
+	title:c_cilicia              = { set_title_color = { 198 132  77 } }
+	title:c_seleucia             = { set_title_color = { 235 185 106 } }
+	title:c_tall_hamid           = { set_title_color = { 191 157 135 } }
+	# d_cappadocia
+	title:c_cappadocia           = { set_title_color = { 208  57  57 } }
+	title:c_lower_galatia        = { set_title_color = { 240 110  86 } }
+	title:c_kyzistra             = { set_title_color = { 201  82 115 } }
+	# d_charsianon
+	title:c_euchaita             = { set_title_color = { 138  37  62 } }
+	title:c_galatia              = { set_title_color = { 175  90  91 } }
+	title:c_hadrianopolis        = { set_title_color = { 131  62 120 } }
+	title:c_charsianon           = { set_title_color = { 168  34  68 } }
+	title:c_kaisereia            = { set_title_color = { 205  87  97 } }
+	# d_mesopotamia
+	title:c_theodosiopolis       = { set_title_color = { 173 147  37 } }
+	title:c_satala               = { set_title_color = { 210 200  66 } }
+	title:c_melitene             = { set_title_color = { 166 172  95 } }
+	title:c_mesopotamia          = { set_title_color = { 203 144  43 } }
+	# d_chaldia
+	title:c_trebizond            = { set_title_color = {  83  27  37 } }
+	title:c_cerasus              = { set_title_color = { 120  80  66 } }
+	title:c_colonea              = { set_title_color = {  76  52  95 } }
+	title:c_acampse              = { set_title_color = { 113  24  43 } }
+	# d_paphlagonia
+	title:c_paphlagonia          = { set_title_color = { 153  62  20 } }
+	title:c_pompeiopolis         = { set_title_color = { 190 115  46 } }
+	# d_bucellaria
+	title:c_honorias             = { set_title_color = { 193  97  62 } }
+	title:c_tarsos               = { set_title_color = { 230 150  91 } }
+}
+
+# --- ANATOLIA SPLIT (Eastern / Western) -----------------------------
+# SHELVED with event basileus_rearrange_kingdoms.0002 (the "sundering"): this
+# effect and basileus_recolor_eastern_anatolia_and_duchies_effect below are no
+# longer invoked. Kept defined for easy un-shelving (restore .0002 to call them).
+# Follow-up to the unification: carve k_anatolia into a western survivor
+# (k_anatolia, 5 duchies) and a new eastern kingdom (k_eastern_anatolia, 9
+# duchies), with three border-cleanup county moves and new capitals. The new
+# kingdom is granted to the emperor (root) until the grant event resolves; both
+# halves are renamed culture-dynamically. root = the decision-taking emperor.
+basileus_split_anatolia_effect = {
+	# 1. Border cleanup — move the three counties to their new duchies FIRST,
+	#    so they ride along to the correct kingdom when the duchies are reparented.
+	title:c_pamphylia = { set_de_jure_liege_title = title:d_cilicia }    # -> east
+	title:c_pisidia   = { set_de_jure_liege_title = title:d_thracesia }  # -> west
+	title:c_pacatiana = { set_de_jure_liege_title = title:d_thracesia }  # -> west
+
+	# 2.
+	title:k_eastern_anatolia = { set_de_jure_liege_title = title:e_byzantium }
+	title:d_anatolia    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_cappadocia    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_sebasteia   = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_armeniac    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_cilicia     = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_charsianon    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_mesopotamia    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+	title:d_chaldia    = { set_de_jure_liege_title = title:k_eastern_anatolia }
+
+	# 3. Capitals (set AFTER the duchy moves so each county is de jure in-realm).
+	title:k_eastern_anatolia = { set_capital_county = title:c_trebizond }
+	title:k_anatolia         = { set_capital_county = title:c_ionia }
+
+	# 4. Grant the new kingdom to the emperor for now (mirrors the Thrace
+	#    elevation). The follow-up grant event may hand it to a candidate.
+	if = {
+		limit = { NOT = { exists = title:k_eastern_anatolia.holder } }
+		create_title_and_vassal_change = {
+			type = created
+			save_scope_as = ea_split_change
+			add_claim_on_loss = no
+		}
+		title:k_eastern_anatolia = {
+			change_title_holder = {
+				holder = root
+				change = scope:ea_split_change
+			}
+		}
+		resolve_title_and_vassal_change = scope:ea_split_change
+	}
+
+	# 5. Rename both halves, culture-dynamic on the emperor (greek vs else).
+	#    set_title_name bakes a fixed string (its _adj sibling supplies the
+	#    adjective) — mirrors basileus_set_theme_name_effect.
+	if = {
+		limit = { culture = culture:greek }
+		title:k_anatolia         = { set_title_name = BASILEUS_WEST_ANATOLIA_NAME_GREEK }
+		title:k_eastern_anatolia = { set_title_name = BASILEUS_EAST_ANATOLIA_NAME_GREEK }
+	}
+	else = {
+		title:k_anatolia         = { set_title_name = BASILEUS_WEST_ANATOLIA_NAME }
+		title:k_eastern_anatolia = { set_title_name = BASILEUS_EAST_ANATOLIA_NAME }
+	}
+}
+
+# Recolor the eastern kingdom + its 4 survivor duchies into a warm tan/amber
+# family derived from the old k_pontus color { 205 130 85 } — distinct from the
+# western crimson set. Called from the split event's option.
+basileus_recolor_eastern_anatolia_and_duchies_effect = {
+	title:k_eastern_anatolia = { set_title_color = { 205 130 85 } }
+
+	# Tan/amber family, spread across all 8 possible eastern duchies (survivors +
+	# the four optional-merge duchies the split moves east) so each reads apart.
+	title:d_anatolia    = { set_title_color = { 200 120 70 } }    # amber
+	title:d_sebasteia   = { set_title_color = { 170 165 80 } }    # olive-gold
+	title:d_armeniac    = { set_title_color = { 145 100 60 } }    # brown
+	title:d_cilicia     = { set_title_color = { 230 195 140 } }   # pale sand
+	title:d_cappadocia  = { set_title_color = { 215 135 80 } }    # tan
+	title:d_charsianon  = { set_title_color = { 185 110 95 } }    # dusty rose-brown
+	title:d_mesopotamia = { set_title_color = { 205 175 110 } }   # light gold
+	title:d_chaldia     = { set_title_color = { 130 90 55 } }     # dark tan
+
+	# Per-county tan shades, each from its OWN eastern duchy — re-colors over the
+	# crimson the unification effect gave them. c_pamphylia rides east with d_cilicia;
+	# c_pacatiana/c_pisidia stayed west (d_thracesia) so are NOT re-tinted here.
+	# d_anatolia
+	title:c_phrygia              = { set_title_color = { 173 107  37 } }
+	title:c_lycaonia             = { set_title_color = { 210 160  66 } }
+	title:c_selge                = { set_title_color = { 166 132  95 } }
+	title:c_galatia_salutaris    = { set_title_color = { 203 104  43 } }
+	title:c_philomelium          = { set_title_color = { 240 157  72 } }
+	title:c_isauria              = { set_title_color = { 196 129 101 } }
+	# d_sebasteia
+	title:c_azysia               = { set_title_color = { 143 152  47 } }
+	title:c_ablastha             = { set_title_color = { 180 205  76 } }
+	title:c_lycandus             = { set_title_color = { 136 177 105 } }
+	title:c_sebasteia            = { set_title_color = { 173 149  53 } }
+	title:c_zela                 = { set_title_color = { 210 202  82 } }
+	# d_armeniac
+	title:c_sinope               = { set_title_color = { 118  87  27 } }
+	title:c_helenopontus         = { set_title_color = { 155 140  56 } }
+	# d_cilicia
+	title:c_cilicia              = { set_title_color = { 203 182 107 } }
+	title:c_seleucia             = { set_title_color = { 240 235 136 } }
+	title:c_tall_hamid           = { set_title_color = { 196 207 165 } }
+	title:c_pamphylia            = { set_title_color = { 233 179 113 } }
+	# d_cappadocia
+	title:c_cappadocia           = { set_title_color = { 188 122  47 } }
+	title:c_lower_galatia        = { set_title_color = { 225 175  76 } }
+	title:c_kyzistra             = { set_title_color = { 181 147 105 } }
+	# d_charsianon
+	title:c_euchaita             = { set_title_color = { 158  97  62 } }
+	title:c_galatia              = { set_title_color = { 195 150  91 } }
+	title:c_hadrianopolis        = { set_title_color = { 151 122 120 } }
+	title:c_charsianon           = { set_title_color = { 188  94  68 } }
+	title:c_kaisereia            = { set_title_color = { 225 147  97 } }
+	# d_mesopotamia
+	title:c_theodosiopolis       = { set_title_color = { 178 162  77 } }
+	title:c_satala               = { set_title_color = { 215 215 106 } }
+	title:c_melitene             = { set_title_color = { 171 187 135 } }
+	title:c_mesopotamia          = { set_title_color = { 208 159  83 } }
+	# d_chaldia
+	title:c_trebizond            = { set_title_color = { 103  77  22 } }
+	title:c_cerasus              = { set_title_color = { 140 130  51 } }
+	title:c_colonea              = { set_title_color = {  96 102  80 } }
+	title:c_acampse              = { set_title_color = { 133  74  28 } }
+}
+
+# Grant k_eastern_anatolia to $HOLDER$ and make them a real, self-contained vassal
+# king: they receive the kingdom title, the land the EMPEROR personally holds in
+# the east, AND the existing eastern governors are re-pointed as THEIR vassals.
+# Mirrors basileus_grant_tagma_command_effect's grant pattern. Scope: root = emperor.
+#
+# NOTE: re-vassalizing appointed governors under a king-tier vassal in admin
+# government is non-standard — verify in-game (right government, themes intact, no
+# appointment glitches). If it misbehaves, drop the second vassal-change block.
+basileus_grant_eastern_anatolia_effect = {
+	$HOLDER$ = { save_scope_as = ea_new_king }
+
+	# --- 1. Hand the kingdom + the emperor's directly-held eastern land to the king. ---
+	create_title_and_vassal_change = {
+		type = granted
+		save_scope_as = ea_grant_change
+		add_claim_on_loss = no
+	}
+	title:k_eastern_anatolia = {
+		change_title_holder = {
+			holder = scope:ea_new_king
+			change = scope:ea_grant_change
+		}
+	}
+	title:k_eastern_anatolia = {
+		every_de_jure_county = {
+			limit = { holder = root }
+			change_title_holder = {
+				holder = scope:ea_new_king
+				change = scope:ea_grant_change
+			}
+		}
+		every_in_de_jure_hierarchy = {
+			limit = { tier = tier_duchy  holder = root }
+			change_title_holder = {
+				holder = scope:ea_new_king
+				change = scope:ea_grant_change
+			}
+		}
+	}
+	resolve_title_and_vassal_change = scope:ea_grant_change
+
+	# --- 2. Re-vassalize the existing eastern governors under the new king. ---
+	# Any de jure duchy/county within k_eastern_anatolia still held by one of the
+	# emperor's vassals (a governor) becomes the new king's vassal instead. Runs
+	# AFTER the kingdom is resolved to the king, so he can be their liege.
+	create_title_and_vassal_change = {
+		type = granted
+		save_scope_as = ea_vassal_change
+		add_claim_on_loss = no
+	}
+	title:k_eastern_anatolia = {
+		every_in_de_jure_hierarchy = {
+			limit = {
+				OR = { tier = tier_duchy  tier = tier_county }
+				exists = holder
+				holder = { is_vassal_of = root }
+				NOT = { holder = root }
+				NOT = { holder = scope:ea_new_king }
+			}
+			holder = {
+				change_liege = {
+					liege = scope:ea_new_king
+					change = scope:ea_vassal_change
+				}
+			}
+		}
+	}
+	resolve_title_and_vassal_change = scope:ea_vassal_change
+
+	# Keep the new king on the realm's Roman Imperial (admin) government.
+	scope:ea_new_king = {
+		if = {
+			limit = { NOT = { has_government = roman_imperial_government } }
+			change_government = roman_imperial_government
+		}
+	}
+}
+
+# --- FRANCOGALLIA: merge Aquitaine into France ----------------------
+# Optional follow-up to basileus_francogallia_effect (which forms BOTH k_france
+# and k_aquitaine). If the emperor chooses to merge (event .0010 option A), every
+# de jure duchy under k_aquitaine is reparented to k_france and the now-empty
+# southern kingdom is destroyed. NO recolor — the absorbed southern duchies keep
+# their existing wine shades. Mirrors the Anatolia unify de-jure-loop + destroy.
+basileus_merge_aquitaine_into_france_effect = {
+	if = {
+		limit = { exists = title:k_aquitaine }
+		title:k_aquitaine = {
+			every_in_de_jure_hierarchy = {
+				limit = { tier = tier_duchy }
+				set_de_jure_liege_title = title:k_france
+			}
+			# Defensive: any county still directly under k_aquitaine.
+			every_in_de_jure_hierarchy = {
+				limit = {
+					tier = tier_county
+					de_jure_liege = title:k_aquitaine
+				}
+				set_de_jure_liege_title = title:k_france
+			}
+		}
+		# Keep the survivor de jure under the empire (defensive; usually a no-op).
+		title:k_france = { set_de_jure_liege_title = title:e_byzantium }
+		destroy_title = title:k_aquitaine
+	}
+}
