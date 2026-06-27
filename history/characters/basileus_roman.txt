@@ -1,0 +1,87 @@
+﻿# Cassiodorus — 6th-century Roman statesman and scholar.
+# Author of the lost twelve-volume History of the Goths, which served as the basis for Jordanes' Getica.
+
+9000003 = {
+	name = "Cassiodorus"
+	religion = orthodox
+	culture = roman
+	trait = scholar
+	trait = diligent
+	trait = patient
+	trait = calm
+	trait = education_learning_4
+	diplomacy = 15
+	learning = 22
+	stewardship = 15
+	485.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	585.1.1 = {
+		death = yes
+	}
+}
+
+# Vigilius — Friend and associate of Jordanes, recipient of the Romana.
+
+9000004 = {
+	name = "Vigilius"
+	religion = orthodox
+	culture = roman
+	trait = scholar
+	500.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	555.6.7 = {
+		death = yes
+	}
+}
+# Castalius — Friend of Jordanes who requested the Getica.
+
+9000005 = {
+	name = "Castalius"
+	religion = orthodox
+	culture = roman
+	trait = scholar
+	500.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	560.1.1 = {
+		death = yes
+	}
+}
+
+# =====================================================================
+# Generals of the Renovatio Imperii — referenced by the Italia event
+# (basileus_italia_renovatio_events.txt: basileus_italia.0001). Both are
+# marked make_unprunable = yes at birth so the engine keeps them alive
+# in the database; the event scopes them by ID centuries later to render
+# portraits and use their names in loc strings.
+# =====================================================================
+
+# Flavius Belisarius (c. 500–565) — Justinian's greatest general. Crushed the
+# Vandals at Ad Decimum, broke the Ostrogoths and held Rome through the great
+# siege. Famed for loyalty to an emperor who never fully trusted him.
+
+9000006 = {
+	name = "Flavius Belisarius"
+	religion = orthodox
+	culture = roman
+	trait = brave
+	trait = loyal
+	trait = diligent
+	trait = flexible_leader
+	trait = education_martial_4
+	martial = 20
+	prowess = 16
+	500.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	565.3.13 = {
+		death = yes
+		effect = { make_unprunable = yes }
+	}
+}

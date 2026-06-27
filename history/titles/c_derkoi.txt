@@ -1,0 +1,11 @@
+c_derkoi = {
+	867.1.1 = {
+		change_development_level = 5
+		liege = d_thrace
+		holder = 1700
+	}
+	1066.1.1 = {
+		liege = d_thrace
+		holder = 1732
+	}
+}

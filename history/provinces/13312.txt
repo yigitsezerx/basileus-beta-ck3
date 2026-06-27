@@ -1,0 +1,5 @@
+13312 = {
+	culture = italian
+	religion = catholic
+	holding = castle_holding
+}

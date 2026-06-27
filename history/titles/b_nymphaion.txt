@@ -1,0 +1,8 @@
+b_nymphaion = {
+	867.1.1 = {
+		liege = c_lydia
+	}
+	1066.1.1 = {
+		liege = c_lydia
+	}
+}

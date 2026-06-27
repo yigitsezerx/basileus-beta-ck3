@@ -1,0 +1,28 @@
+﻿# =====================================================================
+# Jordanes — 6th-century historian, author of the Romana et Getica.
+# Referenced by basileus_pandects_events.txt (pandects_renovatio.0003).
+# Culture is eastern_roman (a LIVING culture in this playset): dead /
+# nonexistent cultures (gothic, roman) get pruned at game start regardless
+# of make_unprunable, which empties the event scope centuries later.
+# =====================================================================
+
+9000002 = {
+	name = "Jordanes"
+	religion = orthodox
+	culture = gothic
+	trait = scholar
+	trait = shy
+	trait = temperate
+	trait = humble
+	trait = education_learning_4
+	diplomacy = 10
+	learning = 18
+	500.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	560.1.1 = {
+		death = yes
+		effect = { make_unprunable = yes }
+	}
+}

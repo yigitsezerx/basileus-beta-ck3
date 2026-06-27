@@ -1,0 +1,15 @@
+﻿# BASILEUS — "The Roman World" — start at game start, only for pre-867 starts.
+476.1.1 = {
+	effect = {
+		if = {
+			limit = {
+				exists = title:e_byzantium
+				game_start_date < 868.1.1
+			}
+			start_situation = {
+				type = basileus_roman_world
+				start_phase = basileus_rw_imperial_order
+			}
+		}
+	}
+}

@@ -1,0 +1,5 @@
+13307 = {
+	culture = lombard
+	religion = catholic
+	holding = castle_holding
+}

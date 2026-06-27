@@ -1,0 +1,28 @@
+﻿# Historical scholar characters referenced by artifact-creation events
+# (basileus_pandects_events.txt: pandects_renovatio.0001, .0003, .0004).
+#
+# All are marked make_unprunable = yes at birth so the engine never
+# garbage-collects them.  Without this, dead characters from the 500s
+# are pruned long before late-game events try to scope them by ID.
+
+9000001 = {
+	name = "Tribonianos"
+	religion = orthodox
+	culture = greek
+	trait = scholar
+	trait = diligent
+	trait = loyal
+	trait = greedy
+	trait = ambitious
+	trait = education_learning_4
+	stewardship = 20
+	learning = 20
+	485.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	542.1.1 = {
+		death = yes
+		effect = { make_unprunable = yes }
+	}
+}

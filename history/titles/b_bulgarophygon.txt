@@ -1,0 +1,8 @@
+b_bulgarophygon = {
+	867.1.1 = {
+		liege = c_brysis
+	}
+	1066.1.1 = {
+		liege = c_brysis
+	}
+}

@@ -1,0 +1,8 @@
+b_akrotiri = {
+	867.1.1 = {
+		liege = c_chonae
+	}
+	1066.1.1 = {
+		liege = c_chonae
+	}
+}

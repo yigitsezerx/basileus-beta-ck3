@@ -1,0 +1,28 @@
+###c_byzantion
+496 = {		#Constantinople / Former Byzantion
+	culture = greek
+	religion = orthodox
+	holding = castle_holding
+	# History	
+	769.1.1 = {
+		buildings = {
+			castle_02
+			common_tradeport_01
+		}
+		special_building = hagia_sophia_01
+		duchy_capital_building = theodosian_walls_01
+	}
+	1066.1.1 = {
+		buildings = {
+			castle_02
+			common_tradeport_02
+			farm_estates_01
+			#regimental_grounds_01
+		}
+	}
+	1178.1.1 = {
+		buildings = {
+			common_tradeport_03
+		}
+	}
+}

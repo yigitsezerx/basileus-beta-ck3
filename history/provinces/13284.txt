@@ -1,0 +1,5 @@
+13284 = {
+	culture = greek
+	religion = orthodox
+	holding = castle_holding
+}

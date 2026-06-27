@@ -1,0 +1,5 @@
+13295 = {
+	culture = khazar
+	religion = tengri_pagan
+	holding = nomad_holding
+}

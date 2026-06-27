@@ -1,0 +1,5 @@
+13306 = {
+	culture = levantine
+	religion = ashari
+	holding = church_holding
+}

@@ -1,0 +1,14 @@
+3761 = {	#Selymbria
+	holding = city_holding
+	buildings = {
+		curtain_walls_01
+	}
+	# Pre-placed decorative landmark: the column stands here from game start
+	# (slot defined + filled, never constructed).
+	special_building_slot = basileus_spiral_column_of_saint
+
+	# History
+	1.1.1 = {
+		special_building = basileus_spiral_column_of_saint
+	}
+}

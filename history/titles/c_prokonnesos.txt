@@ -1,0 +1,11 @@
+c_prokonnesos = {
+	867.1.1 = {
+		change_development_level = 5
+		liege = d_opsikion
+		holder = 145111
+	}
+	1066.1.1 = {
+		liege = d_opsikion
+		holder = 20527
+	}
+}

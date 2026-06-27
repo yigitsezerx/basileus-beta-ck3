@@ -1,0 +1,33 @@
+﻿# =====================================================================
+# Generals of the Renovatio Imperii — referenced by the Italia event
+# (basileus_italia_renovatio_events.txt: basileus_italia.0001). Both are
+# marked make_unprunable = yes at birth so the engine keeps them alive
+# in the database; the event scopes them by ID centuries later to render
+# portraits and use their names in loc strings.
+# =====================================================================
+
+# Narses (c. 478–573) — Armenian eunuch, court chamberlain turned general.
+# Annihilated the Ostrogoths at Taginae and Mons Lactarius, completing the
+# conquest of Italy in extreme old age.
+
+9000007 = {
+	name = "Narses"
+	religion = orthodox
+	culture = armenian
+	trait = eunuch_1
+	trait = patient
+	trait = calm
+	trait = diligent
+	trait = education_martial_4
+	martial = 18
+	intrigue = 14
+	stewardship = 14
+	478.1.1 = {
+		birth = yes
+		effect = { make_unprunable = yes }
+	}
+	573.1.1 = {
+		death = yes
+		effect = { make_unprunable = yes }
+	}
+}

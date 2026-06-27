@@ -1,0 +1,8 @@
+b_stratonikeia = {
+	867.1.1 = {
+		liege = c_ionia
+	}
+	1066.1.1 = {
+		liege = c_ionia
+	}
+}
