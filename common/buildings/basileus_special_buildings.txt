@@ -1,0 +1,104 @@
+# =====================================================================
+# BASILEUS — special buildings.
+# ---------------------------------------------------------------------
+# basileus_spiral_column_of_saint (display name: "Column of Arcadius"): a
+# pre-placed DECORATIVE landmark standing in b_selymbria (province 3761) from
+# game start. It is NOT constructable — it exists only because the province
+# history seats it in its own special-building slot (see
+# history/provinces/3761.txt). The 3D model is supplied by
+# gfx/models/buildings/special/basileus_spiral_column_of_saint.asset and
+# positioned by the special_building locator instance for province 3761.
+#
+# The slot key and the building key are the same (vanilla idiom). The internal
+# key keeps its original name; only the displayed loc name is "Column of Arcadius".
+# =====================================================================
+
+basileus_spiral_column_of_saint = {
+	type = special
+
+	# Map model.
+	asset = {
+		type = pdxmesh
+		name = "basileus_spiral_column_of_saint_mesh"
+	}
+
+	# Placeholder icon
+	type_icon = "icon_basileus_arcadiuscolumn.dds"
+
+	show_disabled = yes
+
+	# Pre-placed only: never offered for construction in the slot.
+	can_construct_potential = { always = no }
+	can_construct = { always = no }
+
+	# Moderate, prestige-themed effect befitting an imperial triumphal column.
+	character_modifier = {
+		monthly_prestige = 0.2
+        monthly_influence_mult = 0.02
+		prestige_gain_mult = 0.05
+	}
+
+	ai_value = { value = 0 }
+
+	flag = travel_point_of_interest_wonder
+}
+
+# =====================================================================
+# BASILEUS — HIPPODROME
+# ---------------------------------------------------------------------
+
+basileus_hippodrome_constantinople = {
+	type = great_building
+	type_icon = "icon_basileus_hippodrome.dds"
+
+    # Block manual construction from the regular holding build menu
+    can_construct_potential = {
+        always = no
+    }
+
+    # NOTE: no top-level cost field. A great_building's gold cost is owned by the
+    # great_project that constructs/upgrades it; this one is PRE-PLACED only
+    # (added at game start, never built by the player), so a cost_gold here is an
+    # "Unsupported cost field ... ERROR_FLAG_INDEX" error in the log and is erased.
+
+    # Checked if the holder can benefit from it
+    is_enabled = {
+        scope:holder = {
+            government_has_flag = government_is_roman_imperial
+        }
+    }	
+	
+	show_disabled = yes
+
+    # Active modifiers
+    character_modifier = {
+		monthly_influence = 0.1
+		monthly_influence_mult = 0.02
+    }
+    province_modifier = {
+        monthly_income = 5.0
+        tax_mult = 0.10
+    }
+    county_modifier = {
+        development_growth = 0.02
+		development_growth_factor = 0.1
+        county_opinion_add = -5
+    }	
+
+    # Rebuild specifications if ruined (e.g., during a siege)
+    rebuild_cost = {
+        gold = 500
+    }
+    can_rebuild = {
+        always = yes
+    }	
+
+    # Fallback modifiers when ruined
+    fallback = {
+        character_modifier = {
+            monthly_influence = 0.1
+        }
+    }
+	
+	flag = hippodrome_constantinople
+}

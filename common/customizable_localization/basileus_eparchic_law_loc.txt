@@ -1,0 +1,53 @@
+# =====================================================================
+# BASILEUS — culture-dynamic names for the Book of the Eparch tiers.
+# Greek-culture (and any non-Latin) rulers see the Greek names; rulers whose
+# culture has the Latin language pillar (eastern_roman & other Latin-speakers)
+# see the Latinised names. Greek is the fallback (last text block).
+# Referenced from the tier loc keys via [GetPlayer.Custom(...)].
+# Tiers 1-3 use these; Tier 0 ("Free Markets") is static.
+# =====================================================================
+
+cl_basileus_eparchic_law_1 = {
+	type = character
+
+	text = {
+		trigger = {
+			culture = { has_cultural_pillar = language_latin }
+		}
+		localization_key = basileus_eparchic_law_1_latin
+	}
+
+	text = {
+		localization_key = basileus_eparchic_law_1_greek
+	}
+}
+
+cl_basileus_eparchic_law_2 = {
+	type = character
+
+	text = {
+		trigger = {
+			culture = { has_cultural_pillar = language_latin }
+		}
+		localization_key = basileus_eparchic_law_2_latin
+	}
+
+	text = {
+		localization_key = basileus_eparchic_law_2_greek
+	}
+}
+
+cl_basileus_eparchic_law_3 = {
+	type = character
+
+	text = {
+		trigger = {
+			culture = { has_cultural_pillar = language_latin }
+		}
+		localization_key = basileus_eparchic_law_3_latin
+	}
+
+	text = {
+		localization_key = basileus_eparchic_law_3_greek
+	}
+}

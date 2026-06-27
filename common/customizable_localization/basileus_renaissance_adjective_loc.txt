@@ -1,0 +1,39 @@
+﻿# =====================================================================
+# BASILEUS — dynamic dynastic adjective for the Macedonian Renaissance title.
+# ---------------------------------------------------------------------
+# Returns the reigning dynasty's adjective, e.g. "Macedonian" / "Komnenian" /
+# "Sezerian". Curated forms for the notable historical Byzantine houses (matched
+# by vanilla dynasty ID), then a "-ian" concatenation fallback for everyone else
+# (player/procedural dynasties). CK3 cannot read a name's final letter, so the
+# fallback always appends "ian"; the curated list fixes the famous houses.
+# Invoked as [ROOT.Custom('cl_basileus_renaissance_adjective')].
+# =====================================================================
+cl_basileus_renaissance_adjective = {
+	type = character
+
+	text = { trigger = { dynasty = { this = dynasty:644 } }     localization_key = basileus_ren_adj_makedon }      # Makedon -> Macedonian
+	text = { trigger = { dynasty = { this = dynasty:642 } }     localization_key = basileus_ren_adj_lekapenos }    # Lekapenos
+	text = { trigger = { dynasty = { this = dynasty:641 } }     localization_key = basileus_ren_adj_phokas }       # Phokas
+	text = { trigger = { dynasty = { this = dynasty:634 } }     localization_key = basileus_ren_adj_komnenos }     # Komnenos
+	text = { trigger = { dynasty = { this = dynasty:633 } }     localization_key = basileus_ren_adj_doukas }       # Doukas
+	text = { trigger = { dynasty = { this = dynasty:639 } }     localization_key = basileus_ren_adj_argyros }      # Argyros
+	text = { trigger = { dynasty = { this = dynasty:195 } }     localization_key = basileus_ren_adj_angelos }      # Angelos
+	text = { trigger = { dynasty = { this = dynasty:101107 } }  localization_key = basileus_ren_adj_laskaris }     # Laskaris
+	text = {
+		trigger = {
+			OR = {
+				dynasty = { this = dynasty:48 }
+				dynasty = { this = dynasty:628 }
+			}
+		}
+		localization_key = basileus_ren_adj_palaiologos
+	}
+	text = { trigger = { dynasty = { this = dynasty:631 } }     localization_key = basileus_ren_adj_botaneiates }  # Botaneiates
+	text = { trigger = { dynasty = { this = dynasty:101225 } }  localization_key = basileus_ren_adj_bringas }      # Bringas
+
+	# No dynasty (rare for an emperor) — a generic, grammatical form.
+	text = { trigger = { NOT = { has_dynasty = yes } }          localization_key = basileus_ren_adj_none }
+
+	# Fallback: <DynastyName>ian (e.g. "Sezerian").
+	text = { localization_key = basileus_ren_adj_fallback }
+}

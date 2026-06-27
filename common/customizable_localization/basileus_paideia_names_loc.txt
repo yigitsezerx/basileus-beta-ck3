@@ -1,0 +1,28 @@
+# =====================================================================
+# BASILEUS — culture-dynamic names for the two Pandidakterion faculties
+# (Enkyklios Paideia / Educational Policy law level names).
+# Greek default; Latin form for eastern_roman & other language_latin cultures.
+# Same simple pattern as cl_basileus_agrarian_law_3 (Allelengyon/Allelengium),
+# which is confirmed to render — used via [GetPlayer.Custom('cl_...')] in the
+# level-name loc keys.
+# =====================================================================
+
+# Law faculty — Διδασκαλεῖον τῶν Νόμων / Schola Legum
+cl_basileus_didaskaleion = {
+	type = character
+	text = {
+		trigger = { culture = { has_cultural_pillar = language_latin } }
+		localization_key = basileus_didaskaleion_latin
+	}
+	text = { localization_key = basileus_didaskaleion_greek }
+}
+
+# Philosophy faculty — Γυμνάσιον / Gymnasium
+cl_basileus_gymnasion = {
+	type = character
+	text = {
+		trigger = { culture = { has_cultural_pillar = language_latin } }
+		localization_key = basileus_gymnasion_latin
+	}
+	text = { localization_key = basileus_gymnasion_greek }
+}

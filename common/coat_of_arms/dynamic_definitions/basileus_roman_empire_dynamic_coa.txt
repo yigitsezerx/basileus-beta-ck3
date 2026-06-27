@@ -1,0 +1,15 @@
+# =====================================================================
+# BASILEUS — dynamic CoA: after Cleave the Empire, e_byzantium adopts the
+# purple Chi-Rho + Alpha/Omega arms (e_byzantium_cleaved). The trigger is the
+# global variable the cleave decision sets; before the cleave (or if it never
+# happens) e_byzantium keeps its default arms from the base CoA definition.
+# Evaluated in title scope; first matching item wins.
+# =====================================================================
+e_byzantium = {
+	item = {
+		trigger = {
+			has_global_variable = basileus_roman_empire_cleaved
+		}
+		coat_of_arms = e_byzantium_cleaved
+	}
+}

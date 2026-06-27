@@ -1,0 +1,58 @@
+# =====================================================================
+# BASILEUS — Coats of arms for the cleaved Roman Empire.
+#   e_western_roman_empire : red field, golden Chi-Rho (static — the title only
+#                            exists after Cleave the Empire).
+#   e_byzantium_cleaved    : purple field, golden Chi-Rho flanked by Alpha/Omega.
+#                            Applied to e_byzantium via the dynamic definition in
+#                            coat_of_arms/dynamic_definitions/, which switches to
+#                            it once the cleave has set the global variable
+#                            basileus_roman_empire_cleaved.
+# =====================================================================
+
+e_western_roman_empire = {
+	pattern = "pattern_solid.dds"
+	color1 = red
+	color2 = white
+	colored_emblem = {
+		color1 = yellow
+		color2 = white
+		texture = "ce_chi_rho.dds"
+		instance = {
+			position = { 0.500000 0.480000 }
+		}
+	}
+}
+
+e_byzantium_cleaved = {
+	pattern = "pattern_solid.dds"
+	color1 = purple
+	color2 = white
+	colored_emblem = {
+		color1 = yellow
+		color2 = white
+		texture = "ce_chi_rho.dds"
+		instance = {
+			position = { 0.500000 0.480000 }
+			depth = 2.010000
+		}
+	}
+	colored_emblem = {
+		color1 = yellow
+		color2 = white
+		texture = "ce_letter_omega.dds"
+		instance = {
+			position = { 0.750000 0.480000 }
+			scale = { 0.200000 0.200000 }
+		}
+	}
+	colored_emblem = {
+		color1 = yellow
+		color2 = white
+		texture = "ce_letter_alpha.dds"
+		instance = {
+			position = { 0.250000 0.480000 }
+			scale = { 0.200000 0.200000 }
+			depth = 1.010000
+		}
+	}
+}

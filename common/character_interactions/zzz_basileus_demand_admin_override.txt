@@ -1,0 +1,268 @@
+# =====================================================================
+# BASILEUS - override of vanilla demand_admin_interaction
+# (game/common/character_interactions/06_ep3_interactions.txt).
+# VERBATIM copy with changes:
+# 1. Custom 'name' block to show "Demand Imperial Autocracy" if the actor has the `government_is_roman_imperial` flag.
+# 2. Custom 'desc' block to refer to imperial governance/governor when appropriate.
+# 3. Custom refusal tooltip in 'on_decline'.
+# =====================================================================
+demand_admin_interaction = {
+	category = interaction_category_vassal
+	icon = demand_admin_interaction
+
+	ai_maybe = yes
+	ai_min_reply_days = 4
+	ai_max_reply_days = 9
+	can_send_despite_rejection = yes
+	ai_accept_negotiation = yes
+	popup_on_receive = yes
+	common_interaction = no
+
+	#according to telemetry, practically never used
+	interface_priority = 0
+
+	ai_targets = {
+		ai_recipients = vassals
+	}
+	ai_target_quick_trigger = {
+		adult = yes
+	}
+	ai_frequency_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 12
+		kingdom = 12
+		empire = 12
+		hegemony = 12
+	}
+
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:actor = {
+						government_has_flag = government_is_roman_imperial
+					}
+				}
+				desc = demand_imperial_autocracy_interaction
+			}
+			desc = demand_admin_interaction
+		}
+	}
+
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:actor = { government_has_flag = government_is_roman_imperial }
+				}
+				desc = demand_imperial_autocracy_interaction_desc
+			}
+			triggered_desc = {
+				trigger = {
+					scope:actor = { government_has_flag = government_is_japan_administrative }
+				}
+				desc = demand_admin_interaction_desc_japan
+			}
+			desc = demand_admin_interaction_desc
+		}
+	}
+
+	is_shown = {
+		scope:actor = {
+			government_allows = administrative
+			trigger_if = {
+				limit = { is_ai = yes }
+				scope:recipient = { highest_held_title_tier >= tier_county }
+			}
+		}
+		scope:recipient = {
+			target_is_liege_or_above = scope:actor
+			is_ai = yes
+			is_landed = yes
+			is_ruler = yes
+			NOT = { has_same_government = scope:actor }
+		}
+	}
+
+	cooldown_against_recipient = { years = 10 }
+
+	is_valid_showing_failures_only = {
+		scope:recipient = {
+			NOT = { has_strong_hook = scope:actor }
+			is_at_war = no
+			trigger_if = {
+				limit = {
+					is_landed = no
+					exists = domicile
+				}
+				domicile.domicile_location.county.holder = { government_allows = administrative }
+			}
+			trigger_if = {
+				limit = { exists = confederation }
+				NOT = { scope:actor.confederation ?= confederation }
+			}
+			liege = scope:actor
+		}
+		scope:actor = { is_at_war = no }
+		custom_tooltip = {
+			text = cannot_take_overt_hostile_actions_against_diarch.tt
+			NOT = { scope:recipient ?= scope:actor.diarch }
+		}
+		custom_tooltip = {
+			text = demand_admin_tribal
+			NOT = {
+				scope:recipient = { government_has_flag = government_is_tribal }
+			}
+		}
+		custom_tooltip = {
+			text = head_of_faith_unable_to_change_government_desc
+			NOT = {
+				scope:recipient = { faith.religious_head ?= this }
+			}
+		}
+	}
+
+	# Offer hereditary boost
+	send_option = {
+		is_valid = {
+			scope:recipient = { is_landed = yes }
+			custom_tooltip = {
+				text = demand_admin_hereditary_tt
+				scope:recipient.house ?= {
+					any_house_member = { count > 1 }
+				}
+			}
+			custom_tooltip = {
+				text = demand_admin_hereditary_exists_tt
+				NOT = { exists = scope:recipient.primary_title.var:petition_house_rights }
+			}
+		}
+		flag = hereditary
+		localization = demand_admin_hereditary
+	}
+	#Spend influence
+	send_option = {
+		flag = influence
+		is_valid = {
+			scope:actor.influence >= massive_influence_value
+		}
+		localization = SPEND_INFLUENCE
+	}
+	#Use hook
+	send_option = {
+		is_valid = {
+			scope:actor = { has_usable_hook = scope:recipient }
+		}
+		flag = hook
+		localization = SCHEME_HOOK
+	}
+	should_use_extra_icon = {
+		scope:actor = { has_usable_hook = scope:recipient }
+	}
+	extra_icon = "gfx/interface/icons/character_interactions/hook_icon.dds"
+
+	send_options_exclusive = no
+
+	auto_accept = {
+		custom_description = {
+			text = "spending_hook"
+			subject = scope:actor
+			object = scope:recipient
+			scope:hook = yes
+		}
+	}
+
+	on_send = {
+		scope:recipient = {
+			primary_title = { save_scope_as = demanded_administration }
+			trigger_event = {
+				id = ep3_interactions_events.0005
+				days = 5
+			}
+		}
+	}
+
+	on_accept = {
+		show_as_tooltip = {
+			# BASILEUS: change_to_administrative_effect is overridden so that, when the
+			# demander rules an Imperial Autocracy, the recipient joins
+			# roman_imperial_government DIRECTLY — a governor under the emperor — with no
+			# administrative_government intermediate step. (See
+			# common/scripted_effects/zzz_basileus_change_to_administrative_override.txt.)
+			# So this preview now shows "Adopts Imperial Autocracy Government" in one step,
+			# and no follow-up flip is needed here.
+			change_to_administrative_interaction_effect = yes
+		}
+		if = {
+			limit = {
+				scope:recipient = { is_ai = yes }
+			}
+			scope:recipient = {
+				set_variable = {
+					name = demand_admin_accepted_ai_block
+					value = scope:actor
+					years = 10
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		# In Japan, this starts a war
+		if = {
+			limit = {
+				scope:actor = { government_has_flag = government_is_japan_administrative }
+				scope:recipient = {
+					is_landed = yes
+					government_has_flag = government_is_japan_feudal
+				}
+			}
+			tgp_japan_demand_administrative_refusal_effect = yes
+		}
+		# Elsewhere it does not
+		else = {
+			scope:recipient = {
+				if = {
+					limit = {
+						scope:actor = { government_has_flag = government_is_roman_imperial }
+					}
+					custom_tooltip = demand_imperial_autocracy_interaction_vassal_refuses
+				}
+				else = {
+					custom_tooltip = demand_admin_interaction_vassal_refuses
+				}
+			}
+		}
+	}
+
+	ai_potential = {
+		government_allows = administrative
+		is_adult = yes
+	}
+
+	ai_will_do = {
+		base = 100
+		modifier = {
+			factor = 0
+			scope:recipient = { highest_held_title_tier >= tier_county }
+			gold >= 300
+		}
+		modifier = {
+			factor = 0
+			scope:recipient = { highest_held_title_tier >= tier_duchy }
+			gold >= 600
+		}
+		modifier = {
+			factor = 0
+			scope:recipient = { highest_held_title_tier >= tier_kingdom }
+			gold >= 2000
+		}
+	}
+
+	ai_accept = {
+		base = 0
+		japan_demand_admin_acceptance_modifier = yes
+		demand_admin_acceptance_modifier = yes
+	}
+}

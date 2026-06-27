@@ -1,0 +1,23 @@
+﻿# =====================================================================
+# BASILEUS — culture-dynamic name for the Tier 3 agrarian law.
+# Greek-culture (and any non-Latin) rulers see "Allelengyon"; rulers whose
+# culture has the Latin language pillar (eastern_roman & other Latin-speakers)
+# see the Latinised "Allelengium". Greek is the fallback (last text block).
+# Referenced from the loc key basileus_agrarian_law_3 via [GetPlayer.Custom(...)].
+# Only Tier 3 needs this — Tiers 0-2 use static names.
+# =====================================================================
+
+cl_basileus_agrarian_law_3 = {
+	type = character
+
+	text = {
+		trigger = {
+			culture = { has_cultural_pillar = language_latin }
+		}
+		localization_key = basileus_agrarian_law_3_latin
+	}
+
+	text = {
+		localization_key = basileus_agrarian_law_3_greek
+	}
+}

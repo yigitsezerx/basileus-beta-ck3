@@ -1,0 +1,152 @@
+# =====================================================================
+# BASILEUS — THE TWO EMPERORS — Imperial Supremacy casus belli.
+# ---------------------------------------------------------------------
+# The war branch of story_two_emperors_dispute. A grand war to humble the
+# Western (Holy Roman) emperor and abolish his pretension to the Roman name.
+# The war goal is the e_hre title itself; on victory the Holy Roman Empire is
+# DISSOLVED (its kings fall independent) and the Basileus stands as the sole
+# Roman Emperor — which then makes him eligible for the Sole Roman recognition.
+#
+# Availability is gated by the global basileus_two_emperors_war_unlocked, set
+# at the climax of the dispute (event basileus_two_emperors.0006 "Draw the
+# sword" or .0021 "Then it shall be war"). Usable only by the reigning Roman
+# emperor, only against the e_hre holder. Plumbing mirrors the mod's
+# basileus_bulgarian_subjugation_cb.
+# =====================================================================
+
+basileus_imperial_supremacy_cb = {
+	icon = roman_reclamation
+	group = conquest
+
+	combine_into_one = yes
+	mutually_exclusive_titles = { always = yes }
+
+	war_name = basileus_imperial_supremacy_war_name
+
+	attacker_score_from_occupation_scale = 150
+	attacker_score_from_battles_scale = 150
+	defender_score_from_battles_scale = 150
+
+	allowed_for_character = {
+		basileus_is_roman_emperor_trigger = yes
+		has_global_variable = basileus_two_emperors_war_unlocked
+		NOT = { government_has_flag = government_is_landless_adventurer }
+	}
+
+	allowed_against_character = {
+		# Only against the reigning Western (Holy Roman) emperor.
+		scope:defender = { this = title:e_hre.holder }
+		NOR = {
+			scope:defender = { target_is_liege_or_above = scope:attacker }
+			scope:attacker = { target_is_liege_or_above = scope:defender }
+		}
+	}
+
+	target_titles = all
+	target_title_tier = empire
+	ignore_effect = change_title_holder
+	ai_only_against_neighbors = yes
+
+	valid_to_start = {
+		# The war goal must be the Holy Roman Empire itself.
+		scope:target = { this = title:e_hre }
+	}
+
+	should_invalidate = {
+		# If the rival loses the imperial dignity by other means, the war is moot.
+		NOT = { scope:defender = { has_title = title:e_hre } }
+	}
+
+	on_invalidated_desc = msg_invalidate_war_title
+	on_invalidated = {}
+
+	cost = {
+		prestige = {
+			value = major_prestige_value
+			multiply = common_cb_prestige_cost_multiplier
+		}
+	}
+
+	on_declaration = {
+		on_declared_war = yes
+		# "The Gauntlet Thrown" — flavor for both courts.
+		scope:attacker = { trigger_event = basileus_two_emperors.0007 }
+		scope:defender = { trigger_event = basileus_two_emperors.0008 }
+	}
+
+	# -----------------------------------------------------------------
+	# VICTORY — the false empire is dissolved; the Basileus reigns supreme.
+	# (basileus_strip_false_emperor_effect destroys e_hre, grants major
+	#  legitimacy + prestige, and marks the dispute resolved.)
+	# -----------------------------------------------------------------
+	on_victory_desc = {
+		desc = basileus_imperial_supremacy_cb_victory_desc
+	}
+
+	on_victory = {
+		scope:attacker = { show_pow_release_message_effect = yes }
+
+		scope:attacker = { accolade_attacker_war_end_glory_gain_med_effect = yes }
+
+		scope:attacker = { basileus_strip_false_emperor_effect = yes }
+
+		modify_allies_of_participants_fame_values = {
+			WINNER = scope:attacker
+			FAME_BASE = medium_prestige_value
+			IS_RELIGIOUS_WAR = no
+			WINNER_ALLY_FAME_SCALE = 1
+			LOSER_ALLY_FAME_SCALE = 1
+		}
+
+		add_truce_attacker_victory_effect = yes
+
+		scope:attacker = { trigger_event = basileus_two_emperors.0010 }
+	}
+
+	on_white_peace_desc = {
+		desc = basileus_imperial_supremacy_cb_white_peace_desc
+	}
+
+	on_white_peace = {
+		scope:attacker = { show_pow_release_message_effect = yes }
+
+		scope:defender = { accolade_defender_war_end_glory_gain_low_effect = yes }
+
+		scope:attacker = { basileus_two_emperors_fail_effect = yes }
+
+		modify_allies_of_participants_fame_values = {
+			WINNER = scope:defender
+			FAME_BASE = medium_prestige_value
+			IS_RELIGIOUS_WAR = no
+			WINNER_ALLY_FAME_SCALE = 1
+			LOSER_ALLY_FAME_SCALE = 1
+		}
+
+		add_truce_white_peace_effect = yes
+
+		scope:attacker = { trigger_event = basileus_two_emperors.0011 }
+	}
+
+	on_defeat_desc = {
+		desc = basileus_imperial_supremacy_cb_defeat_desc
+	}
+
+	on_defeat = {
+		scope:attacker = { show_pow_release_message_effect = yes }
+
+		scope:defender = {
+			accolade_defender_war_end_glory_gain_med_effect = yes
+			add_prestige_war_defender_effect = {
+				PRESTIGE_VALUE = major_prestige_value
+			}
+		}
+
+		scope:attacker = { basileus_two_emperors_fail_effect = yes }
+
+		add_truce_attacker_defeat_effect = yes
+
+		scope:attacker = { trigger_event = basileus_two_emperors.0011 }
+	}
+
+	ai = no
+}
