@@ -1,0 +1,8 @@
+﻿l_english:
+  demand_imperial_autocracy_interaction:0 "Demand Imperial Governance"
+  demand_imperial_autocracy_interaction_desc:0 "Ask [recipient.GetShortUIName|U] to abandon [recipient.GetGovernment.GetAdjective] [government|E] — to embrace the [actor.GetGovernment.GetName] ways and serve as an imperial governor under imperial governance"
+  demand_imperial_autocracy_interaction_accept:0 "Accept Imperial Autocracy"
+  demand_imperial_autocracy_interaction_refuse:0 "Refuse Imperial Autocracy"
+  demand_imperial_autocracy_interaction_vassal_refuses:0 "[recipient.GetShortUIName|U] will not accept imperial autocracy"
+  ep3_interactions_events.0005.desc_imperial:0 "It is high-time [recipient.GetPrimaryTitle.GetBaseNameNoTier] was administered under imperial governance — adopt the autocracy of the [actor.GetPrimaryTitle.GetTierAsNameNoTooltip|l], and I will make you an imperial governor."
+  ep3_interactions_events.0005.a_imperial:0 "Very well, I shall be your imperial governor."

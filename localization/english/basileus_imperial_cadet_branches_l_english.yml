@@ -1,0 +1,10 @@
+﻿l_english:
+ # --- Game rule: Imperial Cadet Branches (BASILEUS category) ---
+ rule_basileus_imperial_cadet_branches:0 "@government_type_roman_imperial_government! BASILEUS — Imperial Cadet Branches"
+ rule_basileus_imperial_cadet_branches_desc:0 "Governs whether rulers under [roman_imperial_government|E] may splinter the imperial house into cadet branches."
+ setting_basileus_imperial_cadet_branches_default:0 "Default"
+ setting_basileus_imperial_cadet_branches_default_desc:0 "Cadet branches can form as usual."
+ setting_basileus_imperial_cadet_branches_reduced:0 "Reduced"
+ setting_basileus_imperial_cadet_branches_reduced_desc:0 "Under [roman_imperial_government|E], the AI will very rarely found cadet branches, and the imperial house stays largely unified. A player may still choose to found one."
+ setting_basileus_imperial_cadet_branches_disabled:0 "Disabled"
+ setting_basileus_imperial_cadet_branches_disabled_desc:0 "Under [roman_imperial_government|E], cadet branches cannot be founded at all — all imperial dynasties will remain undivided."

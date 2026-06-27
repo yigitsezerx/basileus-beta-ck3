@@ -1,0 +1,243 @@
+﻿l_english:
+ # ─── Reorganize the Themes decision ───
+ basileus_reorganize_themes_decision:0 "Restructure the Themes"
+ basileus_reorganize_themes_decision_desc:0 "The administration of the frontier regions is a patchwork. Where our control is complete, we may reorganize the land into proper [Glossary( 'themes', 'THEME_GLOSS' )]."
+ basileus_reorganize_themes_decision_tooltip:0 "Consolidate a fully-controlled region into a restructured [Glossary( 'theme', 'THEME_GLOSS' )]."
+ basileus_reorganize_themes_decision_req:0 "We must completely control the lands of a theme we have not yet reorganized."
+ CHOOSE_THEME_BUTTON:0 "Choose a Theme"
+ basileus_reorganize_themes_decision_confirm:0 "Restructure the Themes"
+
+ # ─── Pannonia theme kingdom (k_pannonia) ───
+ k_pannonia:0 "Pannonia"
+ k_pannonia_adj:0 "Pannonian"
+
+ # ─── Noricum theme kingdom (k_noricum) ───
+ k_noricum:0 "Noricum"
+ k_noricum_adj:0 "Norican"
+ cn_norikou:0 "Norikou"
+ cn_norikou_adj:0 "Norikan"
+
+ # ─── Pannonia / Noricum theme decision items ───
+ basileus_theme_pannonia_frontier_desc:0 "Pannonia"
+ theme_pannonia_tooltip:0 "Reorganize Pannonia."
+ basileus_theme_noricum_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeNoricumName')]"
+ theme_noricum_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeNoricumName')]."
+
+ # ─── Raetia theme kingdom (k_raetia) + decision item ───
+ k_raetia:0 "Raetia"
+ k_raetia_adj:0 "Raetian"
+ basileus_theme_raetia_frontier_desc:0 "Raetia"
+ theme_raetia_tooltip:0 "Reorganize Raetia."
+
+ # ─── Mauretania theme (new d_caesariensis duchy; k_mauretania kingdom) ───
+ d_caesariensis:0 "Caesariensis"
+ d_caesariensis_adj:0 "Caesariensian"
+ basileus_theme_mauretania_frontier_desc:0 "Mauretania"
+ theme_mauretania_tooltip:0 "Reorganize Mauretania."
+
+ # ─── Italia, Reunified ───
+ basileus_theme_italia_reunified_frontier_desc:0 "Italia"
+ italia_reunified_tooltip:0 "Reincorporate the Italian peninsula."
+
+ # ─── Francogallia, Reincorporated ───
+ basileus_theme_francogallia_frontier_desc:0 "Francogallia"
+ francogallia_tooltip:0 "Reincorporate the Frankish and Gallic territories."
+
+ # ─── Spania (Hispania) ───
+ basileus_theme_spania_frontier_desc:0 "Spania"
+ spania_tooltip:0 "Reincorporate the Iberian peninsula."
+
+ # ─── Theme options ───
+ basileus_theme_bulgarian_frontier_desc:0 "Bulgaria"
+ theme_bulgarian_frontier_tooltip:0 "Reorganize the conquered Bulgarian frontier into proper themes."
+ # basileus_theme_haemimontus_desc:0 "Reorganize the #high Haemimontus#! — the duchies of the southern Bulgarian frontier — into a single theme. The lands of Bulgaria proper are merged into Philippopolis, which is renamed Haemimontus."
+ # basileus_theme_paristrion_desc:0 "Reorganize the #high Paristrion#! — the Danubian frontier — into a single theme. Dobrudja is merged into Turnovo, which is renamed Paristrion."
+
+ basileus_theme_peloponnese_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemePeloponneseName')]"
+ theme_peloponnese_tooltip:0 "Reorganize the [GetPlayer.Custom('GetBasileusThemePeloponneseName')]."
+ BASILEUS_THEME_PELOPONNESE_NAME:0 "Peloponnese"
+ BASILEUS_THEME_PELOPONNESE_NAME_adj:0 "Peloponnesian"
+
+ basileus_theme_hellas_frontier_desc:0 "Hellas"
+ theme_hellas_tooltip:0 "Reorganize Hellas."
+ basileus_theme_hellas_requires_peloponnese_tt:0 "The #high [GetPlayer.Custom('GetBasileusThemePeloponneseName')]#! must be reorganized first"
+ basileus_theme_thrace_requires_macedonia_tt:0 "#high [GetPlayer.Custom('GetBasileusThemeMacedoniaName')]#! must be reorganized first."
+
+ basileus_theme_macedonia_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeMacedoniaName')]"
+ theme_macedonia_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeMacedoniaName')]."
+
+ basileus_theme_thrace_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeThrakeName')]"
+ theme_thrace_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeThrakeName')]."
+
+ basileus_theme_dioclea_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeDiocleaName')]"
+ theme_dioclea_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeDiocleaName')]."
+ basileus_theme_dalmatia_frontier_desc:0 "Dalmatia"
+ theme_dalmatia_tooltip:0 "Reorganize Dalmatia."
+
+ basileus_theme_croatia_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeCroatiaName')]"
+ theme_croatia_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeCroatiaName')]."
+ 
+ basileus_theme_syria_frontier_desc:0 "Syria"
+ theme_syria_tooltip:0 "Reorganize Syria."
+
+ basileus_theme_palestina_frontier_desc:0 "Palestine"
+ theme_palestina_tooltip:0 "Reorganize Palestine."
+
+ basileus_theme_africa_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeAfricaName')]"
+ theme_africa_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeAfricaName')]."
+
+ basileus_theme_aegypt_frontier_desc:0 "[GetPlayer.Custom('GetBasileusThemeAegyptName')]"
+ theme_aegypt_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeAegyptName')]."
+
+ # ANATOLIA NEW
+ anatolia_central_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeCentralAnatoliaName')]."
+ anatolia_sebasteia_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeEasternAnatoliaName')]."
+ anatolia_pontos_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemePontosName')]."
+ anatolia_optimaton_tooltip:0 "Reorganize [GetPlayer.Custom('GetBasileusThemeOptimatonName')]."
+
+ kingdom_anatolia_tooltip:0 "Reorganize Anatolia."
+ 
+
+ # ─── Theme title names (set_title_name + the _adj adjective convention) ───
+ # These resolve dynamically by culture via customizable_localization:
+ # eastern_roman → Latinised form; Greek / every other culture → fallback.
+ BASILEUS_THEME_HAEMIMONTUS_NAME:0 "[GetPlayer.Custom('GetBasileusThemeHaemimontusName')]"
+ BASILEUS_THEME_HAEMIMONTUS_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeHaemimontusAdj')]"
+ BASILEUS_THEME_PARISTRION_NAME:0 "[GetPlayer.Custom('GetBasileusThemeParistrionName')]"
+ BASILEUS_THEME_PARISTRION_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeParistrionAdj')]"
+ # Peloponnese
+ BASILEUS_THEME_PELOPONNESE_NAME:0 "[GetPlayer.Custom('GetBasileusThemePeloponneseName')]"
+ BASILEUS_THEME_PELOPONNESE_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemePeloponneseAdj')]"
+ # Thrace kingdom — the title itself is named dynamically.
+ # Static fallback name for k_thrace; the form-effect overrides it per culture
+ # via set_title_name (basileus_set_theme_name_effect).
+ k_thrace:0 "Thrake"
+ k_thrace_adj:0 "Thrakesian"
+
+ # ─── Cleave the Empire — Western Roman Empire (split_roman_empire_decision) ───
+ e_western_roman_empire:0 "Western Roman Empire"
+ e_western_roman_empire_adj:0 "Western Roman"
+ form_western_roman_empire_tt:0 "The #high Western Roman Empire#! is restored, and all the lands of the West are gathered de jure beneath it"
+ basileus_cleave_requires_all_themes:0 "Every frontier region must first be restructured into its #high theme#!."
+ # MACEDONIA
+ BASILEUS_THEME_MACEDONIA_NAME:0 "[GetPlayer.Custom('GetBasileusThemeMacedoniaName')]"
+ BASILEUS_THEME_MACEDONIA_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeMacedoniaAdj')]"
+ # DIOCLEA
+ BASILEUS_THEME_DIOCLEA_NAME:0 "[GetPlayer.Custom('GetBasileusThemeDiocleaName')]"
+ BASILEUS_THEME_DIOCLEA_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeDiocleaAdj')]"
+ # CROATIA
+ BASILEUS_THEME_CROATIA_NAME:0 "[GetPlayer.Custom('GetBasileusThemeCroatiaName')]"
+ BASILEUS_THEME_CROATIA_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeCroatiaAdj')]"
+ # AFRICA
+ BASILEUS_THEME_AFRICA_NAME:0 "[GetPlayer.Custom('GetBasileusThemeAfricaName')]"
+ BASILEUS_THEME_AFRICA_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeAfricaAdj')]"
+ # AEGYPT
+ BASILEUS_THEME_AEGYPT_NAME:0 "[GetPlayer.Custom('GetBasileusThemeAegyptName')]"
+ BASILEUS_THEME_AEGYPT_NAME_adj:0 "[GetPlayer.Custom('GetBasileusThemeAegyptAdj')]"
+ # Culture variants — eastern_roman (ER) vs Greek/default fallback (GREEK).
+ BASILEUS_THEME_HAEMIMONTUS_NAME_ER:0 "Haemimontus"
+ BASILEUS_THEME_HAEMIMONTUS_NAME_GREEK:0 "Haemimontos"
+ BASILEUS_THEME_HAEMIMONTUS_ADJ_ER:0 "Haemimontan"
+ BASILEUS_THEME_HAEMIMONTUS_ADJ_GREEK:0 "Haemimontan"
+ BASILEUS_THEME_PARISTRION_NAME_ER:0 "Paristrion"
+ BASILEUS_THEME_PARISTRION_NAME_GREEK:0 "Paradounabis"
+ BASILEUS_THEME_PARISTRION_ADJ_ER:0 "Paristrian"
+ BASILEUS_THEME_PARISTRION_ADJ_GREEK:0 "Paradounabian"
+ BASILEUS_THEME_PELOPONNESE_NAME_ER:0 "Peloponnese"
+ BASILEUS_THEME_PELOPONNESE_NAME_GREEK:0 "Peloponnesos"
+ BASILEUS_THEME_PELOPONNESE_ADJ_ER:0 "Peloponnesian"
+ BASILEUS_THEME_PELOPONNESE_ADJ_GREEK:0 "Peloponnesian"
+ BASILEUS_THEME_THRAKE_NAME_ER:0 "Thrace"
+ BASILEUS_THEME_THRAKE_NAME_GREEK:0 "Thrake"
+ BASILEUS_THEME_THRAKE_ADJ_ER:0 "Thracian"
+ BASILEUS_THEME_THRAKE_ADJ_GREEK:0 "Thrakesian"
+ BASILEUS_THEME_MACEDONIA_NAME_ER:0 "Macedonia"
+ BASILEUS_THEME_MACEDONIA_NAME_GREEK:0 "Makedonia"
+ BASILEUS_THEME_MACEDONIA_ADJ_ER:0 "Macedonian"
+ BASILEUS_THEME_MACEDONIA_ADJ_GREEK:0 "Makedonian"
+ BASILEUS_THEME_DIOCLEA_NAME_ER:0 "Dioclea"
+ BASILEUS_THEME_DIOCLEA_NAME_GREEK:0 "Diokleia"
+ BASILEUS_THEME_DIOCLEA_ADJ_ER:0 "Dioclean"
+ BASILEUS_THEME_DIOCLEA_ADJ_GREEK:0 "Dioklean"
+ BASILEUS_THEME_CROATIA_NAME_ER:0 "Croatia"
+ BASILEUS_THEME_CROATIA_NAME_GREEK:0 "Chorvatia"
+ BASILEUS_THEME_CROATIA_ADJ_ER:0 "Croatian"
+ BASILEUS_THEME_CROATIA_ADJ_GREEK:0 "Chorvatian"
+ BASILEUS_THEME_AFRICA_NAME_ER:0 "Africa"
+ BASILEUS_THEME_AFRICA_NAME_GREEK:0 "Afriki"
+ BASILEUS_THEME_AFRICA_ADJ_ER:0 "African"
+ BASILEUS_THEME_AFRICA_ADJ_GREEK:0 "Afrikian"
+ BASILEUS_THEME_AEGYPT_NAME_ER:0 "Aegypt"
+ BASILEUS_THEME_AEGYPT_NAME_GREEK:0 "Aigyptos"
+ BASILEUS_THEME_AEGYPT_ADJ_ER:0 "Aegyptian"
+ BASILEUS_THEME_AEGYPT_ADJ_GREEK:0 "Aigyptian"
+ # Spania — kingdom names (set_title_name uses <KEY> for name and <KEY>_adj for the adjective).
+ BASILEUS_THEME_TARRACONENSIS_NAME_ER:0 "Tarraconensis"
+ BASILEUS_THEME_TARRACONENSIS_NAME_ER_adj:0 "Tarraconensian"
+ BASILEUS_THEME_TARRACONENSIS_NAME_GREEK:0 "Tarrakonesia"
+ BASILEUS_THEME_TARRACONENSIS_NAME_GREEK_adj:0 "Tarrakonesian"
+ BASILEUS_THEME_BAETICA_NAME_ER:0 "Baetica"
+ BASILEUS_THEME_BAETICA_NAME_ER_adj:0 "Baetican"
+ BASILEUS_THEME_BAETICA_NAME_GREEK:0 "Baitike"
+ BASILEUS_THEME_BAETICA_NAME_GREEK_adj:0 "Baitikan"
+ BASILEUS_THEME_NORICUM_NAME_ER:0 "Noricum"
+ BASILEUS_THEME_NORICUM_NAME_GREEK:0 "Norikou"
+ BASILEUS_THEME_NORICUM_ADJ_ER:0 "Norician"
+ BASILEUS_THEME_NORICUM_ADJ_GREEK:0 "Norikan"
+
+ # ANATOLIA
+
+ BASILEUS_THEME_CENTRALANATOLIA_NAME_ER:0 "Anatolicon"
+ BASILEUS_THEME_CENTRALANATOLIA_NAME_GREEK:0 "Anatolikon"
+ BASILEUS_THEME_CENTRALANATOLIA_ADJ_ER:0 "Anatoliconian"
+ BASILEUS_THEME_CENTRALANATOLIA_ADJ_GREEK:0 "Anatolikonian"
+
+ BASILEUS_THEME_EASTERNANATOLIA_NAME_ER:0 "Sebasteia"
+ BASILEUS_THEME_EASTERNANATOLIA_NAME_GREEK:0 "Sebasteia"
+ BASILEUS_THEME_EASTERNANATOLIA_ADJ_ER:0 "Sebasteian"
+ BASILEUS_THEME_EASTERNANATOLIA_ADJ_GREEK:0 "Sebasteian"
+
+ BASILEUS_THEME_PONTOS_NAME_ER:0 "Pontus"
+ BASILEUS_THEME_PONTOS_NAME_GREEK:0 "Pontos"
+ BASILEUS_THEME_PONTOS_ADJ_ER:0 "Pontic"
+ BASILEUS_THEME_PONTOS_ADJ_GREEK:0 "Pontic"
+
+ BASILEUS_THEME_OPTIMATON_NAME_ER:0 "Optimati"
+ BASILEUS_THEME_OPTIMATON_NAME_GREEK:0 "Optimatoi"
+ BASILEUS_THEME_OPTIMATON_ADJ_ER:0 "Optimatan"
+ BASILEUS_THEME_OPTIMATON_ADJ_GREEK:0 "Optimatoian"
+
+ # set_title_name adjective convention: KEY -> KEY_adj. These let the static
+ # name keys (used by basileus_set_theme_name_effect) carry an adjective.
+ BASILEUS_THEME_HAEMIMONTUS_NAME_ER_adj:0 "Haemimontan"
+ BASILEUS_THEME_HAEMIMONTUS_NAME_GREEK_adj:0 "Haemimontan"
+ BASILEUS_THEME_PARISTRION_NAME_ER_adj:0 "Paristrian"
+ BASILEUS_THEME_PARISTRION_NAME_GREEK_adj:0 "Paradounabian"
+ BASILEUS_THEME_PELOPONNESE_NAME_ER_adj:0 "Peloponnesian"
+ BASILEUS_THEME_PELOPONNESE_NAME_GREEK_adj:0 "Peloponnesian"
+ BASILEUS_THEME_THRAKE_NAME_ER_adj:0 "Thracian"
+ BASILEUS_THEME_THRAKE_NAME_GREEK_adj:0 "Thrakesian"
+ BASILEUS_THEME_MACEDONIA_NAME_ER_adj:0 "Macedonian"
+ BASILEUS_THEME_MACEDONIA_NAME_GREEK_adj:0 "Makedonian"
+ BASILEUS_THEME_DIOCLEA_NAME_ER_adj:0 "Dioclean"
+ BASILEUS_THEME_DIOCLEA_NAME_GREEK_adj:0 "Dioklean"
+ BASILEUS_THEME_CROATIA_NAME_ER_adj:0 "Croatian"
+ BASILEUS_THEME_CROATIA_NAME_GREEK_adj:0 "Chorvatian"
+ BASILEUS_THEME_AFRICA_NAME_ER_adj:0 "African"
+ BASILEUS_THEME_AFRICA_NAME_GREEK_adj:0 "Afrikian"
+ # ─── Glossaries ───
+
+ THEME_GLOSS:0 "The #emp themes#! or #emp themata#! were the main military and administrative divisions of the later Roman Empire."
+
+ # === Anatolian duchy-merge themes (Reorganize the Themes widgets) ===
+ basileus_theme_anatolia_central_desc:0 "[GetPlayer.Custom('GetBasileusThemeCentralAnatoliaName')]"
+ basileus_theme_anatolia_sebasteia_desc:0 "[GetPlayer.Custom('GetBasileusThemeEasternAnatoliaName')]"
+ basileus_theme_anatolia_pontos_desc:0 "[GetPlayer.Custom('GetBasileusThemePontosName')]"
+ basileus_theme_anatolia_optimaton_desc:0 "[GetPlayer.Custom('GetBasileusThemeOptimatonName')]"
+
+ # --- Bavaria (merged Raetia + Noricum) ---
+ basileus_theme_bavaria_frontier_desc:0 "Bavaria"
+ BASILEUS_THEME_BAVARIA_NAME_ER:0 "Bavaria"
+ BASILEUS_THEME_BAVARIA_NAME_ER_adj:0 "Bavarian"
+ BASILEUS_THEME_BAVARIA_NAME_GREEK:0 "Baiouaroi"
+ BASILEUS_THEME_BAVARIA_NAME_GREEK_adj:0 "Baiouaric"

@@ -1,0 +1,9 @@
+﻿l_english:
+ building_type_basileus_spiral_column_of_saint:0 "$building_basileus_spiral_column_of_saint$"
+ building_type_basileus_spiral_column_of_saint_desc:0 "$building_basileus_spiral_column_of_saint_desc$"
+ building_basileus_spiral_column_of_saint:0 "Column of Arcadius"
+ building_basileus_spiral_column_of_saint_desc:0 "A triumphal column of the old Roman fashion, its shaft wound about with a spiralling frieze of carved soldiers and captives in procession, raised to the memory of a victory.\n\nCrowning its summit stands the figure of Arcadius. Storms and centuries have weathered it, yet it endures above the shores of [GetTitleByKey('c_byzantion').GetNameNoTier] as a monument to Roman glory.\n\n#weak Historically, the Column of Arcadius stood in the Forum of Arcadius in [GetTitleByKey('c_byzantion').GetNameNoTier]; it is placed nearby due to game limitations.#!"
+ building_type_basileus_hippodrome_constantinople:0 "$building_basileus_hippodrome_constantinople$"
+ building_type_basileus_hippodrome_constantinople_desc:0 "$building_basileus_hippodrome_constantinople_desc$"
+ building_basileus_hippodrome_constantinople:0 "Hippodrome"
+ building_basileus_hippodrome_constantinople_desc:0 "The great racing-track of the Romans.\n\nBeneath its tiers the factions of the Hippodrome roar for their charioteers. There is also the [Glossary( 'kathisma', 'KATHISMA_GLOSS' )], where emperors show themselves to the [Glossary( 'hoi polloi', 'HOI_POLLOI_GLOSS' )].\n\nHere [Concept( 'triumph', 'triumphs' )|E] are celebrated, emperors are acclaimed — and, on occasion, unmade."

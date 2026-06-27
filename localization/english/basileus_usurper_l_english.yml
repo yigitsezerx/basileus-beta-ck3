@@ -1,0 +1,9 @@
+﻿l_english:
+ trait_basileus_usurper:0 "Usurper"
+ trait_basileus_usurper_desc:0 "Having raised the standard of revolt against the rightful Emperor of the Romans, this ambitious magnate stakes a claim upon the throne itself — and upon the soldiers, gold, and loyalty of all who would see them crowned in the Queen of Cities."
+ trait_basileus_usurper_disgraced:0 "Disgraced Usurper"
+ trait_basileus_usurper_disgraced_desc:0 "A failed pretender. Their bid for the imperial throne was broken, and the shame of a usurpation that came to nothing clings to their name."
+ basileus_usurper.0001.t:0 "A Usurper"
+ basileus_usurper.0001.desc:0 "Word reaches the Great Palace that [usurper.GetTitledFirstName] has cast aside [usurper.GetFaithGodName]'s ordained order and proclaimed themselves worthy of the imperial diadem. Banners are being raised across the themes, and discontented magnates whisper of a new master in the capital."
+ basileus_usurper.0001.a:0 "The purple is not so easily torn away."
+ basileus_usurper.0001.b:0 "So be it."

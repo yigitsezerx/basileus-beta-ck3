@@ -1,0 +1,26 @@
+﻿l_english:
+ # ─── Provincial Laws decrees ───
+ basileus_decree_provincial_war_policy_decision:0 "Decree Provincial War Policy"
+ basileus_decree_provincial_war_policy_decision_desc:0 "As the bureaucracy administers the imperial realm directly, the #EMP Provincial Laws#! no longer appear on the realm-law roll. By imperial decree We may still set the policy that governs whether Our governors may wage their own wars."
+ basileus_decree_provincial_war_policy_decision_tooltip:0 "Set the Provincial War Declaration policy for the realm."
+
+ basileus_decree_provincial_border_policy_decision:0 "Decree Provincial Border Policy"
+ basileus_decree_provincial_border_policy_decision_desc:0 "By imperial decree We set the policy that governs how Our governors may contest borders with one another."
+ basileus_decree_provincial_border_policy_decision_tooltip:0 "Set the Provincial Border policy for the realm."
+
+ # ─── War policy event ───
+ basileus_provincial_law.0001.t:0 "Provincial War Declaration"
+ basileus_provincial_law.0001.desc:0 "How freely may the governors of the themes wage war in the name of the Empire? The decision rests with the Basileus."
+ basileus_provincial_law.0001.a:0 "War Declaration Allowed — governors may wage war freely"
+ basileus_provincial_law.0001.b:0 "Restricted — governors face restrictions on waging war"
+ basileus_provincial_law.0001.c:0 "Permission Only — governors must seek imperial leave to wage war"
+ basileus_provincial_law.0001.d:0 "Banned — governors may not wage their own wars"
+ basileus_provincial_law.0001.cancel:0 "Leave the policy unchanged for now."
+
+ # ─── Border policy event ───
+ basileus_provincial_law.0002.t:0 "Provincial Border Policy"
+ basileus_provincial_law.0002.desc:0 "How may the governors of the themes press their claims and contest borders with one another? The Basileus decrees the policy."
+ basileus_provincial_law.0002.a:0 "Tentative Border Policy — governors may contest borders broadly"
+ basileus_provincial_law.0002.b:0 "Restricted Border Policy — governors face restrictions on border claims"
+ basileus_provincial_law.0002.c:0 "Limited Border Policy — governors are tightly limited in contesting borders"
+ basileus_provincial_law.0002.cancel:0 "Leave the policy unchanged for now."

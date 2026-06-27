@@ -1,0 +1,30 @@
+﻿l_english:
+ # ─── Enkyklios Paideia (Imperial Education Legislation) ───
+ basileus_paideia_law:0 "Educational Policy"
+ basileus_paideia_law_singular:0 "$basileus_paideia_law$"
+
+ # Culture-dynamic faculty names (Greek default / Latin for eastern_roman).
+ # See customizable_localization/basileus_paideia_names_loc.txt.
+ basileus_didaskaleion_greek:0 "Didaskaleion ton Nomon"
+ basileus_didaskaleion_latin:0 "Schola Legum"
+ basileus_gymnasion_greek:0 "Gymnasion"
+ basileus_gymnasion_latin:0 "Gymnasium"
+
+ # Level 0 — baseline (default): letters left to families & the Church
+ basileus_paideia_law_0:0 "Private Grammarians"
+ basileus_paideia_law_0_desc:0 "Letters are left to private grammarians and the schools of the Church, as they have ever been. The clergy keep their ancient custody of learning and are content — but the imperial crown neither guides the [development|E] of the realm through its schools nor draws any strength from them. Should the Pandidakterion be founded in Constantinople, the state may instead endow one of its two faculties."
+
+ # Level N — the Law faculty: the School of the Laws (Nomophylax)
+ basileus_paideia_law_nomoi:0 "$basileus_didaskaleion_greek$"
+ basileus_paideia_law_nomoi_desc:0 "The imperial crown endows the #high Didaskaleion ton Nomon#! — the School of the Laws of the Pandidakterion, under the #high Nomophylax#!, the Guardian of the Laws. Here the jurists, judges and notaries of the imperial bureaucracy are trained, that justice may be better kept and offices no longer bought and sold. Imperial authority rests on firmer #high legal ground#!, the provinces are the better #high governed#!, and the realm grows steadily — for a modest charge upon the #high treasury#! and a little of the clergy's goodwill, the schools being secular. With the faculty thus endowed, sending a child to study at the Pandidakterion costs less #high gold#!."
+
+ # Level P — the Philosophy faculty: the Gymnasion (Hypatos ton Philosophon)
+ basileus_paideia_law_philosophia:0 "$basileus_gymnasion_greek$"
+ basileus_paideia_law_philosophia_desc:0 "The imperial crown endows the #high Gymnasion#! — the school of philosophy of the Pandidakterion, under the #high Hypatos ton Philosophon#!, the Consul of the Philosophers. Here Hellenic philosophy, rhetoric and the quadrivium are revived in full. The realm #high develops#! the faster, its scholars learn the quicker, and #high innovations#! come sooner to a people steeped in the wisdom of the ancients. But the devout bristle at this revival of #weak Hellenic#! learning — the same that would see its masters tried for heresy — the parochial murmur, and the schools must be kept out of the #high imperial treasury#!. Yet with the faculty endowed, sending a child to study at the Pandidakterion costs less #high gold#!."
+
+ # Custom tooltip — both faculties require the university to stand first
+ have_pandidakterion_founded:0 "The #high Pandidakterion#! must be founded in [GetTitleByKey('c_byzantion').GetName]"
+
+ # Cost-tooltip line for the −25% University Visit subsidy at the Pandidakterion
+ # (see common/script_values/zzz_basileus_adult_education_cost_override.txt)
+ basileus_pandidakterion_tuition_subsidy:0 "#high Pandidakterion#! endowed by the imperial crown"

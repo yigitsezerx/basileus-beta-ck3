@@ -1,0 +1,13 @@
+﻿l_english:
+ basileus_declare_usurpation_decision:0 "Proclaim Yourself Emperor"
+ basileus_declare_usurpation_decision_desc:0 "The purple is not given, it is taken. Why should I wait upon the whims of succession when an empire lies within my grasp?\n\nI will declare myself the rightful Emperor of the Romans. I will be branded a usurper, and my overlord will not forgive it — but a claimant faction will surely rally to my banner, then the imperial diadem will belong [Glossary( 'to the strongest', 'ALEXANDER_DYING_GLOSS' )]."
+ basileus_declare_usurpation_decision_tooltip:0 "Take the #high Usurper#! trait, press a claim on the imperial title, and raise a claimant faction against your overlord."
+ basileus_declare_usurpation_decision_confirm:0 "Test our mettle."
+ basileus_declare_usurpation_decision_effect_tt:0 "Gain the #high Usurper#! trait and a claim on the imperial title, then form a claimant faction against your overlord. Other discontented magnates may rally to your cause."
+ basileus_usurpation_req_powerful_tt:0 "You area credible challenger."
+ basileus_usurpation_req_prestige_tt:0 "You are of Distinguished prestige, or higher."
+ basileus_usurpation_req_not_coemperor_tt:0 "You are not your overlord's co-emperor."
+
+ # Glossary
+
+ ALEXANDER_DYING_GLOSS:0 "When the dying Alexander the Great was asked who should inherit his vast empire, he famously replied, "To the strongest.""

@@ -1,0 +1,27 @@
+﻿l_english:
+ # === The Macedonian Renaissance — capstone event ===
+ basileus_macedonian_renaissance.0001.t:0 "[ROOT.Char.Custom('cl_basileus_renaissance_adjective')] Renaissance"
+ basileus_macedonian_renaissance.0001.desc:0 "For over three generations and more, [ROOT.Char.GetDynasty.GetName] has worn the purple in unbroken succession.\nIn this long era of stability, [GetTitleByKey('c_byzantion').GetNameNoTier] and the empire as a whole flourished.\n\nThe world looks upon the [great_palace|E], where the masters of the imperial academy stand as\nthe supreme guardians of the Roman civilization.\n\nAt our imperial command, the scattered wisdom of the ancients was gathered, purified, and transcribed in flawless new scripts.\n\nOur streets and our workshops, overflowing with gold and lapis. Our [ROOT.Char.GetFaith.HouseOfWorshipPlural], once defaced and broken by decades of bitter controversies, were made whole again, glowing with mosaics that reflect the very favor of [ROOT.Char.GetFaith.DivineRealm].\n\n#low [GetPlayer.Custom('GetSenateGodName')] has clearly bestowed upon his grace upon [ROOT.Char.GetTitledFirstName] to usher in a new golden age.#!"
+ basileus_macedonian_renaissance.0001.a:0 "Proclaim it — the [ROOT.Char.Custom('cl_basileus_renaissance_adjective')] Renaissance!"
+ basileus_macedonian_renaissance.0001.b:0 "Let the work itself be Our monument."
+
+ # === Modifiers ===
+ basileus_macren_dynasty_modifier:0 "Renaissance of the Romans"
+ basileus_macren_dynasty_modifier_desc:0 "This dynasty has raised the Romans to a golden age of #emp letters, law, and art#! — a splendor that and hastens the flowering of its culture."
+ basileus_macren_patron_modifier:0 "Patron of the Renaissance"
+ basileus_macren_patron_modifier_desc:0 "Under this [GetPlayer.GetTitleTierName|U], a #emp renaissance#! was proclaimed — sanctuaries re-glorified in #emp gold and mosaic#! and the wisdom of the ancients restored."
+
+ # === Dynastic adjective (curated houses + "-ian" fallback) ===
+ basileus_ren_adj_makedon:0 "Macedonian"
+ basileus_ren_adj_lekapenos:0 "Lekapenid"
+ basileus_ren_adj_phokas:0 "Phokian"
+ basileus_ren_adj_komnenos:0 "Komnenian"
+ basileus_ren_adj_doukas:0 "Doukid"
+ basileus_ren_adj_argyros:0 "Argyrid"
+ basileus_ren_adj_angelos:0 "Angelid"
+ basileus_ren_adj_laskaris:0 "Laskarid"
+ basileus_ren_adj_palaiologos:0 "Palaiologan"
+ basileus_ren_adj_botaneiates:0 "Botaneiatid"
+ basileus_ren_adj_bringas:0 "Bringid"
+ basileus_ren_adj_none:0 "Imperial"
+ basileus_ren_adj_fallback:0 "[ROOT.Char.GetDynasty.GetBaseNameNoTooltip]ian"

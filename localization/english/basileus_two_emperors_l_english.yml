@@ -1,0 +1,133 @@
+﻿l_english:
+ # ═══════════════════════════════════════════════════════════════════
+ #  THE TWO EMPERORS — the Zweikaiserproblem, after the 871 letters of
+ #  Basil I and Louis II. Byzantine-side story cycle.
+ # ═══════════════════════════════════════════════════════════════════
+
+ # ─── Decision ───
+ basileus_dispute_western_emperor_decision:0 "Dispute the Western Pretender"
+ basileus_dispute_western_emperor_decision_desc:0 "Far in the West, a king has draped himself in the purple and dares to sign himself #high Emperor of the Romans#!.\n\nLet Us take up the pen — and, if the pen will not suffice, the sword — and put the question to him plainly: who is the true heir of #high Augustus and Constantine#!?"
+ basileus_dispute_western_emperor_decision_tooltip:0 "Open the dispute with the #emp [GetTitleByKey('e_hre').GetName]#! over the Roman emperorship. A chain of letters will steer toward #emp war#! or a #emp demand for submission#!."
+ basileus_dispute_western_emperor_decision_confirm:0 "I am #emp the#! [GetPlayer.GetTitleTierName|U] and $trait_autocrator_ercf$!"
+
+ # ─── Story cycle & panel ───
+ story_two_emperors_dispute:0 "The Two Emperors"
+ story_two_emperors_dispute_desc:0 "A bitter dispute over which Emperor is the true successor of Rome."
+ TWO_EMPERORS_INFO_STRING:0 "One Empire, one Emperor. The pretender in the West must be answered — with words, and then perhaps with iron — until he renounces the #high Roman#! name or is humbled before all."
+ TE_BASILEUS:0 "Basileus"
+ TE_RIVAL:0 "The Pretender"
+ TE_POPE:0 "The Pope"
+ TE_PROGRESS:0 "The Quarrel"
+ TE_PROGRESS_MIN:0 "Correspondence"
+ TE_PROGRESS_MAX:0 "Confrontation"
+ HRE_REALM:0 "Pretender's Realm"
+
+ # ─── Shared tooltips ───
+ basileus_two_emperors_war_unlocked_tt:0 "Unlocks the #emp Imperial Supremacy#! [casus_belli|E] against the #emp [GetTitleByKey('e_hre').GetName]#!."
+ basileus_two_emperors_demand_sent_tt:0 "Dispatch an ultimatum to the Western Emperor demanding [rival.GetSheHe] acknowledge our seniority. [rival.GetHerHis|U] answer will depend on [rival.GetHerHis] pride — and our strength."
+
+ basileus_hre_abolished_create_block:0 "The #high Holy Roman Empire#! was cast down by the Basileus in the dispute of the #emp Two Emperors#!, and cannot be restored while a #high Roman Emperor#! reigns."
+
+ # ─── Glossary entries (hover-tooltips, referenced via the Glossary loc function) ───
+ GLOSS_REX_GRAECORUM:0 "#high King of the Greeks#!. The dismissive style by which the Frankish and papal West addressed the Eastern Roman Emperor — denying him the Roman imperial title."
+ GLOSS_IMPERATOR_ROMANORUM:0 "#high Emperor of the Romans#!. The full Roman imperial title. Both [GetTitleByKey('c_byzantion').GetNameNoTier] and the Frankish emperors of the West claimed it, each denying the other's right — the very heart of the Two-Emperor Problem."
+ GLOSS_BASILEUS:0 "The title of the later Roman Emperors, borne from the 7th century onward."
+ GLOSS_NEW_ROME:0 "#high Constantinople#!, refounded by Constantine the Great in 330 as #high Nova Roma#! — New Rome. The Byzantines held that the seat and dignity of Rome itself had lawfully passed to their city on the Bosphorus."
+ GLOSS_CHRISTUS_DOMINI:0 "#high The Lord's Anointed#!. By being crowned and anointed by the Pope, the Western Emperor claimed his authority flowed from Christ through the successor of Saint Peter."
+ GLOSS_FILIOQUE:0 "#high "and from the Son"#!. A Western addition to the Nicene Creed, holding that the Holy Spirit proceeds from the Father #italic and the Son#!. [GetTitleByKey('c_byzantion').GetNameNoTier] condemned it as an unlawful tampering with the Creed — a chief grievance against the Church."
+ GLOSS_AZYMES:0 "Unleavened bread used in the Eucharist. The Orthodox Church held leavened bread to be correct and denounced the Western practice as a Judaizing error — one of the disputes that divided the Churches."
+ GLOSS_DROMON:0 "The principal warship of the Roman navy — a swift, oared galley, often armed with #high Greek fire#!. The dromons were the backbone of imperial sea power across the Mediterranean."
+ GLOSS_TAGMATA:0 "The professional standing regiments of the middle Roman army, garrisoned in and about the capital under the Emperor's direct command. Unlike the provincial thematic levies, the tagmata formed a permanent, elite strategic reserve."
+
+ # ─── Casus belli — Imperial Supremacy ───
+ basileus_imperial_supremacy_cb:0 "Imperial Supremacy"
+ basileus_imperial_supremacy_war_name:0 "War of the Two Emperors"
+ basileus_imperial_supremacy_cb_victory_desc:0 "The false empire of the West is dissolved, its crown cast down, and the [Glossary('Basileus', 'GLOSS_BASILEUS')] stands as the sole Roman Emperor in the world."
+ basileus_imperial_supremacy_cb_white_peace_desc:0 "The armies part with the question unsettled. The pretender keeps his stolen title — for now."
+ basileus_imperial_supremacy_cb_defeat_desc:0 "The Roman host is broken, and the Western upstart struts the prouder for it. A bitter day."
+
+ # ─── 0001 — A Letter from the West ───
+ basileus_two_emperors.0001.t:0 "The Two Emperors: A Letter from the West"
+ basileus_two_emperors.0001.desc:0 "A travel-stained courier in Frankish regalia is brought before me, bearing a sealed letter from #emp [rival.GetFirstName]#!, who in the West is hailed as #high [GetTitleByKey('e_hre').GetHolder.GetTitleTierName]#!.\n\nI break the seal. The salutation alone is an outrage. [rival.GetSheHe|U] addresses us — us, who sit upon the throne of #high [constantine.GetFirstName]#! in [ROOT.Char.GetCapitalLocation.GetName]! — not as a brother emperor, but as [Glossary('Rex Graecorum', 'GLOSS_REX_GRAECORUM')], as though we were some chieftain of a single tribe. And [rival.GetSheHe] signs himself, in letters of gold, [Glossary('Imperator Romanorum', 'GLOSS_IMPERATOR_ROMANORUM')] — Emperor of the #high Romans#!.\n\nThe argument of the letter is as brazen as its greeting. [rival.GetSheHe|U] holds the city of old #high [GetTitleByKey('c_roma').GetNameNoTier]#!; [rival.GetSheHe] shields the See of [GetTitleByKey('k_papal_state').GetHolder.GetShortUIName] and was anointed by his hand; therefore, [rival.GetSheHe] writes, the Roman name and the Roman empire have passed to the West, where [GetTitleByKey('c_roma').GetNameNoTier] herself lies — while we, far in the East, are but Greeks who flatter ourselves with a borrowed name. [rival.GetSheHe|U] even presumes to thank us, with a patron's condescension, for our #emp "assistance"#! at #high Bari#!, as though the fleets of the Romans had been [rival.GetHerHis] hired servants.\n\n[GetTitleByKey('c_byzantion').GetNameNoTier] has not heard such insolence in living memory. A Frank, crowned by a bishop, presumes to the dignity of the [ROOT.Char.GetPrimaryTitle.GetName] — and would make us a mere #emp king#! of a province. This cannot pass unanswered."
+ basileus_two_emperors.0001.desc.latin:0 "A travel-stained courier in Frankish regalia is brought before me, bearing a sealed letter from #emp [rival.GetTitledFirstName]#!, who in the West is hailed as #high [GetTitleByKey('e_hre').GetHolder.GetTitleTierName]#!.\n\nI break the seal — and find insult heaped upon insult. [rival.GetSheHe|U] addresses us, who sit upon the throne of #high [constantine.GetFirstName]#! in [ROOT.Char.GetCapitalLocation.GetName], not as a brother emperor but as [Glossary('Rex Graecorum', 'GLOSS_REX_GRAECORUM')]! Us, whose every law and liturgy is pronounced in the tongue of #high Latin#!, named Greeks by a Frank whose own clerks can scarce parse their missals.\n\nThe body of the letter is bolder still. [rival.GetSheHe|U] holds the city of old #high [GetTitleByKey('c_roma').GetNameNoTier]#! and shields the See of [GetTitleByKey('k_papal_state').GetHolder.GetShortUIName], who anointed him; therefore, [rival.GetSheHe] writes, the Roman name has passed to the West where [GetTitleByKey('c_roma').GetNameNoTier] herself lies — while we are Greeks who merely play at being Roman. And [rival.GetSheHe] sneers that our restoration of the #high Latin#! tongue and the Roman name is a #high mummer's farce#!, a theatre of antiquaries — while [rival.GetSheHe], by a bishop's hand, is the true [Glossary('Imperator Romanorum', 'GLOSS_IMPERATOR_ROMANORUM')].\n\n[GetTitleByKey('c_byzantion').GetNameNoTier] has not heard such insolence in living memory. The lie and the mockery together cry out for an answer."
+ basileus_two_emperors.0001.a:0 "Summon our [ROOT.Char.GetCouncillorPosition('minister_personnel').GetPositionName]."
+
+ # ─── 0002 — Our First Answer ───
+ basileus_two_emperors.0002.t:0 "The Two Emperors: Our Answer"
+ basileus_two_emperors.0002.desc:0 "The chancery waits, pens poised. On what ground shall we meet this #high [GetTitleByKey('e_hre').GetHolder.GetTitleTierName]#! and shatter [rival.GetHerHis] pretension?\n\nThere is the cold weight of #high law and lineage#!. We are the unbroken succession of [GetTitleByKey('e_byzantium').GetName] — from #high Augustus#! and #high [constantine.GetFirstName]#! to our own person, never severed, never refounded. We hold [GetTitleByKey('c_byzantion').GetNameNoTier], the Senate, the law, and the purple itself; the very title [Glossary('Basileus', 'GLOSS_BASILEUS')] is ours alone. A Frankish king does not become heir to the Caesars by squatting in the ruin of the old city.\n\nThere is the matter of [rival.GetHerHis] bishop's #high oil#!. A pontiff may set a crown upon a head; he cannot make an Emperor. The Roman imperium is conferred by God, by the army, and by the acclamation of the Senate and the people. It is not a gift in the keeping of a single priest, to bestow upon whatever king flatters him.\n\nAnd there is the deeper wound — that they themselves have wandered into #high error#!, the [Glossary('Filioque', 'GLOSS_FILIOQUE')] and other novelties, and so have forfeited any claim to lead the faithful of [GetTitleByKey('e_byzantium').GetName]. How we answer will set the temper of the whole quarrel."
+ basileus_two_emperors.0002.a:0 "We are #high Roman#! by unbroken succession, here in [ROOT.Char.GetCapitalLocation.GetName]."
+ basileus_two_emperors.0002.b:0 "He is merely a King, nothing more."
+ basileus_two_emperors.0002.c:0 "No bishop's oil makes an Emperor."
+ basileus_two_emperors.0002.d:0 "It is they who have lapsed — [Glossary('Filioque', 'GLOSS_FILIOQUE')] and [Glossary('azymes', 'GLOSS_AZYMES')] are heresies!"
+
+ # ─── 0003 — The Pretender Replies ───
+ basileus_two_emperors.0003.t:0 "The Two Emperors: [rival.GetTitledFirstName] Replies"
+ basileus_two_emperors.0003.desc:0 "[rival.GetTitledFirstName] does not wilt. [rival.GetHerHis|U] reply — penned, we are told, by a cunning cleric in [rival.GetHerHis] pay — is as bold as it is impudent.\n\n[rival.GetSheHe|U] answers that [rival.GetSheHe] was anointed by #emp [GetTitleByKey('k_papal_state').GetHolder.GetShortUIName]#!, the successor of #high Saint Peter#!, and so was made [Glossary('Christus Domini', 'GLOSS_CHRISTUS_DOMINI')] — a higher thing by far than emperors raised up by a mere senate and soldiery.\n\n[rival.GetSheHe|U] answers that it is #high we#! who abandoned [GetTitleByKey('c_roma').GetNameNoTier] — that the #emp Greeks#! fled the seat, the very #high Roman#! name and the #high Latin#! tongue, and shut themselves up in the East, leaving the City and the Apostle's tomb to be defended by Frankish swords.\n\nThen comes the sharpest stroke of all. [rival.GetSheHe|U] writes that the Franks received the empire #high for their orthodoxy#!, even as we forfeited it for our error — as the faithful were made heirs of Abraham while the faithless were cast off. The crown follows true belief, [rival.GetSheHe] says, not the accident of a city or a throne.\n\nAnd [rival.GetSheHe] ends, with a scholar's smirk, that emperors have risen from every nation under heaven — that #high [theodosius.GetFirstName]#! himself was a #emp Spaniard#!, and others #emp Illyrians#!, #emp Isaurians#!, and #emp Thracians#! — so why should a #emp Frank#! be barred? Only God's favour makes an Emperor, [rival.GetSheHe] says; birth is no bar to the imperial dignity."
+ basileus_two_emperors.0003.desc.latin:0 "[rival.GetTitledFirstName] does not wilt. [rival.GetHerHis|U] reply — penned, we are told, by a cunning cleric in [rival.GetHerHis] pay — is as bold as it is impudent.\n\n[rival.GetSheHe|U] answers that [rival.GetSheHe] was anointed by #emp [GetTitleByKey('k_papal_state').GetHolder.GetShortUIName]#!, the successor of #high Saint Peter#!, and so was made [Glossary('Christus Domini', 'GLOSS_CHRISTUS_DOMINI')] — a higher thing by far than emperors raised up by a mere senate and soldiery.\n\n[rival.GetSheHe|U] dares not say that #high we#! have abandoned the #high Latin#! tongue — for all the world hears us speak it. So instead [rival.GetSheHe] sneers that our #high Latin#! and our #high Roman#! name are a #high recent affectation#!: that true #high Rome#! perished long ago, and what we have raised upon the #emp Bosphorus#! is a learned forgery — a #emp Greek#! in borrowed regalia, however fine the grammar.\n\nThen comes the sharpest stroke. [rival.GetSheHe|U] writes that the Franks received the empire #high for their orthodoxy#!, even as we forfeited it for our error — as the faithful were made heirs of Abraham while the faithless were cast off. The crown follows true belief, [rival.GetSheHe] says, not the accident of a city or a throne.\n\nAnd [rival.GetSheHe] ends, with a scholar's smirk, that emperors have risen from every nation under heaven — that #high [theodosius.GetFirstName]#! himself was a #emp Spaniard#! — so why should a #emp Frank#! be barred from the imperial dignity?"
+ basileus_two_emperors.0003.a:0 "Such insolence!"
+
+ # ─── 0004 — Our Second Answer ───
+ basileus_two_emperors.0004.t:0 "The Two Emperors: We Press the Quarrel"
+ basileus_two_emperors.0004.desc:0 "The pretender has made [rival.GetHerHis] case; now we must press ours home. The whole of #emp Christendom#! will read these letters in due time — our words must strike true.\n\n[rival.GetHerHis|U] boast of orthodoxy we may turn in our hand like a blade: it is they who have tampered with the Creed, who sing the [Glossary('Filioque', 'GLOSS_FILIOQUE')] and break the [Glossary('azymes', 'GLOSS_AZYMES')]. If the crown follows true belief, then by [rival.GetHerHis] own argument it is forfeit in the West, not the East. And as for our #emp flight#! from #high [GetTitleByKey('c_roma').GetNameNoTier]#! — we did not flee; the old city was abandoned to the barbarians long ago, and it was the Romans of the East who held the line of empire unbroken while the West shattered into a hundred warring kings.\n\nShall we answer with a scholar's patience, picking [rival.GetHerHis] arguments apart with law and history? Shall we hold [rival.GetHerHis] tin-pot coronation up to ridicule — a Caesar made by one bishop's hand? Or shall we remind [rival.GetHerHim], plainly, of the [Glossary('tagmata', 'GLOSS_TAGMATA')] and the [Glossary('dromons', 'GLOSS_DROMON')] that keep the #high Mediterranean Sea#!?"
+ basileus_two_emperors.0004.desc.latin:0 "The pretender has made [rival.GetHerHis] case; now we must press ours home. The whole of #emp Christendom#! will read these letters in due time — and [rival.GetHerHis] sharpest barb is that our #emp Romanitas#! is a counterfeit, a regalia thrown over #emp Greeks#!.\n\nYet the barb turns in his hand. We have not abandoned the #high Latin#! tongue — we have restored it, and our court and our law speak it daily, while his own clerks stumble through their missals. And [rival.GetHerHis] boast of orthodoxy is hollow: it is they who sing the [Glossary('Filioque', 'GLOSS_FILIOQUE')] and break the [Glossary('azymes', 'GLOSS_AZYMES')]. If the crown follows true belief, it is forfeit in the West.\n\nShall we answer with a scholar's patience, picking [rival.GetHerHis] arguments apart? Shall we hold [rival.GetHerHis] tin-pot coronation up to ridicule? Shall we remind [rival.GetHerHim] of the [Glossary('tagmata', 'GLOSS_TAGMATA')] and the [Glossary('dromons', 'GLOSS_DROMON')]? Or shall we throw [rival.GetHerHis] slander back in [rival.GetHerHis] teeth — that it is #high we#! who keep the living law and tongue of [GetTitleByKey('e_byzantium').GetName], and [rival.GetSheHe] who merely apes it?"
+ basileus_two_emperors.0004.a:0 "Answer with historical evidence — calmly, and with certain proofs."
+ basileus_two_emperors.0004.b:0 "Mock the day a bishop's hand made a #emp Caesar#! of a certain #emp Frank#!."
+ basileus_two_emperors.0004.c:0 "Remind [rival.GetHerHim] of the [Glossary('tagmata', 'GLOSS_TAGMATA')] and the [Glossary('dromons', 'GLOSS_DROMON')]."
+ basileus_two_emperors.0004.e:0 "We speak the living tongue of the #high Empire#!."
+
+ # ─── 0005 — The Quarrel Spreads ───
+ basileus_two_emperors.0005.t:0 "The Two Emperors: All Christendom Listens"
+ basileus_two_emperors.0005.desc:0 "The letters are copied and read aloud from [GetTitleByKey('c_aachen').GetNameNoTier] to [GetTitleByKey('c_roma').GetNameNoTier] to the courts of the East. What began as two emperors' pride is now the talk of every chancery and cloister in the world.\n\n#emp [GetTitleByKey('k_papal_state').GetHolder.GetShortUIName]#! is most uneasy of all, caught between two powers that each court and threaten him — for to crown the one is to make an enemy of the other. In the Latin churches the clergy mutter against the Greeks; in the East, the patriarch and the Senate of [GetTitleByKey('c_byzantion').GetNameNoTier] seethe at the Frankish presumption and look to us to uphold the honour of the Roman name. The lords of the south, of #high Bari#! and #high Benevento#!, watch to see which way the wind will blow.\n\nWe may carry ourself as a statesman above the fray — or pour oil upon the flames from the ambo of #high Hagia Sophia#! itself."
+ basileus_two_emperors.0005.a:0 "Hold a measured, imperial line. Let lesser men shout."
+ basileus_two_emperors.0005.b:0 "Denounce their errors before the assembled people."
+
+ # ─── 0006 — The Reckoning ───
+ basileus_two_emperors.0006.t:0 "The Two Emperors: The Reckoning"
+ basileus_two_emperors.0006.desc:0 "Ink and parchment have done all they can. We have matched the pretender argument for argument — succession against anointing, our unbroken purple against [rival.GetHerHis] borrowed city, our orthodoxy against [rival.GetHerHis] Latin novelties — and still [rival.GetSheHe] will not yield [rival.GetHerHis] stolen title to mere words. The eyes of the world are upon us, and a quarrel of letters cannot end in a draw: one Emperor must be seen to prevail.\n\nWe may draw the #emp sword#! and humble [rival.GetHerHim] utterly, settling by older means what reason could not; we may #emp demand#! that [rival.GetSheHe] bow and renounce the #high Roman#! name, and wait upon [rival.GetHerHis] answer; or we may let the matter rest, and bear the loss of face before all Christendom."
+ basileus_two_emperors.0006.desc.hot:0 "Ink and parchment have done all they can — and after the heat we have poured into this quarrel, all Christendom expects fire to follow. We have called [rival.GetHerHim] a barbarian, a heretic, a mummer in a borrowed crown; [rival.GetSheHe|U] will never yield [rival.GetHerHis] stolen title to mere words now, and to demand softly would look like weakness after such thunder. The eyes of the world are upon us.\n\nWe may draw the #emp sword#! and humble [rival.GetHerHim] utterly; we may #emp demand#! that [rival.GetSheHe] bow and renounce the #high Roman#! name, though [rival.GetHerHis] blood is well up and [rival.GetSheHe] is unlikely to kneel; or we may let the matter rest, and bear a grievous loss of face."
+ basileus_two_emperors.0006.desc.cold:0 "Ink and parchment have done their work, and we have kept the quarrel cool and lawful — a contest of proofs, not of threats. We have answered [rival.GetHerHis] every claim with law, history, and Scripture, and made our case before the whole world without once stooping to insult. That very restraint may yet move [rival.GetHerHim] to reason, where bluster would only have hardened [rival.GetHerHis] pride.\n\nWe may still draw the #emp sword#! if we must; we may #emp demand#! with quiet authority that [rival.GetSheHe] acknowledge our seniority, and find [rival.GetHerHim] perhaps willing to bend; or we may let the matter rest, having made our case before the world."
+ basileus_two_emperors.0006.a:0 "Draw the sword. He shall be humbled in the field."
+ basileus_two_emperors.0006.b:0 "Demand [rival.GetSheHe] bend the knee and renounce the #high Roman#! name."
+ basileus_two_emperors.0006.c:0 "Let the matter rest. We have said enough."
+
+ # ─── 0007 — War: the Roman court ───
+ basileus_two_emperors.0007.t:0 "The Two Emperors: War"
+ basileus_two_emperors.0007.desc:0 "The dispute is seemed to be settling now, by older means.\n\nAlthough we have sought to resolve the matter through diplomacy and argument, the situation has escalated into open conflict.\n\nThe [Glossary('tagmata', 'GLOSS_TAGMATA')] muster, and the imperial standards of the Romans are raised against #emp [rival.GetTitledFirstName]#! and [rival.GetHerHis] false empire.\n\nLet [rival.GetTitledFirstName] learn what it means to claim the inheritance of Rome before the Romans themselves."
+ basileus_two_emperors.0007.a:0 "For the glory of the Roman name!"
+
+ # ─── 0008 — War: the Western court ───
+ basileus_two_emperors.0008.t:0 "The Greeks Make War"
+ basileus_two_emperors.0008.desc:0 "Word comes from the East: #emp the Basileus#!, who styles himself Emperor of the Romans from his throne by the Bosphorus, has taken up arms over the matter of the imperial title."
+ basileus_two_emperors.0008.a:0 "Let them come."
+
+ # ─── 0010 — Victory: the false empire dissolved ───
+ basileus_two_emperors.0010.t:0 "The Two Emperors: There Is But One"
+ basileus_two_emperors.0010.desc:0 "It is finished.\n\nThe pretender is brought low, armies scattered, and the upstart #high Empire of the West#! that mocked the name of [GetTitleByKey('e_byzantium').GetName] is dissolved forever.\n\nIts lesser kings, once gathered under a stolen crown, are flung apart to fend for themselves.\n\nFrom the pillars of Hercules to the gates of the East, there is now but one Empire that may be called #high Roman#!, and one man who may be called its Emperor.\n\n#emp Me.#!"
+ basileus_two_emperors.0010.a:0 "There can be but one #high Roman Empire#! — and one #high Emperor#!."
+
+ # ─── 0011 — The dispute fails ───
+ basileus_two_emperors.0011.t:0 "The Two Emperors: The Question Unanswered"
+ basileus_two_emperors.0011.desc:0 "The war ends without the victory we sought. The pretender keeps [rival.GetHerHis] stolen title, and the world has seen the Romans fail to make good their boast.\n\nThe insult festers. Perhaps another day, with sharper steel and surer fortune, the question may be put to [rival.GetHerHim] again."
+ basileus_two_emperors.0011.a:0 "This is not the end of the matter."
+
+ # ─── 0020 — The Demand: the Western Emperor decides ───
+ basileus_two_emperors.0020.t:0 "The Demand of the Greeks"
+ basileus_two_emperors.0020.desc:0 "An embassy arrives from #emp [basileus.GetTitledFirstName]#! of Constantinople, and its terms are stark. The Greek does not ask that We surrender Our crown — only that We bow to it. That We acknowledge, before all Christendom, that he is the #high senior#! Emperor, the elder heir of Augustus, and We but a junior wearing a borrowed dignity.\n\nTo concede is to keep Our throne, and Our peace — but to stoop. To refuse is to keep Our pride, and to dare the wrath of the East."
+ basileus_two_emperors.0020.a:0 "Concede. Better a living junior than dead."
+ basileus_two_emperors.0020.b:0 "Refuse! I am Emperor by the grace of God and Saint Peter!"
+
+ # ─── 0021 — He refuses ───
+ basileus_two_emperors.0021.t:0 "The Two Emperors: [rival.GetTitledFirstName] Refuses"
+ basileus_two_emperors.0021.desc:0 "The answer comes back from the West, and it is defiance. #emp [rival.GetTitledFirstName]#! will not bow. [rival.GetSheHe|U] proclaims himself [GetTitleByKey('e_hre').GetHolder.GetTitleTierName] by the grace of God and the hand of Saint Peter's heir, and bids us to trouble [rival.GetHerHim] no more.\n\nThe ultimatum has failed. Now there are but two roads left: the #emp sword#!, or a silence that will be heard as our defeat."
+ basileus_two_emperors.0021.a:0 "Then it shall be war. Muster the tagmata."
+ basileus_two_emperors.0021.b:0 "Swallow the insult. The time is not right."
+
+ # ─── 0022 — He concedes ───
+ basileus_two_emperors.0022.t:0 "The Two Emperors: The Pretender Bows"
+ basileus_two_emperors.0022.desc:0 "It is done, and done without a single sword drawn.\n\nBefore his own court and ours, #emp [rival.GetTitledFirstName]#! has yielded the point and laid down the #high Roman#! name. The crown of the West is renounced; its lesser kings, no longer bound to a Western Emperor, drift apart to their own devices, and the upstart empire is dissolved.\n\nWhere reason and pressure prevailed, no army was needed. There is but one Roman Empire now, and one Emperor — and we won it with ink and nerve alone."
+ basileus_two_emperors.0022.a:0 "Let it be recorded in every chronicle."
+
+ # ─── 0030 — Vindication by other hands ───
+ basileus_two_emperors.0030.t:0 "The Two Emperors: The Question Answers Itself"
+ basileus_two_emperors.0030.desc:0 "Word comes from the West, and it gives us pause — then a slow, cold satisfaction.\n\nThe upstart #high Empire of the West#! is no more. Whether by rebellion, partition, or conquest, the stolen crown has fallen from its pretender's brow, and there is no Western Emperor left to dispute our title.\n\nWe need not have lifted a finger. The question of the two emperors has answered itself: there was only ever one Rome."
+ basileus_two_emperors.0030.a:0 "As it was always destined to be."

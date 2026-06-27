@@ -1,0 +1,24 @@
+﻿l_english:
+ # ─── Roman Imperial Government (player-facing name: "Imperial Autocracy") ───
+ # The internal government type id stays roman_imperial_government; only the
+ # display name is "Imperial Autocracy". The admin window header is vanilla loc
+ # ADMINISTRATIVE_GOVERNMENT_HEADER = "<title adjective> <gov name> Government",
+ # so this composes cleanly as e.g. "Roman Imperial Autocracy Government" /
+ # "Eastern Roman Imperial Autocracy Government" with no GUI override needed.
+ roman_imperial_government:0 "Imperial Autocracy"
+ roman_imperial_government_with_icon:0 "@government_type_roman_imperial_government! $roman_imperial_government$"
+ roman_imperial_government_adjective:0 "Imperial Autocratic"
+ roman_imperial_government_realm:0 "Imperial Autocracy"
+ roman_imperial_government_desc:0 "\n$game_concept_roman_imperial_government_desc$"
+
+ # House-attribute flavour: reuse the DEFAULT administrative naming (the
+ # "Powerful Family Attribute") rather than defining our own, so the Family /
+ # house-attribute window reads correctly instead of showing the raw loc key.
+ roman_imperial_government_house_attribute_flavor_name:0 "$administrative_government_house_attribute_flavor_name$"
+ roman_imperial_government_house_attribute_flavor_name_no_tooltip:0 "$administrative_government_house_attribute_flavor_name_no_tooltip$"
+
+ # Icon concept emitted by our GetGovernmentIcon branch (see
+ # common/customizable_localization/basileus_government_icon_override.txt) — used
+ # by GOVERNMENT_ADJECTIVE_ICON / the realm banner. Points at our text-icon.
+ roman_imperial_icon_concept:0 "[roman_imperial_government_i|E]"
+

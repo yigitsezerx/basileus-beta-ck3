@@ -1,0 +1,27 @@
+﻿l_english:
+ # ─── Subject-contract group name (shown as "<name> Contract") ───
+ basileus_roman_imperial_vassal:0 "Imperial"
+
+ # ─── Military window section header ───
+ BASILEUS_TAGMATA_HEADER:0 "Imperial [tagmata|E]"
+
+ # ─── The Megas Domestikos command title ───
+ k_megas_domestikos:0 "Domestikon tōn Scholōn"
+ cn_megas_domestikos_er:0 "Domesticate of the Schools"
+
+ # ─── Appointment-succession title law ───
+ basileus_tagma_appointment_succession_law:0 "Office of the Domestic of the Schools"
+ basileus_tagma_appointment_succession_law_desc:0 "This is an appointed military office of the imperial autocracy, not a hereditary title."
+
+ # ─── Appointment type ───
+ basileus_tagma_commander:0 "Megas Domestikos"
+
+ # ─── Standing-army subject contract ───
+ basileus_tagma_maa:0 "Imperial Field Army"
+ basileus_tagma_maa_desc:0 "Whether this officer commands a standing professional army ([tagmata|E]) maintained at the imperial expense."
+ basileus_tagma_maa_off:0 "No Tagmata"
+ basileus_tagma_maa_off_short:0 "No Tagmata"
+ basileus_tagma_maa_off_desc:0 "#emp This officer commands no standing professional army.#!"
+ basileus_tagma_maa_on:0 "Standing Tagmata"
+ basileus_tagma_maa_on_short:0 "Tagmata"
+ basileus_tagma_maa_on_desc:0 "#emp Commands the standing [tagmata|E] — a permanent professional army of heavy cavalry and infantry, maintained at the imperial expense.#!"

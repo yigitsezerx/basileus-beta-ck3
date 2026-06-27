@@ -1,0 +1,37 @@
+﻿l_english:
+ # --- System Generated Keys ---
+ situation_basileus_roman_world:0 "The Roman Situation"
+ situation_basileus_roman_world_desc:0 "The state of Roman authority in the imperial heartland."
+ basileus_roman_world_sub_region_roman_balkans_situation:0 "The West"
+ basileus_roman_world_sub_region_roman_anatolia_situation:0 "The Heartland"
+ basileus_roman_world_sub_region_roman_east_situation:0 "The East"
+ basileus_roman_world_participant_group_romans:0 "Romans"
+ basileus_roman_world_participant_group_romans_desc:0 "All [GetGovernment( 'roman_imperial_government' ).GetAdjective] [rulers|E] with their [vassals|E]."
+ 
+ basileus_roman_world_basileus_rw_imperial_order_situation_phase:0 "Imperial Order"
+ basileus_roman_world_basileus_rw_imperial_order_situation_phase_desc:0 "Roman authority stands firm; the heartland prospers under the Empire."
+ basileus_roman_world_basileus_rw_imperial_decline_situation_phase:0 "Imperial Decline"
+ basileus_roman_world_basileus_rw_imperial_decline_situation_phase_desc:0 "Authority wanes; the administration loses its grip on the provinces."
+ game_concept_basileus:0 "Basileus"
+ game_concept_basileus_desc:0 "The term came to be used, in the later Roman tradition, to designate the #emp Roman Emperor#!."
+ basileus_rw_emperor_subtitle:0 "[autocrator|E]"
+
+ # --- Original Keys ---
+ basileus_roman_world:0 "The Roman World"
+ basileus_roman_world_desc:0 "The state of Roman authority in the imperial heartland."
+ roman_balkans_situation:0 "Roman Balkans"
+ roman_anatolia_situation:0 "Roman Anatolia"
+ roman_east_situation:0 "The Orient"
+ romans:0 "Romans"
+ basileus_rw_romans_header:0 "[GetTitleByKey('e_byzantium').GetName]"
+ basileus_rw_imperial_order:0 "Imperial Order"
+ basileus_rw_imperial_order_desc:0 "Roman authority stands firm; the heartland prospers under the Empire."
+ basileus_rw_imperial_decline:0 "Imperial Decline"
+ basileus_rw_imperial_decline_desc:0 "Authority wanes; the administration loses its grip on the provinces."
+ # --- themed effect-set names (Stage 1) ---
+ basileus_rw_warfare_effects:0 "Effects on Warfare"
+ basileus_rw_subject_effects:0 "Effects on Subjects"
+ basileus_rw_realm_effects:0 "Effects on the Realm"
+ # --- phase parameters ---
+ situation_parameter_basileus_rw_stable:0 "Stable Roman rule in the heartland."
+ situation_parameter_basileus_rw_decline:0 "Roman authority is in decline."

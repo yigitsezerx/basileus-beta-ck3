@@ -1,0 +1,35 @@
+﻿l_english:
+ # ─── Culture rename (eastern_roman → "Roman") via set_culture_name ───
+ basileus_roman_culture_noun:0 "Roman"
+ basileus_roman_culture_collective:0 "Romans"
+ basileus_roman_culture_prefix:0 "Romano"
+
+ # ─── Story cycle: Recognition of the Sole Roman Emperor ───
+ story_sole_roman_recognition:0 "There Can Be Only One"
+ story_sole_roman_recognition_desc:0 "With the Empire made whole once more and no rival there is, we shall press the Bishop of Rome to acknowledge a single, undivided Roman Empire — and a #emp single#! Roman Emperor."
+ SOLE_ROMAN_INFO_STRING:0 "The Papacy resists, but with Roman armies astride Italy and no other to set against us, even the Pope cannot stall forever.."
+ SR_POPE:0 "The Pope"
+ SR_PROGRESS:0 "Recognition"
+ SR_PROGRESS_MIN:0 "Petition"
+ SR_PROGRESS_MAX:0 "Proclaimed"
+
+ # ─── 0001 — The Petition to Rome ───
+ basileus_sole_roman.0001.t:0 "There Can Be Only One: A Petition"
+ basileus_sole_roman.0001.desc:0 "The work of generations is complete. The lost provinces are restored, #high Latin#! revived, the Empire #high Roman#! in name and substance alike. And in all the world there is no other who dares call himself #high $trait_autocrator_ercf$#!.\n\nOne thing remains. For all our power, it is the Bishop of Rome, #emp the Pope#!, who has long arrogated to himself the right to crown the $trait_autocrator_ercf$. Let him, then, acknowledge the truth:\n\nThat there is but one Roman Empire, and its Emperor, #emp me#!.\n\nA delegation is prepared. Our terms are carried to the Lateran."
+ basileus_sole_roman.0001.a:0 "Let us proceed."
+
+ # ─── 0002 — Rome Stalls ───
+ basileus_sole_roman.0002.t:0 "There Can Be Only One: The Curia Demurs"
+ basileus_sole_roman.0002.desc:0 "Word returns from the Lateran, and it is cold. The Pope receives Our envoys with stiff courtesy and empty words — talk of councils, of precedent, of matters requiring lengthy deliberation. He will not say no. He dares not. But neither will he say yes.\n\nIt is the answer of a man who hopes the question will simply go away. He does not yet grasp how near our armies stand, nor how shallow #emp the West#! has become."
+ basileus_sole_roman.0002.a:0 "He will reconsider then?"
+
+ # ─── 0003 — Pressure Mounts ───
+ basileus_sole_roman.0003.t:0 "There Can Be Only One: Pressure Mounts"
+ basileus_sole_roman.0003.desc:0 "The pressure is telling.. With no Western power to shield him, and the Roman banners flying the length of Italy, the Pope finds his position untenable. The bishops of the Western world, long accustomed to looking westward for a protector, find no one there.\n\nWhispers reach us from Rome: the Curia is divided, the Pope wavering. He searches for a way to grant what we demand while saving face.."
+ basileus_sole_roman.0003.a:0 "He'll find his courage soon.."
+
+ # ─── 0010 — Recognition ───
+ basileus_sole_roman.0010.t:0 "There Can Be Only One: $trait_autocrator_ercf$"
+ basileus_sole_roman.0010.desc:0 "At last, the Pope yields.\n\nThe bull is sealed and proclaimed from the steps of Saint Peter's.\n\nThere is one Roman Empire and one Roman Emperor, and that Emperor is #emp me#!. The Bishop of Rome, who once crowned pretenders in the West, now acknowledges before all Christendom what we have always known.\n\nThe pretence of a divided Roman Empire is ended."
+ basileus_sole_roman.0010.a:0 "There can be only one."
+ basileus_sole_roman.0010.a.tt:0 "#emp The Eastern Roman culture is renamed to #high Roman#!."

@@ -1,0 +1,26 @@
+﻿l_english:
+ # ─── Laws-panel section header (its own section in the Realm > Laws panel) ───
+ MY_REALM_WINDOW_LAWS_BASILEUS_LAND_LAWS:0 "Imperial Legislation"
+ MY_REALM_WINDOW_LAWS_BASILEUS_LAND_LAWS_DESC:0 "Imperial policy for the whole of the [realm|E], ordained by the [GetPlayer.GetTitleTierName|U] — guiding the [development|E] of its provinces, the [taxes|E] that fill its coffers, and the schools that raise the servants of the state. Each such [law|E] binds [GetPlayer.GetPrimaryTitle.GetNameNoTooltip] entire."
+
+ # ─── Imperial Agrarian Policy (the Macedonian land legislation) ───
+ basileus_agrarian_law:0 "Agrarian Policy"
+ basileus_agrarian_law_singular:0 "$basileus_agrarian_law$"
+
+ # Tier 0 — decentralised baseline (default)
+ basileus_agrarian_law_0:0 "Reliance on Local Magnates"
+ basileus_agrarian_law_0_desc:0 "The #high local magnates#! — the great provincial families — are left to their own devices. The powerful are content and their retinues bolster the host, the #high themes#! keep a fuller share of their revenues, and the upkeep of our soldiers is light. Yet unchecked, the magnates devour the lands of the free peasantry and the soldier-farmers, and with them wither the #high tax rolls#! and the levies of the Empire."
+
+ # Tier 1 — Romanos I, 922
+ basileus_agrarian_law_1:0 "Protimēsis"
+ basileus_agrarian_law_1_desc:0 "By the [protimesis|E] — the right of pre-emption — kin, neighbours, and the village commune are granted first refusal upon any land offered for sale, that the powerful may no longer simply buy their way into the holdings of the poor."
+
+ # Tier 2 — Novels of 934 & 947
+ basileus_agrarian_law_2:0 "Expanded Rights of the Peasantry"
+ basileus_agrarian_law_2_desc:0 "Following many great famines, lands wrongfully taken from the #high penētes#! are ordered restored. The free peasantry and the soldier-farmers recover their plots."
+
+ # Tier 3 — Basil II, 1002 (culture-dynamic name: Allelengyon / Allelengium)
+ basileus_agrarian_law_3:0 "$basileus_agrarian_law_3_greek$"
+ basileus_agrarian_law_3_greek:0 "Allelengyon"
+ basileus_agrarian_law_3_latin:0 "Allelengium"
+ basileus_agrarian_law_3_desc:0 "The #high $basileus_agrarian_law_3_greek$#!: the principle of mutual fiscal responsibility — the [allelengyon|E] — is turned upon the mighty themselves — the #high local magnates#! are made to answer for the tax arrears of the ruined and abandoned holdings about them. The treasury, the army, and the loyalty of the common folk stand at their height, and the great families are held firmly in the imperial hand."

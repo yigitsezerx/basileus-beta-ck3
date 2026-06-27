@@ -1,0 +1,23 @@
+﻿l_english:
+ # ─── Imperial Reconstruction great project ───
+ great_project_type_basileus_imperial_reconstruction:0 "Imperial Assimilation"
+ great_project_type_basileus_imperial_reconstruction_project:0 "Imperial Assimilation"
+ great_project_type_basileus_imperial_reconstruction_project_possessive:0 "Imperial Assimilation"
+
+ great_project_type_basileus_imperial_reconstruction_desc:0 "A frontier won by the sword is not yet truly #high [GetPlayer.GetCulture.GetName]#!. Through a generation of patient labour — surveyors and settlers, clerics and labourers — the tongue, faith, law, and order of the Empire are carried into a conquered [duchy|E], until its [counties|E] are [GetPlayer.GetCulture.GetName] in #high speech, creed, and loyalty#! as well as in name."
+ great_project_type_basileus_imperial_reconstruction_project_desc:0 "$great_project_type_basileus_imperial_reconstruction_desc$"
+
+ # Location requirement tooltip
+ basileus_reconstruction_has_target_county_tt:0 "At least one [county|E] in the [duchy|E] is not yet of our #high culture#! or #high faith#!"
+
+ # Completion toast
+ basileus_imperial_reconstruction_complete_desc:0 "The region is made #high [GetPlayer.GetCulture.GetName]#!: its people brought into our tongue and faith, its lands developed and its counties brought firmly under imperial #high control#!. What was a frontier is now a province of the Empire in every sense."
+
+ # "On Project Completed" effect line (shown in the project description)
+ basileus_imperial_reconstruction_effect_desc:0 "Brings every [county|E] of the target [duchy|E] fully into the body of the Empire — converting its [culture|E] and [faith|E] to those of the #high [GetPlayer.GetTitleTierName]#!, raising its [development|E] and [control|E]."
+
+ # ─── Contributions ───
+ great_project_type_basileus_imperial_reconstruction_project_contribution_imperial_survey:0 "Conduct the Imperial Survey"
+ great_project_type_basileus_imperial_reconstruction_project_contribution_settlers:0 "Send Settlers and Labourers"
+ great_project_type_basileus_imperial_reconstruction_project_contribution_clergy:0 "Send Clergy and Missionaries"
+ great_project_type_basileus_imperial_reconstruction_project_contribution_public_works:0 "Build Roads and Public Works"

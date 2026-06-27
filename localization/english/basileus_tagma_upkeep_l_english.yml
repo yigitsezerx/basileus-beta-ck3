@@ -1,0 +1,12 @@
+﻿l_english:
+ basileus_tagma_upkeep_0:0 "Tagmata Upkeep"
+ basileus_tagma_upkeep_1:0 "Tagmata Upkeep"
+ basileus_tagma_upkeep_2:0 "Tagmata Upkeep"
+ basileus_tagma_upkeep_3:0 "Tagmata Upkeep"
+ basileus_tagma_upkeep_0_desc:0 "Maintaining a professional army on the field drains the treasury and the [influence|E] of [GetPlayer.GetTitleTierName|U] [GetTitleByKey('e_byzantium').GetHolder.GetFirstNameNoTooltip]."
+ basileus_tagma_upkeep_1_desc:0 "$basileus_tagma_upkeep_0_desc$"
+ basileus_tagma_upkeep_2_desc:0 "$basileus_tagma_upkeep_0_desc$"
+ basileus_tagma_upkeep_3_desc:0 "$basileus_tagma_upkeep_0_desc$"
+
+ # Megas Domestikos appointment: the command of the Tagmata is a male-only office.
+ basileus_tagma_male_only_desc:0 "The command of the #high Imperial Tagmata#! is a #high male-only#! military office."

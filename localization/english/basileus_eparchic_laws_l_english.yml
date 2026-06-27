@@ -1,0 +1,26 @@
+﻿l_english:
+ # ─── Imperial Commerce Policy (the Book of the Eparch) ───
+ basileus_eparchic_law:0 "Commercial Policy"
+ basileus_eparchic_law_singular:0 "$basileus_eparchic_law$"
+
+ # Tier 0 — decentralised baseline (default)
+ basileus_eparchic_law_0:0 "Deregulated Markets"
+ basileus_eparchic_law_0_desc:0 "Trade is left to private merchants and the unchartered markets of the cities. The guildsmen and townsfolk prosper at their own hand, building flourishes cheaply, and the capital grows of its own accord — yet the crown draws no special revenue from commerce, and the markets answer to no imperial order."
+
+ # Tier 1 — chartered guilds (culture-dynamic: Systḗmata / Collegia)
+ basileus_eparchic_law_1:0 "$basileus_eparchic_law_1_greek$"
+ basileus_eparchic_law_1_greek:0 "Systēmata"
+ basileus_eparchic_law_1_latin:0 "Systēmata"
+ basileus_eparchic_law_1_desc:0 "The #high $basileus_eparchic_law_1_greek$#!: the trades of the City are gathered into chartered guilds under imperial licence. A first measure of order brings the crown a modest share of commerce and a steadier hand upon the provinces, while the merchants remain content with their privileges."
+
+ # Tier 2 — full regulation (culture-dynamic: Eparchikòn Biblíon / Liber Praefecti)
+ basileus_eparchic_law_2:0 "$basileus_eparchic_law_2_greek$"
+ basileus_eparchic_law_2_greek:0 "Eparchikòn Biblíon"
+ basileus_eparchic_law_2_latin:0 "Liber Praefecti"
+ basileus_eparchic_law_2_desc:0 "The #high $basileus_eparchic_law_2_greek$#! — the [book_of_the_eparch|E] — sets down in law every weight, price, and practice of the City's guilds, enforced by the [eparch|E]. Fair prices win the gratitude of the common folk and the crown's commercial revenue and authority stand at their height — but the guild magnates begin to resent the heavy hand of regulation."
+
+ # Tier 3 — state monopoly (culture-dynamic: Basilikòn Kommérkion / Monopolium Imperiale)
+ basileus_eparchic_law_3:0 "$basileus_eparchic_law_3_greek$"
+ basileus_eparchic_law_3_greek:0 "Basilikòn Kommérkion"
+ basileus_eparchic_law_3_latin:0 "Commercial Monopoly"
+ basileus_eparchic_law_3_desc:0 "The #high $basileus_eparchic_law_3_greek$#!: the most lucrative trades are seized as imperial monopolies, and commerce flows through the crown's own warehouses. The treasury and the control of the provinces reach their greatest extent and the people are kept in fair supply — but the throttled guilds turn bitterly against the throne, and private building withers under the dead hand of the state."

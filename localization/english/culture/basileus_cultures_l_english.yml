@@ -1,0 +1,15 @@
+﻿l_english:
+ #Byzantine group
+
+ byzantine_group:0 "Roman"
+ byzantine_group_collective_noun:1 "Romans"
+ eastern_roman:0 "Eastern Roman"
+ eastern_roman_prefix:0 "Romano"
+ eastern_roman_collective_noun:0 "Eastern Romans"
+ western_roman:0 "Western Roman"
+ western_roman_prefix:0 "Romano"
+ western_roman_collective_noun:0 "Western Romans"
+ eastern_roman_history_loc:0 "[SelectLocalization( EqualTo_int32( GetPlayer.MakeScope.ScriptValue('basileus_is_roman_recognition_done_val'), '(int32)1' ), 'eastern_roman_history_loc_cleared', 'eastern_roman_history_loc_default' )]"
+ eastern_roman_history_loc_default:0 "Diverged in the year [DATE.GetYear]"
+ eastern_roman_history_loc_cleared:0 ""
+ western_roman_history_loc:0 "Diverged in the year [DATE.GetYear]"

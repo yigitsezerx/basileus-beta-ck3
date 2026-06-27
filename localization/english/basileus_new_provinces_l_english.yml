@@ -1,0 +1,180 @@
+﻿l_english:
+ b_bulgarophygon:0 "Bulgarophygon"
+ b_bulgarophygon_adj:0 "Bulgarophygonian"
+ b_drusipara:0 "Drusipara"
+ b_drusipara_adj:0 "Drusiparian"
+ b_erythrai:0 "Erythrai"
+ b_erythrai_adj:0 "Erythraian"
+ c_colophon:0 "Colophon"
+ c_colophon_adj:0 "Colophonian"
+ b_colophon:0 "Colophon"
+ b_colophon_adj:0 "Colophonian"
+ c_tralles:0 "Tralles"
+ c_tralles_adj:0 "Trallian"
+ b_tralles:0 "Tralles"
+ b_tralles_adj:0 "Trallian"
+ c_stratonikeia:0 "Stratonikeia"
+ c_stratonikeia_adj:0 "Stratonikeian"
+ b_stratonikeia:0 "Stratonikeia"
+ b_stratonikeia_adj:0 "Stratonikeian"
+ c_nymphaion:0 "Nymphaion"
+ c_nymphaion_adj:0 "Nymphaionian"
+ b_nymphaion:0 "Nymphaion"
+ b_nymphaion_adj:0 "Nymphaionian"
+ c_hierapolis_phrygia:0 "Hierapolis"
+ c_hierapolis_phrygia_adj:0 "Hierapolitan"
+ b_hierapolis_phrygia:0 "Hierapolis"
+ b_hierapolis_phrygia_adj:0 "Hierapolitan"
+ b_tiberiopolis:0 "Tiberiopolis"
+ b_tiberiopolis_adj:0 "Tiberiopolitan"
+
+ b_appia:0 "Appia"
+ b_appia_adj:0 "Appian"
+
+ b_akrotiri:0 "Akrotiri"
+ b_akrotiri_adj:0 "Akrotirian"
+
+ c_comama:0 "Comama"
+ c_comama_adj:0 "Comaman"
+ b_comama:0 "Comama"
+ b_comama_adj:0 "Comaman"
+
+ c_trikomia:0 "Trikomia"
+ c_trikomia_adj:0 "Trikomian"
+ b_trikomia:0 "Trikomia"
+ b_trikomia_adj:0 "Trikomian"
+
+ # ─── New counties & baronies split from Selymbria / Söğüt / Oka ───
+
+ # c_derkoi / b_derkoi — Lake Derkos fortress & bishopric, N. Thrace (d_thrace)
+ c_derkoi:0 "Derkoi"
+ b_derkoi:0 "Derkoi"
+ cn_derkoi_greek:0 "Derkoi"
+ cn_derkoi_eastern_roman:0 "Dercus"
+ cn_derkoi_turkish:0 "Terkos"
+
+ # c_belokome / b_belokome — Belokome (Bilecik), Bithynia (d_thracesia)
+ c_belokome:0 "Belokome"
+ b_belokome:0 "Belokome"
+ cn_belokome_greek:0 "Belokome"
+ cn_belokome_eastern_roman:0 "Belocome"
+ cn_belokome_turkish:0 "Bilecik"
+
+ # c_pemanenon / b_pemanenon — Pemanenon (Eski Manyas), Mysia (d_thracesia)
+ c_pemanenon:0 "Pemanenon"
+ b_pemanenon:0 "Pemanenon"
+ cn_pemanenon_greek:0 "Poimanenon"
+ cn_pemanenon_eastern_roman:0 "Poemanenum"
+ cn_pemanenon_turkish:0 "Manyas"
+
+ # c_nikopolis_nestum / b_nikopolis_nestum — Nikopolis ad Nestum, Rhodope/Mesta valley (d_philippopolis)
+ c_nikopolis_nestum:0 "Nikopolis ad Nestum"
+ b_nikopolis_nestum:0 "Nikopolis ad Nestum"
+ cn_nikopolis_nestum_greek:0 "Nikopolis"
+ cn_nikopolis_nestum_eastern_roman:0 "Nicopolis ad Nestum"
+
+ # c_athyras / b_athyras — Athyra (Büyükçekmece), Marmara coast (d_thrace)
+ c_athyras:0 "Athyras"
+ b_athyras:0 "Athyras"
+ cn_athyras_greek:0 "Athyras"
+ cn_athyras_eastern_roman:0 "Athyra"
+ cn_athyras_turkish:0 "Büyükçekmece"
+
+ # c_prokonnesos / b_prokonnesos — Prokonnesos (Marmara Island), marble-quarry isle (d_opsikion)
+ c_prokonnesos:0 "Prokonnesos"
+ b_prokonnesos:0 "Prokonnesos"
+ cn_prokonnesos_greek:0 "Prokonnesos"
+ cn_prokonnesos_eastern_roman:0 "Proconnesus"
+ cn_prokonnesos_turkish:0 "Marmara"
+
+ # c_charax / b_charax — Charax, Bithynian fort near Chalcedon (d_optimatoi)
+ c_charax:0 "Charax"
+ b_charax:0 "Charax"
+ cn_charax_greek:0 "Charax"
+ cn_charax_eastern_roman:0 "Charax"
+
+ # c_notion / b_notion — Notion, harbor of Colophon, Ionian coast (d_thracesia)
+ c_notion:0 "Notion"
+ b_notion:0 "Notion"
+ cn_notion_greek:0 "Notion"
+ cn_notion_eastern_roman:0 "Notium"
+
+ # c_santabaris / b_santabaris — Santabaris, Phrygian road-fort near Dorylaion (d_thracesia)
+ c_santabaris:0 "Santabaris"
+ b_santabaris:0 "Santabaris"
+ cn_santabaris_greek:0 "Santabaris"
+ cn_santabaris_eastern_roman:0 "Santabaris"
+
+ # b_saky - Saky / Sakka barony in c_kalos_limen
+ b_saky:0 "Saky"
+ b_saky_adj:0 "Sakyan"
+ cn_saky_greek:0 "Sakka"
+ cn_saky_eastern_roman:0 "Sacca"
+ cn_saky_khazar:0 "Saqi"
+
+ # b_phoullai - Phoullai / Phoulla barony in c_perekop
+ b_phoullai:0 "Phoullai"
+ b_phoullai_adj:0 "Phoullaian"
+ cn_phoullai_greek:0 "Phoulla"
+ cn_phoullai_eastern_roman:0 "Phoullae"
+ cn_phoullai_khazar:0 "Fulla"
+
+ # b_taphrae - Taphrae barony in c_perekop
+ b_taphrae:0 "Taphrae"
+ b_taphrae_adj:0 "Taphraean"
+ cn_taphrae_greek:0 "Taphrai"
+ cn_taphrae_eastern_roman:0 "Taphrae"
+ cn_taphrae_khazar:0 "Or"
+
+ # --- Anatolian baronies (Galatia / Paphlagonia / Cappadocia) ---
+ b_petinessos:0 "Petinessos"
+ cn_petinessos_greek:0 "Petinessos"
+ cn_petinessos_eastern_roman:0 "Petenissus"
+ b_laodikeia_katakekaumene:0 "Laodikeia Katakekaumene"
+ cn_laodikeia_katakekaumene_greek:0 "Laodikeia"
+ cn_laodikeia_katakekaumene_eastern_roman:0 "Laodicea Combusta"
+ b_verinopolis:0 "Verinopolis"
+ cn_verinopolis_greek:0 "Verinopolis"
+ cn_verinopolis_eastern_roman:0 "Verinopolis"
+ b_tieion:0 "Tieion"
+ cn_tieion_greek:0 "Tieion"
+ cn_tieion_eastern_roman:0 "Tium"
+ b_malagina:0 "Malagina"
+ cn_malagina_greek:0 "Malagina"
+ cn_malagina_eastern_roman:0 "Malagina"
+ b_kalecik:0 "Kalecik"
+ cn_kalecik_greek:0 "Kalecik"
+ cn_kalecik_eastern_roman:0 "Kalecik"
+ b_sykeon:0 "Sykeon"
+ cn_sykeon_greek:0 "Sykeon"
+ cn_sykeon_eastern_roman:0 "Sycaeon"
+ b_korniaspa:0 "Korniaspa"
+ cn_korniaspa_greek:0 "Korniaspa"
+ cn_korniaspa_eastern_roman:0 "Corniaspa"
+ b_mokissos:0 "Mokissos"
+ cn_mokissos_greek:0 "Mokissos"
+ cn_mokissos_eastern_roman:0 "Mocissus"
+
+ # --- Italian & Levantine baronies ---
+ b_saidnaya:0 "Saidnaya"
+ b_agropoli:0 "Agropoli"
+ b_massafra:0 "Massafra"
+ b_oria:0 "Oria"
+ b_bitonto:0 "Bitonto"
+ b_monte_sant_angelo:0 "Monte Sant'Angelo"
+ b_giulianova:0 "Giulianova"
+ b_populonia:0 "Populonia"
+ cn_monte_sant_angelo_greek:0 "Hagios Angelos"
+ cn_monte_sant_angelo_eastern_roman:0 "Mons Sancti Angeli"
+ cn_agropoli_greek:0 "Akropolis"
+ cn_agropoli_eastern_roman:0 "Acropolis"
+ cn_massafra_greek:0 "Massaphra"
+ cn_massafra_eastern_roman:0 "Massafra"
+ cn_oria_greek:0 "Hyria"
+ cn_oria_eastern_roman:0 "Uria"
+ cn_bitonto_greek:0 "Bytounton"
+ cn_bitonto_eastern_roman:0 "Butuntum"
+ cn_giulianova_greek:0 "Kastron Neon"
+ cn_giulianova_eastern_roman:0 "Castrum Novum"
+ cn_populonia_greek:0 "Poplonion"
+ cn_populonia_eastern_roman:0 "Populonium"

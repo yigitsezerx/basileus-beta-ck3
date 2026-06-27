@@ -1,0 +1,8 @@
+﻿l_english:
+ rule_basileus_one_catholic_empire:0 "@government_type_roman_imperial_government! BASILEUS — Two-Emperor Problem"
+ rule_basileus_one_catholic_empire_desc:0 "When enabled, only a single Catholic (and Catholic-derived) empire may be established. The [GetTitleByKey('e_byzantium').GetName] and its ruler are exempt, they never count toward the limit and are never restricted."
+ setting_basileus_one_catholic_empire_off:0 "Off"
+ setting_basileus_one_catholic_empire_off_desc:0 "[GetFaithByKey('catholic').GetAdjective] [empires|E] can be created."
+ setting_basileus_one_catholic_empire_on:0 "On"
+ setting_basileus_one_catholic_empire_on_desc:0 "A second [GetFaithByKey('catholic').GetAdjective] [empire|E] can not be created while and if a [GetFaithByKey('catholic').GetAdjective] one already exists, excepting the [GetTitleByKey('e_byzantium').GetName]."
+ basileus_one_catholic_empire_restriction_tt:0 "There may only be one [GetFaithByKey('catholic').GetName] empire (the [GetTitleByKey('e_byzantium').GetName] excepted)"

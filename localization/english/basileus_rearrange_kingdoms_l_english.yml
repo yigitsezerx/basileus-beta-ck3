@@ -1,0 +1,76 @@
+﻿l_english:
+ # --- Rearrange the Kingdoms decision ---
+ basileus_rearrange_kingdoms_decision:0 "Establish the Catepanates"
+ basileus_rearrange_kingdoms_decision_desc:0 "A fully-pacified region may be gathered into one great command. We may raise a new catepanate over its [Glossary( 'themes', 'THEME_GLOSS' )]."
+ basileus_rearrange_kingdoms_decision_tooltip:0 "Establish the catepanate of a fully-controlled region."
+ basileus_rearrange_kingdoms_decision_req:0 "We must completely control a region whose catepanate We have not yet established."
+ basileus_anatolia_requires_merges_tt:0 "The four Anatolian themes — #EMP Central Anatolia#!, #EMP Sebasteia#!, #EMP Pontos#!, and #EMP Optimaton#! — must first be reorganized."
+
+ # --- Anatolia widget ---
+ basileus_rearrange_kingdom_anatolia_desc:0 "Anatolia"
+
+ # --- Rename event ---
+ basileus_rearrange_kingdoms.0001.t:0 "The Roman Heartland"
+ basileus_rearrange_kingdoms.0001.desc:0 "Generations ago, when the armies of the #emp Caliphate#! broke upon our eastern marches, my forefathers remade the old provinces of [GetTitleByKey('e_byzantium').GetName] into [Glossary( 'themata', 'THEME_GLOSS' )]. Soldier and farmer bound as one, each province a sword in the hands of the #emp strategoi#!.\n\nBut a #emp strategos#! who commands an army broad enough to hold a province commands one broad enough to march on [GetTitleByKey('c_byzantion').GetNameNoTier]. So the [Glossary( 'themes', 'THEME_GLOSS' )] were cut, and cut again, until a dozen commands stood where once a handful of great provinces held the plateau — each #emp strategos#! watching his neighbor rather than the enemy beyond the border.\n\nIt kept the imperial throne safe. It did not keep the realm whole. I have watched what that division costs us now: commanders who quarrel over precedence while the frontier burns, slow to answer a beacon not lit on their own soil, bred for generations to fear each other's ambition more than the enemy's advance.\n\nI will not unmake what was built in the old crisis. But the crisis has passed, and the fear that outlived it serves us no longer. I gather now what scattered caution has divided [GetTitleByKey('k_anatolia').GetNameNoTier].\n\n And now that [GetTitleByKey('k_anatolia').GetNameNoTier] is firmly back under our imperial control, there's a dilemma of administrative naming of this great region I must face."
+ basileus_rearrange_kingdoms.0001.a:0 "Let the name stand — #EMP Anatolia#!, as ever it was."
+ basileus_rearrange_kingdoms.0001.b:0 "Proclaim #EMP Asia Minor#!!"
+
+ # --- Asia Minor culture-dynamic title name (set_title_name; _adj sibling required) ---
+ BASILEUS_ASIA_MINOR_NAME:0 "Asia Minor"
+ BASILEUS_ASIA_MINOR_NAME_adj:0 "Anatolian"
+ BASILEUS_ASIA_MINOR_NAME_GREEK:0 "Mikrá Asía"
+ BASILEUS_ASIA_MINOR_NAME_GREEK_adj:0 "Mikrasiatic"
+
+ # === Anatolia split (Eastern / Western) ===
+ # Base title name for the new kingdom (shown before the split renames it).
+ k_eastern_anatolia:0 "Eastern Anatolia"
+ k_eastern_anatolia_adj:0 "Eastern Anatolian"
+
+ # --- Split offer event (0002) ---
+ basileus_rearrange_kingdoms.0002.t:0 "Dominion of [GetTitleByKey('k_anatolia').GetNameNoTier]"
+ basileus_rearrange_kingdoms.0002.desc:0 "A single administrative region over so vast a dominion is a heavy responsibility. The western plateau looks ever toward the [great_palace|E] and to the #emp Propontis#!.\n\nThe eastern highlands answer to something else: the cold wind off the #emp Euphrates#!, a frontier that has always kept its own watch.\n\nSo I must judge: does [GetTitleByKey('k_anatolia').GetNameNoTier] stand stronger as one dominion under one imperial hand, or else?"
+ basileus_rearrange_kingdoms.0002.a:0 "Sunder it — as #emp West#! and #emp East#!."
+ basileus_rearrange_kingdoms.0002.b:0 "As vast as it is, [GetTitleByKey('k_anatolia').GetNameNoTier] shall benefit more by being governed by one hand."
+
+ # --- Grant event (0003) ---
+ basileus_rearrange_kingdoms.0003.t:0 "A Crown for the East"
+ basileus_rearrange_kingdoms.0003.desc:0 "The eastern march stands now as a kingdom in its own right — [GetTitleByKey('k_eastern_anatolia').GetName], warden of the passes toward Armenia and the cold Euphrates. Such a charge is not lightly ruled from the Sacred Palace. To whose hand shall We commit its crown and its themes — or shall this watch remain Our own?"
+ basileus_rearrange_kingdoms.0003.a:0 "Gird [ea_cand_1.GetTitledFirstName] with the eastern crown."
+ basileus_rearrange_kingdoms.0003.b:0 "Gird [ea_cand_2.GetTitledFirstName] with the eastern crown."
+ basileus_rearrange_kingdoms.0003.c:0 "Gird [ea_cand_3.GetTitledFirstName] with the eastern crown."
+ basileus_rearrange_kingdoms.0003.d:0 "The East is too dear to delegate — We shall hold it Ourself."
+
+ # --- Directional half-names (set_title_name; _adj sibling required) ---
+ BASILEUS_WEST_ANATOLIA_NAME:0 "Western Anatolia"
+ BASILEUS_WEST_ANATOLIA_NAME_adj:0 "Western Anatolian"
+ BASILEUS_WEST_ANATOLIA_NAME_GREEK:0 "Dytiké Anatolí"
+ BASILEUS_WEST_ANATOLIA_NAME_GREEK_adj:0 "Western Anatolian"
+ BASILEUS_EAST_ANATOLIA_NAME:0 "Eastern Anatolia"
+ BASILEUS_EAST_ANATOLIA_NAME_adj:0 "Eastern Anatolian"
+ BASILEUS_EAST_ANATOLIA_NAME_GREEK:0 "Anatoliké Anatolí"
+ BASILEUS_EAST_ANATOLIA_NAME_GREEK_adj:0 "Eastern Anatolian"
+
+ # --- Francogallia merge offer (0010) ---
+ basileus_rearrange_kingdoms.0010.t:0 "From the Rhine to the Pyrenees"
+ basileus_rearrange_kingdoms.0010.desc:0 "From the cold northern sea to the warm vineyards of the south, the old Frankish lands now answer to our writ — yet they answer in two voices.. The north looks to [GetTitleByKey('k_france').GetNameNoTier]; the south, to [GetTitleByKey('k_aquitaine').GetNameNoTier] and the road to Iberia.\n\nI may bind them into one great region, or let each stand as its own catepanate."
+ basileus_rearrange_kingdoms.0010.a:0 "Fold the south beneath [GetTitleByKey('k_france').GetNameNoTier]."
+ basileus_rearrange_kingdoms.0010.b:0 "Let the south stand as its own."
+
+ # --- Francogallia rename (0011) ---
+ basileus_rearrange_kingdoms.0011.t:0 "From the Rhine to the Pyrenees"
+ basileus_rearrange_kingdoms.0011.desc:0 "North and south are made one realm beneath a administrative region. A dominion so great must bear a name worthy of it — and the choosing is #emp mine#!."
+ basileus_rearrange_kingdoms.0011.a:0 "Let it remain as #emp [GetTitleByKey('k_france').GetNameNoTier]#!."
+ basileus_rearrange_kingdoms.0011.b:0 "#EMP Gallia#!!"
+ basileus_rearrange_kingdoms.0011.c:0 "@basileus_lunatic! I had something #emp entirely different#! in mind.."
+
+ # --- Francogallia culture-dynamic title names (set_title_name; _adj sibling required) ---
+ BASILEUS_FRANCE_NAME:0 "Francia"
+ BASILEUS_FRANCE_NAME_adj:0 "Frankish"
+ BASILEUS_FRANCE_NAME_GREEK:0 "Phrangia"
+ BASILEUS_FRANCE_NAME_GREEK_adj:0 "Frankish"
+ BASILEUS_GALLIA_NAME:0 "Gallia"
+ BASILEUS_GALLIA_NAME_adj:0 "Gallic"
+ BASILEUS_GALLIA_NAME_GREEK:0 "Gallía"
+ BASILEUS_GALLIA_NAME_GREEK_adj:0 "Gallic"
+ BASILEUS_BAGUETTIA_NAME:0 "Baguettia"
+ BASILEUS_BAGUETTIA_NAME_adj:0 "Baguettian"
