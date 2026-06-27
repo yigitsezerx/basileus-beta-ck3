@@ -1,0 +1,86 @@
+﻿# Game-rule-dependent checks MUST stay in after_lobby (game rules are only
+# resolved once the player leaves the lobby).
+on_game_start_after_lobby = {
+	on_actions = {
+		basileus_check_gamerule_rhomaios
+		basileus_check_gamerule_ere_colour
+		basileus_check_gamerule_ere_colour_tyrian_red
+		basileus_check_gamerule_ere_colour_imperial
+	}
+}
+
+# The Hippodrome placement has no game-rule dependency, so it runs in the
+# earlier on_game_start hook (same hook vanilla uses for the Great Wall).
+on_game_start = {
+	on_actions = {
+		basileus_check_hippodrome
+	}
+}
+
+basileus_check_hippodrome = {
+	trigger = {
+		game_start_date >= 203.1.1
+	}
+	effect = {
+		title:b_constantinople.title_province = {
+			add_great_building = basileus_hippodrome_constantinople
+		}
+	}
+}
+
+basileus_check_gamerule_rhomaios = {
+	effect = {
+		if = {
+			limit = {
+				has_game_rule = rhomaios
+			}
+			culture:greek = {
+				set_culture_name = {
+					noun = ercf_rhomaios_name
+					collective_noun = ercf_rhomaios_collective
+					prefix = ercf_rhomaios_prefix
+				}
+			}
+		}
+	}
+}
+
+basileus_check_gamerule_ere_colour = {
+	effect = {
+		title:e_byzantium = {
+			if = {
+				limit = {
+					has_game_rule = basileus_ere_colour
+				}
+				set_title_color = { 99 14 20 }
+			}
+		}
+	}
+}
+
+basileus_check_gamerule_ere_colour_tyrian_red = {
+	effect = {
+		title:e_byzantium = {
+			if = {
+				limit = {
+					has_game_rule = basileus_ere_colour_tyrian_red
+				}
+				set_title_color = { 72 13 20 }
+			}
+		}
+	}
+}
+
+basileus_check_gamerule_ere_colour_imperial = {
+	effect = {
+		title:e_byzantium = {
+			if = {
+				limit = {
+					has_game_rule = basileus_ere_colour_imperial
+				}
+				set_title_color = { 85 20 34 }
+			}
+		}
+	}
+}
+

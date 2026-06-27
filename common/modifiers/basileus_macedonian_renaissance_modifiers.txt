@@ -1,0 +1,28 @@
+﻿# =====================================================================
+# BASILEUS — THE MACEDONIAN RENAISSANCE: golden-age modifiers.
+# ---------------------------------------------------------------------
+# Granted by basileus_macren_reward_effect when the capstone is proclaimed.
+# =====================================================================
+
+# The lasting dynastic golden age (permanent dynasty modifier — applies to every
+# member of the house). Carries the CULTURAL ACCELERATION of the renaissance
+# (fascination + acceptance) alongside the learning/development legacy.
+basileus_macren_dynasty_modifier = {
+	icon = learning_positive
+	learning = 2
+	cultural_head_fascination_mult = 0.10
+	monthly_dynasty_prestige = 2
+	monthly_learning_lifestyle_xp_gain_mult = 0.10
+}
+
+# The reigning patron of the age (permanent character modifier on the emperor
+# under whom the renaissance is proclaimed).
+basileus_macren_patron_modifier = {
+	icon = byzantine_crown_positive
+	monthly_prestige = 0.25
+	learning = 2
+	vassal_opinion = 5
+	# Patron of churches: mosaics, restored sanctuaries, icons re-glorified.
+	monthly_piety = 0.25
+	clergy_opinion = 5
+}

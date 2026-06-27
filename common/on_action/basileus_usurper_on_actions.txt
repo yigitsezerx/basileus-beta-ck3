@@ -1,0 +1,105 @@
+###########################################################
+# BASILEUS — USURPER CIVIL WARS (hooks)
+# IMPORTANT: vanilla OWNS the `effect` block on these built-in on_actions
+# (five_year_playable_pulse, yearly_playable_pulse, on_title_gain, on_war_started),
+# so a direct `effect = {}` here would be SILENTLY DISCARDED. Only
+# `on_actions = { ... }` sub-lists merge across files, so every hook registers a
+# named, mod-owned on_action whose effect DOES run.
+#   five_year_playable_pulse -> roll for a new usurper (root = each landed ruler)
+#   yearly_playable_pulse     -> resolve existing usurpers' fate
+#   on_title_gain             -> a usurper who takes an imperial title is cleared
+#   on_war_started            -> brand the claimant of any imperial claimant war
+###########################################################
+
+five_year_playable_pulse = {
+	on_actions = { basileus_usurper_five_year_pulse }
+}
+
+yearly_playable_pulse = {
+	on_actions = { basileus_usurper_yearly_pulse }
+}
+
+on_title_gain = {
+	on_actions = { basileus_usurper_on_title_gain }
+}
+
+on_war_started = {
+	on_actions = { basileus_usurper_on_war_started }
+}
+
+# =====================================================================
+# Handlers (mod-owned custom on_actions — their `effect` blocks run).
+# =====================================================================
+
+# Roll for a usurper every five years. Root is the landed ruler being checked.
+basileus_usurper_five_year_pulse = {
+	effect = {
+		if = {
+			limit = {
+				basileus_usurpable_emperor_trigger = yes
+				# Only roll if at least one credible pretender exists.
+				any_vassal = {
+					basileus_eligible_usurper_trigger = { LIEGE = root }
+					can_create_faction = {
+						type = claimant_faction
+						target = root
+					}
+				}
+			}
+			random = {
+				chance = basileus_usurpation_chance
+				basileus_spawn_usurper_effect = yes
+			}
+		}
+	}
+}
+
+# Resolve any active usurper's fate yearly (failed attempts become "disgraced").
+basileus_usurper_yearly_pulse = {
+	effect = {
+		if = {
+			limit = { has_trait = basileus_usurper }
+			basileus_resolve_usurper_traits_effect = yes
+		}
+	}
+}
+
+# A usurper who has just claimed an imperial title sheds the usurper trait.
+# root = new holder; scope:title = gained title.
+basileus_usurper_on_title_gain = {
+	effect = {
+		if = {
+			limit = {
+				has_trait = basileus_usurper
+				basileus_is_imperial_roman_court_trigger = yes
+			}
+			basileus_usurper_won_throne_effect = yes
+		}
+	}
+}
+
+# Catch-all: ANY claimant-faction war that begins for an imperial title brands
+# its claimant a usurper (covers vanilla AI factions, the create-claimant
+# interaction, inheritance claims, etc.).
+# Scopes: scope:war, scope:attacker, scope:defender.
+basileus_usurper_on_war_started = {
+	effect = {
+		if = {
+			limit = {
+				scope:war = { using_cb = claimant_faction_war }
+				exists = scope:attacker.joined_faction
+				exists = scope:attacker.joined_faction.special_character
+				scope:attacker.joined_faction.special_title ?= {
+					OR = {
+						this = title:e_byzantium
+						this = title:h_roman_empire
+						this = title:h_eastern_roman_empire
+					}
+				}
+			}
+			scope:attacker.joined_faction.special_character = {
+				basileus_tag_imperial_claimant_effect = yes
+			}
+		}
+	}
+}

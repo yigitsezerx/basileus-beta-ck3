@@ -1,0 +1,60 @@
+# =====================================================================
+# BASILEUS - override of vanilla detailed_ledgers_perk
+# (game/common/lifestyle_perks/00_stewardship_1_wealth_tree_perks.txt).
+# VERBATIM copy with changes:
+# 1. Adds roman_imperial_government_tax_contribution_mult = 0.1 to the
+#    government_character_modifier block under government_is_administrative.
+# =====================================================================
+detailed_ledgers_perk = {
+	lifestyle = stewardship_lifestyle
+	tree = wealth
+	position = { 0 2.5 }
+	icon = node_stewardship
+	
+	parent = heregeld_perk
+	
+	name = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_government = landless_adventurer_government }
+				desc = detailed_ledgers_perk_adventurer_name
+			}
+			desc = detailed_ledgers_perk_name
+		}
+	}
+	
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		invert_check = yes
+		republic_government_opinion = 20
+		republic_government_tax_contribution_mult = 0.15
+	}
+	
+	government_character_modifier = {
+		flag = government_is_landless_adventurer
+		provisions_loss_mult = -0.2
+	}
+	
+	government_character_modifier = {
+		flag = government_is_nomadic
+		monthly_income_from_herd_mult = 0.1
+	}
+	
+	government_character_modifier = {
+		flag = government_is_administrative
+		administrative_government_tax_contribution_mult = 0.1
+		roman_imperial_government_tax_contribution_mult = 0.1
+	}
+
+	government_character_modifier = {
+		flag = government_has_treasury
+		monthly_treasury_from_salary_budget_mult = 0.1
+	}
+
+	effect = {
+		if = {
+			limit = { government_has_flag = government_is_mandala }	
+			custom_description_no_bullet = { text = mandala_detailed_ledgers_perk_effect }
+		}
+	}
+}

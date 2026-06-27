@@ -1,0 +1,43 @@
+﻿# =====================================================================
+# BASILEUS — IMPERIAL AUTOCRACY GENERIC TITLE FALLBACK
+# ---------------------------------------------------------------------
+# Styles the holder of the imperial autocracy government
+# (roman_imperial_government) as Basileus / Basilissa even when the ruler
+# is NOT of a Byzantine culture.
+#
+# All the existing imperial flavorization is gated to heritage_byzantine
+# (eastern_roman) or name_list_greek, so a foreign-heritage Roman Emperor
+# would otherwise fall back to the plain "Emperor". These entries have NO
+# heritages / name_lists gate, so they match any culture — but their
+# priority (105) sits BELOW the greek (107) and eastern_roman (300)
+# emperor entries, so Byzantine rulers keep their own flavorization and
+# these only ever apply to everyone else.
+#
+# Scoped to governments = { roman_imperial_government } so they affect
+# only the imperial autocracy itself (the Emperor), never ordinary
+# administrative or feudal realms elsewhere. Governor tiers (duchy/kingdom)
+# already have generic administrative fallbacks in 01_flavorization.txt.
+# =====================================================================
+
+emperor_imperial_generic_male = {
+	type = character
+	gender = male
+	special = holder
+	tier = empire
+	priority = 105
+	governments = { roman_imperial_government }
+	flavourization_rules = {
+		only_independent = yes
+	}
+}
+emperor_imperial_generic_female = {
+	type = character
+	gender = female
+	special = holder
+	tier = empire
+	priority = 105
+	governments = { roman_imperial_government }
+	flavourization_rules = {
+		only_independent = yes
+	}
+}

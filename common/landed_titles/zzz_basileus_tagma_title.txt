@@ -1,0 +1,29 @@
+﻿# ============================================================================
+# The Imperial Tagma — single landless command title.
+# ----------------------------------------------------------------------------
+# Modelled on TFE's k_minister_comes_domesticorum more or less.
+# a permanent, landless, non-driftable kingdom-tier title that carries the
+# standing army (title men-at-arms) and is auto-granted to the Megas Domestikos
+# (the Grand Marshal ministry holder) via the council on_get_position hook.
+# It never blood-inherits — it uses appointment succession (see the title law).
+# ============================================================================
+
+k_megas_domestikos = {
+	color = { 96 44 68 }
+	capital = c_byzantion
+
+	landless = yes
+	allow_domicile = no
+	destroy_if_invalid_heir = yes
+	no_automatic_claims = yes
+	de_jure_drift_disabled = yes
+	can_use_nomadic_naming = no
+	can_be_named_after_dynasty = no
+	definite_form = yes
+	ruler_uses_title_name = no
+
+	# Eastern Roman gets the period office name; base loc is the Greek fallback.
+	cultural_names = {
+		name_list_eastern_roman = cn_megas_domestikos_er
+	}
+}

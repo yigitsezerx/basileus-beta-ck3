@@ -1,0 +1,332 @@
+# =====================================================================
+# BASILEUS — IMPERIAL AGRARIAN POLICY (The Macedonian Land Legislation)
+# ---------------------------------------------------------------------
+# A 4-tier, mutually-exclusive imperial realm law modelling the Macedonian
+# dynasty's land legislation against the dynatoi (the powerful magnates):
+#   0  Rely on Local Magnates           (decentralised baseline; default)
+#   1  Protimesis                        (Romanos I, 922 — right of pre-emption)
+#   2  Expand the Rights of the Peasantry(Novels of 934/947 — restoration)
+#   3  Allelengyon / Allelengium         (Basil II, 1002 — magnates bear arrears)
+#
+# The arc trades a magnate-friendly, domicile-rich, cheap-army baseline for an
+# ever more centralised state (crown treasury, control, levies, popular support,
+# development) that antagonises the powerful and costs more to maintain.
+#
+# Exclusive to roman_imperial_government (gated by government_is_roman_imperial).
+# flag = admin_law -> appears in the Realm > Laws panel. cumulative = no -> the
+# tiers are mutually exclusive (like vanilla province_border_law, whose structure
+# this mirrors: prestige + influence pass_cost, shared admin_law_cooldown,
+# vassal cascade, imperial-bureaucracy gating on the harsher tiers).
+#
+# The emperor-vs-theme tax split is achieved with ONE modifier block:
+#   monthly_treasury_from_vassals      affects only the emperor (he receives
+#                                      treasury from vassals)
+#   monthly_treasury_from_liege_mult   affects only the theme-holders (a
+#                                      governor's retained cut from his liege)
+# =====================================================================
+
+basileus_agrarian_law = {
+	default = basileus_agrarian_law_0
+	cumulative = no
+	flag = admin_law
+	# Custom flag: pulls this group into its OWN section of the Laws panel
+	# (see gui/window_my_realm.gui — the "Imperial Land Legislation" section).
+	# Keeping admin_law preserves the engine behaviour; the GUI override excludes
+	# this flag from the Provincial Laws section so it shows only in our section.
+	flag = basileus_imperial_land_law
+
+	# --- Tier 0: Rely on Local Magnates (default, free) ---------------------
+	basileus_agrarian_law_0 = {
+		modifier = {
+			# Decentralised baseline: the dynatoi run the provinces — rich, happy
+			# magnates and flourishing estates, but a weak, poor, low-mobilisation crown.
+			powerful_vassal_opinion = 10
+			barons_and_minor_landholders_opinion = 10
+			monthly_treasury_from_vassals = -0.15
+			levy_size = -0.15
+			development_growth_factor = -0.05
+			men_at_arms_maintenance = -0.2
+			domicile_build_gold_cost = -0.20
+			domicile_monthly_influence_mult = 0.20
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_0 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_0 }
+			}
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = { value = 1 }
+	}
+
+	# --- Tier 1: Protimesis -------------------------------------------------
+	basileus_agrarian_law_1 = {
+		modifier = {
+			# First step of centralisation (right of pre-emption): mild crown control
+			# and development gains; the dynatoi begin to chafe.
+			powerful_vassal_opinion = -5
+			barons_and_minor_landholders_opinion = -5
+			monthly_treasury_from_vassals = -0.15
+			monthly_county_control_growth_add = 0.025
+			development_growth_factor = 0.02
+			men_at_arms_maintenance = -0.05
+			domicile_build_gold_cost = -0.10
+			domicile_monthly_influence_mult = 0.10
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_1 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_1 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = minor_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = { ai_has_cautious_personality = yes }
+				add = 1
+			}
+		}
+	}
+
+	# --- Tier 2: Expand the Rights of the Peasantry (req. bureaucracy 2) -----
+	basileus_agrarian_law_2 = {
+		modifier = {
+			# Restoration of the free peasantry: the crown reclaims its tax and
+			# soldier base — more levies, development, control, popular support and
+			# crown income; the dynatoi lose ground.
+			powerful_vassal_opinion = -5
+			barons_and_minor_landholders_opinion = -10
+			county_opinion_add = 5
+			monthly_treasury_from_liege_mult = 0.05
+			levy_size = 0.10
+			monthly_county_control_growth_add = 0.10
+			development_growth_factor = 0.10
+			domicile_build_gold_cost = -0.05
+			domicile_monthly_influence_mult = 0.05
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_2 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_2 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = medium_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = {
+					ai_has_cautious_personality = yes
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+				add = 1
+			}
+		}
+	}
+
+	# --- Tier 3: Allelengyon / Allelengium (req. bureaucracy 3) --------------
+	basileus_agrarian_law_3 = {
+		modifier = {
+			# Peak centralisation (the dynatoi cover the poor's tax arrears): the
+			# richest, most controlling, most developed crown with the largest
+			# free-peasant levy and strong popular support — but a furious magnate
+			# class and a costlier professional state (estates no longer subsidised).
+			powerful_vassal_opinion = -10
+			barons_and_minor_landholders_opinion = -10
+			county_opinion_add = 10
+			monthly_treasury_from_liege_mult = 0.15
+			levy_size = 0.15
+			monthly_county_control_growth_add = 0.15
+			development_growth_factor = 0.20
+			men_at_arms_maintenance = 0.05
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_3
+					has_realm_law = imperial_bureaucracy_3
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_3 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_3
+					has_realm_law = imperial_bureaucracy_3
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_agrarian_law_3 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = major_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = {
+					has_realm_law = imperial_bureaucracy_3
+					ai_has_cautious_personality = yes
+				}
+				add = 1
+			}
+		}
+	}
+}

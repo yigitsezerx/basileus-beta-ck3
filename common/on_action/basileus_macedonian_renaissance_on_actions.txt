@@ -1,0 +1,86 @@
+﻿# =====================================================================
+# BASILEUS — THE MACEDONIAN RENAISSANCE: succession tracker + initiation.
+# ---------------------------------------------------------------------
+# Tracks the consecutive same-dynasty holders of e_byzantium (a count + the
+# reigning dynasty) so the capstone can gate on continuity. A yearly pulse fires
+# the single capstone event once the realm qualifies (once per game).
+# on_action lists MERGE across files, so these sub-lists add to the shared hooks.
+# =====================================================================
+
+# --- Seed the streak at game start from the current e_byzantium holder. ---
+on_game_start = {
+	on_actions = {
+		basileus_macren_setup
+	}
+}
+basileus_macren_setup = {
+	effect = {
+		if = {
+			limit = { exists = title:e_byzantium.holder }
+			set_global_variable = { name = basileus_macren_streak_count  value = 1 }
+			title:e_byzantium.holder = {
+				if = {
+					limit = { exists = dynasty }
+					set_global_variable = { name = basileus_macren_streak_dynasty  value = dynasty }
+				}
+				set_global_variable = { name = basileus_macren_last_holder  value = this }
+			}
+		}
+	}
+}
+
+# --- Track each new e_byzantium holder (root = the new holder). ---
+on_title_gain = {
+	on_actions = {
+		basileus_macren_emperor_track
+	}
+}
+basileus_macren_emperor_track = {
+	trigger = {
+		scope:title = title:e_byzantium
+		exists = root
+	}
+	effect = {
+		if = {
+			# Same person re-gaining the throne — the streak is unchanged.
+			limit = { global_var:basileus_macren_last_holder ?= this }
+		}
+		else_if = {
+			# Same dynasty, a NEW emperor — extend the streak.
+			limit = {
+				exists = dynasty
+				global_var:basileus_macren_streak_dynasty ?= dynasty
+			}
+			change_global_variable = { name = basileus_macren_streak_count  add = 1 }
+		}
+		else = {
+			# A different dynasty (or first record) — restart the streak.
+			set_global_variable = { name = basileus_macren_streak_count  value = 1 }
+			if = {
+				limit = { exists = dynasty }
+				set_global_variable = { name = basileus_macren_streak_dynasty  value = dynasty }
+			}
+		}
+		set_global_variable = { name = basileus_macren_last_holder  value = root }
+	}
+}
+
+# --- Yearly: raise the renaissance once the realm qualifies (once per game). ---
+yearly_playable_pulse = {
+	on_actions = {
+		basileus_macren_yearly_pulse
+	}
+}
+basileus_macren_yearly_pulse = {
+	trigger = {
+		basileus_macedonian_renaissance_eligible_trigger = yes
+	}
+	effect = {
+		# Claim it once per game, then raise the golden age.
+		add_to_global_variable_list = {
+			name = unavailable_unique_decisions
+			target = flag:basileus_macren_achieved
+		}
+		trigger_event = basileus_macedonian_renaissance.0001
+	}
+}

@@ -1,0 +1,16 @@
+# =====================================================================
+# BASILEUS - override of vanilla bandit_king_modifier
+# (game/common/modifiers/07_ep3_laamp_flavor_modifiers.txt).
+# VERBATIM copy with changes:
+# 1. Adds roman_imperial_government_opinion = -20.
+# =====================================================================
+bandit_king_modifier = {
+	icon = intrigue_mixed
+	martial = 2
+	intrigue = 2
+	feudal_government_opinion = -20
+	clan_government_opinion = -20
+	administrative_government_opinion = -20
+	roman_imperial_government_opinion = -20
+	landless_adventurer_government_opinion = 40
+}

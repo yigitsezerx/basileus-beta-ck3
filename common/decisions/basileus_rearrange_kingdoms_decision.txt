@@ -1,0 +1,574 @@
+# =====================================================================
+# BASILEUS — REARRANGE THE KINGDOMS (all KINGDOM-tier reorganizations)
+# ---------------------------------------------------------------------
+# The single home for KINGDOM-tier de jure reshaping (the strict tier split;
+# duchy-tier merges live in basileus_reorganize_themes_decision). The
+# e_byzantium holder, having fully secured a region, may form a theme-kingdom
+# from its duchies, dissolve rival crowns into one, or restore a lost diadem of
+# the Roman world. One-time per region (locked via the unavailable_unique_decisions
+# global list). Uses CK3's vanilla decision option-list widget.
+#
+# Effects, loc descriptions, regions and lock flags are SHARED with the themes
+# system (basileus_theme_effects.txt / basileus_themes_l_english.yml / regions);
+# only the decision-side wiring lives here. The Anatolia widget is special — it
+# requires the four Anatolian duchy merges first and runs a rename/split/grant
+# event chain.
+# =====================================================================
+
+basileus_rearrange_kingdoms_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+	decision_group_type = roman
+	sort_order = 119
+
+	desc = basileus_rearrange_kingdoms_decision_desc
+	selection_tooltip = basileus_rearrange_kingdoms_decision_tooltip
+
+	is_shown = {
+		is_ruler = yes
+		is_landed = yes
+		OR = {
+			has_title = title:e_byzantium
+			has_title = title:h_roman_empire
+			has_title = title:h_eastern_roman_empire
+		}
+		# At least one kingdom reorganization remains undone.
+		OR = {
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:kingdom_anatolia_rearranged } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_hellas_frontier_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_thrace_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_syria_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_palestina_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_africa_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_aegypt_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_pannonia_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bavaria_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_mauretania_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_italia_reunified } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_francogallia_incorporated } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_spania } }
+		}
+	}
+
+	is_valid = {
+		has_title = title:e_byzantium
+		custom_description = {
+			text = basileus_rearrange_kingdoms_decision_req
+			subject = root
+			# Valid if ANY one kingdom reorganization is formable.
+			OR = {
+				AND = {
+					completely_controls_region = basileus_anatolia_unified_region
+					# The four Anatolian merge themes must be reorganized first. # SHELVED
+					# is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_central_done } # Shelved.
+					# is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_sebasteia_done } # Shelved.
+					# is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_pontos_done } # Shelved.
+					# is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_optimaton_done } # Shelved.
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:kingdom_anatolia_rearranged } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_peloponnese
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_hellas
+					# Hellas requires the Peloponnese theme to be formed first.
+					is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed }
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_hellas_frontier_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_macedonia
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_thrace
+					# Thrace requires the Macedonia theme to be formed first.
+					is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed }
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_thrace_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_syria
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_syria_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_palestina
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_palestina_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_africae
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_africa_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_aegypt
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_aegypt_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_pannonia
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_pannonia_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_bavaria
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bavaria_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_mauretania_2
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_mauretania_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_italia_reunified
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_italia_reunified } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_francogallia
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_francogallia_incorporated } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_northern_iberia
+					completely_controls_region = custom_roman_southern_iberia
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_spania } }
+				}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_imprisoned = no
+		has_regent = no
+	}
+
+	widget = {
+		gui = "decision_view_widget_option_list_generic"
+		controller = decision_option_list_controller
+		decision_to_second_step_button = "CHOOSE_THEME_BUTTON"
+
+		# --- Anatolia: unifies k_nikaea + k_anatolia + k_pontus under k_anatolia ---
+		item = {
+			value = kingdom_anatolia
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:kingdom_anatolia_rearranged } }
+			}
+			is_valid = {
+				completely_controls_region = basileus_anatolia_unified_region
+				# The four Anatolian merge themes (Reorganize the Themes) must be
+				# taken first, so this widget only ever sees the 8 survivor duchies.
+			}
+			current_description = basileus_rearrange_kingdom_anatolia_desc
+			localization = basileus_rearrange_kingdom_anatolia_desc
+			# Placeholder icon (no themes/anatolia.dds yet) — swap when art is ready.
+			icon = "gfx/interface/icons/themes/anatolia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- The Peloponnese ---
+		item = {
+			value = theme_peloponnese
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_peloponnese
+			}
+			current_description = basileus_theme_peloponnese_frontier_desc
+			localization = basileus_theme_peloponnese_frontier_desc
+			icon = "gfx/interface/icons/themes/peloponnese.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Hellas ---
+		item = {
+			value = theme_hellas
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_hellas_frontier_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_hellas
+				# Must reorganize the Peloponnese before Hellas.
+				custom_tooltip = {
+					text = basileus_theme_hellas_requires_peloponnese_tt
+					is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed }
+				}
+			}
+			current_description = basileus_theme_hellas_frontier_desc
+			localization = basileus_theme_hellas_frontier_desc
+			icon = "gfx/interface/icons/themes/hellas.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Macedonia ---
+		item = {
+			value = theme_macedonia
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_macedonia
+			}
+			current_description = basileus_theme_macedonia_frontier_desc
+			localization = basileus_theme_macedonia_frontier_desc
+			icon = "gfx/interface/icons/themes/macedonia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Thrace (elevates d_thrace into the kingdom of Thrace) ---
+		item = {
+			value = theme_thrace
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_thrace_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_thrace
+				# Must reorganize Macedonia before Thrace.
+				custom_tooltip = {
+					text = basileus_theme_thrace_requires_macedonia_tt
+					is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed }
+				}
+			}
+			current_description = basileus_theme_thrace_frontier_desc
+			localization = basileus_theme_thrace_frontier_desc
+			icon = "gfx/interface/icons/themes/thrace.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Syria ---
+		item = {
+			value = theme_syria
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_syria_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_syria
+			}
+			current_description = basileus_theme_syria_frontier_desc
+			localization = basileus_theme_syria_frontier_desc
+			icon = "gfx/interface/icons/themes/syria.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Palestine ---
+		item = {
+			value = theme_palestina
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_palestina_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_palestina
+			}
+			current_description = basileus_theme_palestina_frontier_desc
+			localization = basileus_theme_palestina_frontier_desc
+			icon = "gfx/interface/icons/themes/palestine.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Africa ---
+		item = {
+			value = theme_africa
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_africa_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_africae
+			}
+			current_description = basileus_theme_africa_frontier_desc
+			localization = basileus_theme_africa_frontier_desc
+			icon = "gfx/interface/icons/themes/africa.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Aegypt ---
+		item = {
+			value = theme_aegypt
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_aegypt_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_aegypt
+			}
+			current_description = basileus_theme_aegypt_frontier_desc
+			localization = basileus_theme_aegypt_frontier_desc
+			icon = "gfx/interface/icons/themes/aegypt.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Pannonia (elevates k_pannonia) ---
+		item = {
+			value = theme_pannonia
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_pannonia_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_pannonia
+			}
+			current_description = basileus_theme_pannonia_frontier_desc
+			localization = basileus_theme_pannonia_frontier_desc
+			icon = "gfx/interface/icons/themes/pannonia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Bavaria (merged Raetia + Noricum; consolidates under k_bavaria) ---
+		item = {
+			value = theme_bavaria
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bavaria_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_bavaria
+			}
+			current_description = basileus_theme_bavaria_frontier_desc
+			localization = basileus_theme_bavaria_frontier_desc
+			icon = "gfx/interface/icons/themes/raetia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Mauretania (creates d_caesariensis, elevates k_mauretania) ---
+		item = {
+			value = theme_mauretania
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_mauretania_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_mauretania_2
+			}
+			current_description = basileus_theme_mauretania_frontier_desc
+			localization = basileus_theme_mauretania_frontier_desc
+			icon = "gfx/interface/icons/themes/mauretania.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Italy, Reunified ---
+		item = {
+			value = italia_reunified
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_italia_reunified } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_italia_reunified
+			}
+			current_description = basileus_theme_italia_reunified_frontier_desc
+			localization = basileus_theme_italia_reunified_frontier_desc
+			icon = "gfx/interface/icons/themes/italia_reunified.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Francogallia ---
+		item = {
+			value = francogallia
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_francogallia_incorporated } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_francogallia
+			}
+			current_description = basileus_theme_francogallia_frontier_desc
+			localization = basileus_theme_francogallia_frontier_desc
+			icon = "gfx/interface/icons/themes/francogallia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Spania ---
+		item = {
+			value = spania
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_spania } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_northern_iberia
+				completely_controls_region = custom_roman_southern_iberia
+			}
+			current_description = basileus_theme_spania_frontier_desc
+			localization = basileus_theme_spania_frontier_desc
+			icon = "gfx/interface/icons/themes/spania.dds"
+			ai_chance = { value = 0 }
+		}
+	}
+
+	effect = {
+		# --- Anatolia (special: runs the rename/split/grant event chain) ---
+		hidden_effect = {
+			if = {
+				limit = { scope:kingdom_anatolia = yes }
+				basileus_rearrange_kingdom_anatolia_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_anatolia }
+				# Rename + recolor are handled by the follow-up event.
+				trigger_event = {
+					id = basileus_rearrange_kingdoms.0001
+					days = 1
+				}
+			}
+		}
+		# --- The Peloponnese ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_peloponnese = yes }
+				basileus_form_theme_peloponnese_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_krete }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_peloponnese_frontier_formed
+				}
+			}
+		}
+		# --- Hellas ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_hellas = yes }
+				basileus_form_theme_hellas_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_hellas }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_hellas_frontier_formed
+				}
+			}
+		}
+		# --- Macedonia ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_macedonia = yes }
+				basileus_form_theme_macedonia_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_thessalonika }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_macedonia_frontier_formed
+				}
+			}
+		}
+		# --- Thrace ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_thrace = yes }
+				basileus_form_theme_thrace_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_thrace }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_thrace_formed
+				}
+			}
+		}
+		# --- Syria ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_syria = yes }
+				basileus_form_theme_syria_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_syria }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_syria_formed
+				}
+			}
+		}
+		# --- Palestine ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_palestina = yes }
+				basileus_form_theme_palestina_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_jerusalem }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_palestina_formed
+				}
+			}
+		}
+		# --- Africa ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_africa = yes }
+				basileus_form_theme_africa_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_africa }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_africa_formed
+				}
+			}
+		}
+		# --- Aegypt ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_aegypt = yes }
+				basileus_form_theme_aegypt_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_egypt }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_aegypt_formed
+				}
+			}
+		}
+		# --- Pannonia ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_pannonia = yes }
+				basileus_form_theme_pannonia_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_pannonia }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_pannonia_formed
+				}
+			}
+		}
+		# --- Bavaria (merged Raetia + Noricum) ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_bavaria = yes }
+				basileus_form_theme_bavaria_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_bavaria }
+				# flag is set inside the effect (theme_bavaria_formed)
+			}
+		}
+		# --- Mauretania ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_mauretania = yes }
+				basileus_form_theme_mauretania_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_mauretania }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_mauretania_formed
+				}
+			}
+		}
+		# --- Italia ---
+		hidden_effect = {
+			if = {
+				limit = { scope:italia_reunified = yes }
+				basileus_italia_reunified_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_italy }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:roman_italia_reunified
+				}
+				# Renovatio Imperii capstone event (Belisarius & Narses).
+				trigger_event = {
+					id = basileus_italia.0001
+					days = 2
+				}
+			}
+		}
+		# --- Spania ---
+		hidden_effect = {
+			if = {
+				limit = { scope:spania = yes }
+				basileus_form_theme_spania_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_aragon }
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_andalusia }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:roman_spania
+				}
+			}
+		}
+		# --- Francogallia ---
+		hidden_effect = {
+			if = {
+				limit = { scope:francogallia = yes }
+				basileus_francogallia_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_france }
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:k_aquitaine }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:roman_francogallia_incorporated
+				}
+				# Merge offer + rename are handled by the follow-up event chain.
+				trigger_event = {
+					id = basileus_rearrange_kingdoms.0010
+					days = 1
+				}
+			}
+		}
+	}
+
+	cost = {
+		gold = 200
+		prestige = 100
+		influence = 100
+	}
+
+	ai_potential = { always = no }
+	ai_will_do = { base = 0 }
+}

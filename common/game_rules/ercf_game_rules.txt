@@ -1,0 +1,44 @@
+ercf_greek_culture_name_rule = {
+	default = rhomaios
+	categories = {
+		basileus
+	}
+	
+	rhomaios = {
+	}
+	greek = {
+	}
+}
+
+basileus_ere_colour_rule = {
+	default = basileus_ere_colour_imperial
+	categories = {
+		basileus
+	}
+
+	basileus_ere_colour = {
+	}
+	basileus_ere_colour_tyrian_red = {
+	}
+	basileus_ere_colour_imperial = {
+	}
+	basileus_default_colours = {
+	}
+}
+
+basileus_one_catholic_empire = {
+	categories = { basileus }
+	default = basileus_one_catholic_empire_on
+
+	basileus_one_catholic_empire_off = {}
+	basileus_one_catholic_empire_on  = {}
+}
+
+basileus_imperial_cadet_branches = {
+	categories = { basileus }
+	default = basileus_imperial_cadet_branches_default
+
+	basileus_imperial_cadet_branches_default  = {}
+	basileus_imperial_cadet_branches_reduced  = {}
+	basileus_imperial_cadet_branches_disabled = {}
+}

@@ -1,0 +1,142 @@
+# =====================================================================
+# BASILEUS — Western Roman Empire (titular empire).
+# ---------------------------------------------------------------------
+# Created ONLY by the "Cleave the Empire" decision (split_roman_empire_decision).
+# That decision renames the h_roman_empire hegemony to "Western Roman Empire",
+# grants this empire to the Western Emperor (root), sets it de jure under that
+# hegemony, and re-homes every kingdom in custom_western_roman_hemisphere
+# (EXCEPT k_serbia) directly beneath it — mirroring the Eastern side, where the
+# rest stays under h_eastern_roman_empire and e_byzantium is renamed
+# "Eastern Roman Empire". can_create = no, so it is decision-only.
+# =====================================================================
+e_western_roman_empire = {
+	color = { 122 28 36 }
+
+	capital = c_roma # Rome
+	definite_form = yes
+	can_be_named_after_dynasty = no
+
+	can_create = { always = no }
+}
+
+# =====================================================================
+# BASILEUS — Titular kingdom for the Thrace theme.
+# d_thrace is attached de jure at runtime by basileus_form_theme_thrace_effect
+# (Restructure the Themes decision). Name is culture-dynamic via loc:
+# k_thrace / k_thrace_adj -> [GetPlayer.Custom('GetBasileusThemeThrake*')].
+# =====================================================================
+
+k_thrace = {
+	color = { 120 40 90 }
+
+	capital = c_byzantion   # Constantinople (in d_thrace)
+
+	# Titular — no de jure children defined here; d_thrace is re-parented to
+	# this kingdom at elevation.
+}
+
+# =====================================================================
+# BASILEUS -- Eastern Anatolia (titular kingdom for the Anatolia split).
+# Created at runtime by basileus_split_anatolia_effect (Rearrange the Kingdoms
+# chain): the 9 eastern Anatolian duchies are re-parented here de jure. Color is
+# the old k_pontus tan; both halves are renamed culture-dynamically (West/East
+# Anatolia) at split time. Granted to the emperor, then optionally handed to a
+# candidate via basileus_grant_eastern_anatolia_effect.
+# =====================================================================
+k_eastern_anatolia = {
+	color = { 205 130 85 }
+
+	capital = c_trebizond
+
+	# Titular — no de jure children here; the eastern duchies are re-parented
+	# at split time.
+}
+
+# =====================================================================
+# BASILEUS — Mauretania
+# =====================================================================
+
+d_caesariensis = {
+	color = { 150 110 60 }
+
+	capital = c_tanas
+}
+
+k_mauretania = {
+	color = { 112 25 23 }
+
+	capital = c_algier
+
+	can_create = {
+		rule_title_creation_imperial_power_projection_title_creation_trigger = yes
+	}
+}
+
+# =====================================================================
+# BASILEUS — Noricum theme kingdom (titular).
+# ---------------------------------------------------------------------
+# k_noricum is declared here as a top-level TITULAR kingdom (no de jure
+# children baked in). Its de jure liege (e_byzantium) and de jure children
+# (d_steyermark / d_krain / d_carinthia / d_salzburg + selected counties) are
+# wired up at RUNTIME by basileus_debug_form_theme_noricum
+# (common/scripted_effects/zzz_basileus_debug_effects.txt).
+#
+# A new kingdom TITLE cannot be created from nothing at runtime — it must exist
+# in landed_titles first — hence this static declaration. Coat of arms lives in
+# common/coat_of_arms/coat_of_arms/01_basileus_noricum_coa.txt; name loc in
+# localization/english/basileus_themes_l_english.yml.
+# =====================================================================
+
+k_noricum = {
+	color = { 125 48 44 }
+
+	capital = c_vienna
+
+	cultural_names = {
+		name_list_eastern_roman = k_noricum
+		name_list_greek = cn_norikou
+	}
+}
+
+# =====================================================================
+# BASILEUS — Pannonia theme kingdom (titular).
+# ---------------------------------------------------------------------
+# k_pannonia is declared here as a top-level TITULAR kingdom (no de jure
+# children baked in). Its de jure liege (e_byzantium) and de jure children
+# (d_slavonia / d_somogy / d_gyor and selected counties) are wired up at
+# RUNTIME by basileus_debug_form_theme_pannonia
+# (common/scripted_effects/zzz_basileus_debug_effects.txt), mirroring how the
+# Thrace theme elevates a dormant titular kingdom.
+#
+# A new kingdom TITLE cannot be created from nothing at runtime — it must exist
+# in landed_titles first — hence this static declaration. Coat of arms lives in
+# common/coat_of_arms/coat_of_arms/01_basileus_pannonia_coa.txt; name loc in
+# localization/english/basileus_themes_l_english.yml.
+# =====================================================================
+
+k_pannonia = {
+	color = { 130 77 70 }
+
+	capital = c_visegrad
+}
+
+# =====================================================================
+# BASILEUS — Raetia theme kingdom (titular).
+# ---------------------------------------------------------------------
+# k_raetia is declared here as a top-level TITULAR kingdom (no de jure
+# children baked in). Its de jure liege (e_byzantium) and de jure children
+# (d_tyrol / d_augsburg / d_currezia / d_bavaria, with c_ingolstadt evicted to
+# d_nordgau) are wired up at RUNTIME by basileus_form_theme_raetia_effect
+# (common/scripted_effects/basileus_theme_effects.txt).
+#
+# A new kingdom TITLE cannot be created from nothing at runtime — it must exist
+# in landed_titles first — hence this static declaration. Coat of arms lives in
+# common/coat_of_arms/coat_of_arms/01_basileus_raetia_coa.txt; name loc in
+# localization/english/basileus_themes_l_english.yml.
+# =====================================================================
+
+k_raetia = {
+	color = { 107 37 44 }
+
+	capital = c_augsburg
+}

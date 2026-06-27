@@ -1,0 +1,57 @@
+# =====================================================================
+# THE TWO EMPERORS — opt-in story-cycle start decision.
+# ---------------------------------------------------------------------
+# Byzantine-centric. The Basileus formally disputes the Western (Holy Roman)
+# emperor's claim to the Roman inheritance, opening story_two_emperors_dispute
+# (its on_setup fires basileus_two_emperors.0001, the incoming snub).
+#
+# is_shown explicitly requires that e_hre exists AND has a living holder.
+# Hidden once settled in our favour (global basileus_two_emperors_resolved)
+# or while the dispute is already running.
+# =====================================================================
+
+basileus_dispute_western_emperor_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+	sort_order = 118
+	desc = basileus_dispute_western_emperor_decision_desc
+	selection_tooltip = basileus_dispute_western_emperor_decision_tooltip
+	decision_group_type = roman
+
+	is_shown = {
+		basileus_is_roman_emperor_trigger = yes
+		is_adult = yes
+		# The rival Western emperor must exist on a living throne.
+		exists = title:e_hre
+		exists = title:e_hre.holder
+		# Not already running, and not already settled in our favour.
+		NOT = { any_owned_story = { type = story_two_emperors_dispute } }
+		NOT = { has_global_variable = basileus_two_emperors_resolved }
+	}
+
+	is_valid_showing_failures_only = {
+		is_imprisoned = no
+		has_regent = no
+		has_contagious_deadly_disease_trigger = no
+	}
+
+	is_valid = {
+		# There must be a genuine foreign rival to dispute — not ourselves,
+		# not our own vassal, and a sovereign in his own right.
+		NOT = { title:e_hre.holder = this }
+		NOT = { title:e_hre.holder = { target_is_liege_or_above = root } }
+		title:e_hre.holder = { is_independent_ruler = yes }
+	}
+
+	effect = {
+		create_story = { type = story_two_emperors_dispute }
+	}
+
+	cost = {
+		influence = 150
+	}
+
+	ai_potential = { always = no }
+	ai_will_do = { base = 0 }
+}

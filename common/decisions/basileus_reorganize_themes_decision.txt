@@ -1,0 +1,305 @@
+# =====================================================================
+# BASILEUS — REORGANIZE THE THEMES (duchy-tier reorganizations only)
+# ---------------------------------------------------------------------
+# A multi-option (widget) decision: the e_byzantium holder, having fully
+# secured a frontier region, consolidates it into a historical theme by
+# merging the region's duchies into one surviving DUCHY, renaming it, and
+# destroying the emptied parent duchies. One-time per theme (locked via the
+# unavailable_unique_decisions global list).
+#
+# KINGDOM-tier reorganizations live in basileus_rearrange_kingdoms_decision
+# (the strict tier split). This decision is duchy-tier only.
+#
+# Adding a duchy theme = one item below + one basileus_*_effect +
+# one lock flag + its loc keys.
+# =====================================================================
+
+basileus_reorganize_themes_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+	decision_group_type = roman
+	sort_order = 118
+
+	desc = basileus_reorganize_themes_decision_desc
+	selection_tooltip = basileus_reorganize_themes_decision_tooltip
+
+	is_shown = {
+		is_ruler = yes
+		is_landed = yes
+		OR = {
+			has_title = title:e_byzantium
+			has_title = title:h_roman_empire
+			has_title = title:h_eastern_roman_empire
+		}
+		# At least one duchy theme remains unformed. (Add future themes' flags here.)
+		OR = {
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bulgarian_frontier_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dioclea_formed } }
+			NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dalmatia_formed } }
+			# NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_central_done } } # Shelved.
+			# NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_sebasteia_done } } # Shelved.
+			# NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_pontos_done } } # Shelved.
+			# NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_optimaton_done } } # Shelved.
+		}
+	}
+
+	is_valid = {
+		has_title = title:e_byzantium
+		custom_description = {
+			text = basileus_reorganize_themes_decision_req
+			subject = root
+			# Valid if ANY one duchy theme is formable.
+			OR = {
+				AND = {
+					completely_controls_region = custom_roman_haemimontus
+					completely_controls_region = custom_roman_paristrion
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bulgarian_frontier_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_dioclea
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dioclea_formed } }
+				}
+				AND = {
+					completely_controls_region = custom_roman_dalmatia
+					NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dalmatia_formed } }
+				}
+				#AND = {
+				#	completely_controls_region = custom_roman_croatia
+				#	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_croatia_formed } }
+				#}
+				#AND = {
+				#	completely_controls_region = custom_roman_anatolia_central
+				#	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_central_done } }
+				#}
+				#AND = {
+				#	completely_controls_region = custom_roman_anatolia_sebasteia
+				#	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_sebasteia_done } }
+				#}
+				#AND = {
+				#	completely_controls_region = custom_roman_anatolia_pontos
+				#	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_pontos_done } }
+				#}
+				#AND = {
+				#	completely_controls_region = custom_roman_anatolia_optimaton
+				#	NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_optimaton_done } }
+				#}
+			}
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_imprisoned = no
+		has_regent = no
+	}
+
+	widget = {
+		gui = "decision_view_widget_option_list_generic"
+		controller = decision_option_list_controller
+		decision_to_second_step_button = "CHOOSE_THEME_BUTTON"
+
+		# --- The Bulgarian Frontier: forms Haemimontus + Paristrion together ---
+		item = {
+			value = theme_bulgarian_frontier
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bulgarian_frontier_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_haemimontus
+				completely_controls_region = custom_roman_paristrion
+			}
+			current_description = basileus_theme_bulgarian_frontier_desc
+			localization = basileus_theme_bulgarian_frontier_desc
+			icon = "gfx/interface/icons/themes/bulgaria.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Dioclea ---
+		item = {
+			value = theme_dioclea
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dioclea_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_dioclea
+			}
+			current_description = basileus_theme_dioclea_frontier_desc
+			localization = basileus_theme_dioclea_frontier_desc
+			icon = "gfx/interface/icons/themes/doclea.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Dalmatia ---
+		item = {
+			value = theme_dalmatia
+			is_shown = {
+				NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_dalmatia_formed } }
+			}
+			is_valid = {
+				completely_controls_region = custom_roman_dalmatia
+				completely_controls_region = custom_roman_croatia
+			}
+			current_description = basileus_theme_dalmatia_frontier_desc
+			localization = basileus_theme_dalmatia_frontier_desc
+			icon = "gfx/interface/icons/themes/dalmatia.dds"
+			ai_chance = { value = 0 }
+		}
+		# --- Croatia ---
+		#item = {
+		#	value = theme_croatia
+		#	is_shown = {
+		#		NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_croatia_formed } }
+		#	}
+		#	is_valid = {
+		#		completely_controls_region = custom_roman_croatia
+		#	}
+		#	current_description = basileus_theme_croatia_frontier_desc
+		#	localization = basileus_theme_croatia_frontier_desc
+		#	icon = "gfx/interface/icons/traits/open_terrain_expert.dds"
+		#	ai_chance = { value = 0 }
+		#}
+		# --- Central Anatolia (d_cappadocia + d_charsianon -> d_anatolia) ---
+		#item = {
+		#	value = anatolia_central
+		#	is_shown = {
+		#		NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_central_done } }
+		#	}
+		#	is_valid = {
+		#		completely_controls_region = custom_roman_anatolia_central
+		#	}
+		#	current_description = basileus_theme_anatolia_central_desc
+		#	localization = basileus_theme_anatolia_central_desc
+		#	icon = "gfx/interface/icons/themes/anatolikon.dds"
+		#	ai_chance = { value = 0 }
+		#}
+		## --- Sebasteia (d_mesopotamia -> d_sebasteia) ---
+		#item = {
+		#	value = anatolia_sebasteia
+		#	is_shown = {
+		#		NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_sebasteia_done } }
+		#	}
+		#	is_valid = {
+		#		completely_controls_region = custom_roman_anatolia_sebasteia
+		#	}
+		#	current_description = basileus_theme_anatolia_sebasteia_desc
+		#	localization = basileus_theme_anatolia_sebasteia_desc
+		#	icon = "gfx/interface/icons/themes/sebasteia.dds"
+		#	ai_chance = { value = 0 }
+		#}
+		# --- Pontos (d_chaldia -> d_armeniac, renamed Pontos/Pontus) ---
+		#item = {
+		#	value = anatolia_pontos
+		#	is_shown = {
+		#		NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_pontos_done } }
+		#	}
+		#	is_valid = {
+		#		completely_controls_region = custom_roman_anatolia_pontos
+		#	}
+		#	current_description = basileus_theme_anatolia_pontos_desc
+		#	localization = basileus_theme_anatolia_pontos_desc
+		#	icon = "gfx/interface/icons/themes/pontus.dds"
+		#	ai_chance = { value = 0 }
+		#}
+		## --- Optimaton (d_paphlagonia + d_bucellaria -> d_optimatoi) ---
+		#item = {
+		#	value = anatolia_optimaton
+		#	is_shown = {
+		#		NOT = { is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_anatolia_optimaton_done } }
+		#	}
+		#	is_valid = {
+		#		completely_controls_region = custom_roman_anatolia_optimaton
+		#	}
+		#	current_description = basileus_theme_anatolia_optimaton_desc
+		#	localization = basileus_theme_anatolia_optimaton_desc
+		#	icon = "gfx/interface/icons/themes/optimatoi.dds"
+		#	ai_chance = { value = 0 }
+		#}
+	}
+
+	effect = {
+		# --- The Bulgarian Frontier (Haemimontus + Paristrion) ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_bulgarian_frontier = yes }
+				basileus_form_theme_haemimontus_effect = yes
+				basileus_form_theme_paristrion_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:d_philippopolis }
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:d_turnovo }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_bulgarian_frontier_formed
+				}
+			}
+		}
+		# --- Dioclea ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_dioclea = yes }
+				basileus_form_theme_dioclea_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:d_duklja }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_dioclea_formed
+				}
+			}
+		}
+		# --- Dalmatia ---
+		hidden_effect = {
+			if = {
+				limit = { scope:theme_dalmatia = yes }
+				basileus_form_theme_dalmatia_effect = yes
+				basileus_grant_title_to_root_if_unheld_effect = { TITLE = title:d_dalmatia }
+				add_to_global_variable_list = {
+					name = unavailable_unique_decisions
+					target = flag:theme_dalmatia_formed
+				}
+			}
+		}
+		# --- Croatia ---
+		#hidden_effect = {
+		#	if = {
+		#		limit = { scope:theme_croatia = yes }
+		#		basileus_form_theme_croatia_effect = yes
+		#		add_to_global_variable_list = {
+		#			name = unavailable_unique_decisions
+		#			target = flag:theme_croatia_formed
+		#		}
+		#	}
+		#}
+		## --- Central Anatolia (flag set inside the effect) ---
+		#hidden_effect = {
+		#	if = {
+		#		limit = { scope:anatolia_central = yes }
+		#		basileus_merge_anatolia_central_effect = yes
+		#	}
+		#}
+		## --- Sebasteia ---
+		#hidden_effect = {
+		#	if = {
+		#		limit = { scope:anatolia_sebasteia = yes }
+		#		basileus_merge_anatolia_sebasteia_effect = yes
+		#	}
+		#}
+		## --- Pontos ---
+		#hidden_effect = {
+		#	if = {
+		#		limit = { scope:anatolia_pontos = yes }
+		#		basileus_merge_anatolia_pontos_effect = yes
+		#	}
+		#}
+		## --- Optimaton ---
+		#hidden_effect = {
+		#	if = {
+		#		limit = { scope:anatolia_optimaton = yes }
+		#		basileus_merge_anatolia_optimaton_effect = yes
+		#	}
+		#}
+	}
+
+	cost = {
+		gold = 200
+		prestige = 100
+		influence = 100
+	}
+
+	ai_potential = { always = no }
+	ai_will_do = { base = 0 }
+}

@@ -1,0 +1,37 @@
+﻿# =====================================================================
+# BASILEUS — KEEP REFERENCED HISTORICAL CHARACTERS ALIVE
+# ---------------------------------------------------------------------
+# Pre-867 dead historical figures that later events scope by ID
+# (Tribonian, Jordanes, Cassiodorus, Vigilius, Castalius, Belisarius,
+# Narses) must not be garbage-collected before the events fire.
+#
+# IMPORTANT: make_unprunable placed in the characters' HISTORY files is
+# NOT honored in this build — those characters still get collected during
+# play (only the one anchored early, by becoming an artifact's creator,
+# survived). The reliable method is to apply make_unprunable at RUNTIME,
+# at game start, while every loaded character still exists (before the
+# dead-character garbage collection). This mirrors how vanilla itself
+# only ever uses make_unprunable at runtime (events/test_events,
+# events/war_events), never in history.
+#
+# on_actions lists MERGE across files, so this on_game_start sits
+# alongside the government-setup one without overriding it.
+# =====================================================================
+
+on_game_start = {
+	on_actions = {
+		basileus_keep_referenced_historical_characters
+	}
+}
+
+basileus_keep_referenced_historical_characters = {
+	effect = {
+		if = { limit = { exists = character:9000001 } character:9000001 = { make_unprunable = yes } } # Tribonian
+		if = { limit = { exists = character:9000002 } character:9000002 = { make_unprunable = yes } } # Jordanes
+		if = { limit = { exists = character:9000003 } character:9000003 = { make_unprunable = yes } } # Cassiodorus
+		if = { limit = { exists = character:9000004 } character:9000004 = { make_unprunable = yes } } # Vigilius
+		if = { limit = { exists = character:9000005 } character:9000005 = { make_unprunable = yes } } # Castalius
+		if = { limit = { exists = character:9000006 } character:9000006 = { make_unprunable = yes } } # Belisarius
+		if = { limit = { exists = character:9000007 } character:9000007 = { make_unprunable = yes } } # Narses
+	}
+}

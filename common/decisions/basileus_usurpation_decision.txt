@@ -1,0 +1,76 @@
+# =====================================================================
+# BASILEUS — PROCLAIM YOURSELF EMPEROR (player usurpation)
+# ---------------------------------------------------------------------
+# A PLAYER-ONLY decision (ai_potential = always = no) that lets an ambitious
+# vassal of a Roman emperor short-circuit the usurpation system: take the
+# basileus_usurper trait, gain a claim on the imperial title, and raise a
+# claimant faction immediately — rather than waiting for the five-year roll.
+#
+# Prerequisites are deliberately demanding so it stays a weighty choice:
+#   * You must be a landed vassal whose top liege holds e_byzantium /
+#     h_roman_empire / h_eastern_roman_empire (basileus_is_imperial_roman_court).
+#   * You must be a credible challenger: duke-tier or higher.
+#   * You must have standing: prestige level 2 (Distinguished) or above.
+#   * You must NOT already be your liege's co-emperor (they have their own path).
+# (The effect grants the claim before forming the faction, so no separate
+#  "can create faction" prerequisite is needed — claimant factions require a
+#  claim the pretender only gains at that moment.)
+#
+# Effect: basileus_become_usurper_effect (scripted_effects/basileus_usurper_effects.txt).
+# =====================================================================
+
+basileus_declare_usurpation_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+	decision_group_type = roman
+	sort_order = 90
+
+	desc = basileus_declare_usurpation_decision_desc
+	selection_tooltip = basileus_declare_usurpation_decision_tooltip
+	confirm_text = basileus_declare_usurpation_decision_confirm
+
+	is_shown = {
+		is_ruler = yes
+		is_landed = yes
+		is_independent_ruler = no
+		exists = top_liege
+		top_liege = { basileus_is_imperial_roman_court_trigger = yes }
+		NOT = { has_trait = basileus_usurper }
+	}
+
+	is_valid = {
+		is_adult = yes
+		custom_tooltip = {
+			text = basileus_usurpation_req_powerful_tt
+			highest_held_title_tier >= tier_duchy
+		}
+		custom_tooltip = {
+			text = basileus_usurpation_req_prestige_tt
+			prestige_level >= 2
+		}
+		custom_tooltip = {
+			text = basileus_usurpation_req_not_coemperor_tt
+			NOT = { is_diarch_of_target = top_liege }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_imprisoned = no
+		has_regent = no
+	}
+
+	effect = {
+		custom_tooltip = basileus_declare_usurpation_decision_effect_tt
+		hidden_effect = {
+			basileus_become_usurper_effect = yes
+		}
+	}
+
+	cost = {
+		prestige = 150
+	}
+
+	ai_potential = { always = no }
+	ai_will_do = { base = 0 }
+}

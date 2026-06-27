@@ -1,0 +1,49 @@
+﻿# ============================================================================
+# Imperial Tagma — reconciliation pulse.
+# ----------------------------------------------------------------------------
+# There is no clean engine on_action for "vassal obligation level changed", so
+# we reconcile the standing tagma on a quarterly pulse: if the Megas Domestikos
+# holds the office, sync the actual title men-at-arms to the emperor's chosen
+# size obligation. The reconcile effect is idempotent (only re-seeds on a real
+# mismatch), so this is cheap and simply catches contract-UI size changes.
+# ============================================================================
+
+quarterly_playable_pulse = {
+	on_actions = {
+		basileus_tagma_reconcile_pulse
+	}
+}
+
+basileus_tagma_reconcile_pulse = {
+	effect = {
+		# root = the pulsed playable character (the landless Megas Domestikos
+		# counts as a playable ruler).
+		if = {
+			limit = { has_title = title:k_megas_domestikos }
+			# ── HOLDER VALIDATOR ────────────────────────────────────────────
+			# Council swaps/reassignments do NOT reliably fire on_lose_position,
+			# so an ex-marshal can walk off with the office (community-verified:
+			# swap the Grand Marshal to another seat and he keeps the title).
+			# If the holder no longer sits on the Grand Marshal seat: hand the
+			# office back to the emperor, then pass it to the CURRENT marshal
+			# (the grant effect is scope-safe and works on any current scope).
+			if = {
+				limit = {
+					NOT = { has_council_position = minister_grand_marshal }
+					exists = liege
+					liege = { government_has_flag = government_is_roman_imperial }
+				}
+				basileus_return_tagma_command_effect = yes
+				liege = {
+					random_councillor = {
+						limit = { has_council_position = minister_grand_marshal }
+						basileus_grant_tagma_command_effect = yes
+					}
+				}
+			}
+			else = {
+				basileus_reconcile_tagma_effect = yes
+			}
+		}
+	}
+}

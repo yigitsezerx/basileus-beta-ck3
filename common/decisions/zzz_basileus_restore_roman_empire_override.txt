@@ -1,0 +1,140 @@
+# =====================================================================
+# BASILEUS — override of vanilla restore_roman_empire_decision.
+# ---------------------------------------------------------------------
+# Full copy of game/common/decisions/80_major_decisions_roman.txt's
+# restore_roman_empire_decision, with ONE addition: an extra is_valid
+# requirement that the realm holds at least 75% of the custom_roman_empire_iki
+# region (CK3's list-trigger `percent >=` mechanic). "zzz_" sorts after the
+# vanilla "80_..." file so this definition wins.
+#
+# !! If a patch changes the vanilla decision, re-sync this copy. !!
+# =====================================================================
+
+restore_roman_empire_decision = {
+	picture = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+	desc = restore_roman_empire_decision_desc
+	selection_tooltip = restore_roman_empire_decision_tooltip
+	decision_group_type = roman
+
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 0
+		duchy = 0
+		kingdom = 0
+		empire = 120
+		hegemony = 0
+	}
+
+	is_shown = {
+		is_ruler = yes
+		is_playable_character = yes
+		has_title = title:e_byzantium
+		NOT = { primary_title = title:e_hre }
+		NOT = { primary_title = title:e_italy }
+		NOT = {  #Can only do it once.
+			is_target_in_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:flag_restored_roman_empire
+			}
+		}
+		OR = {
+			government_has_flag = government_is_feudal
+			government_has_flag = government_is_republic
+			government_has_flag = government_is_clan
+			government_allows = administrative
+		}
+	}
+
+	is_valid = {
+		prestige_level >= max_prestige_level
+		restore_roman_empire_decision_religion_culture_trigger = yes
+		# BASILEUS addition: hold at least 75% of the Roman world.
+		custom_description = {
+			text = basileus_restore_rome_iki_control_desc
+			any_county_in_region = {
+				region = custom_roman_empire_iki
+				percent >= 0.75
+				holder = { OR = { this = root  is_vassal_or_below_of = root } }
+			}
+		}
+		completely_controls = title:d_latium
+		completely_controls = title:d_venice
+		completely_controls = title:d_romagna
+		completely_controls = title:d_sicily
+		completely_controls = title:d_genoa
+		completely_controls = title:d_capua
+		completely_controls = title:d_apulia
+		completely_controls = title:d_thrace
+		completely_controls = title:d_antioch
+		completely_controls = title:d_palestine
+		completely_controls = title:d_alexandria
+		completely_controls = title:d_athens
+		completely_controls = title:d_tunis
+		completely_controls = title:d_croatia
+		completely_controls = title:d_thessalonika
+		# BASILEUS addition: every kingdom-tier reorganization (Rearrange the
+		# Kingdoms) must be completed first — the whole Roman world set in order
+		# before its crown is reforged. (custom_description triggers are AND'd.)
+		custom_description = {
+			text = basileus_restore_rome_reorganized_desc
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:kingdom_anatolia_rearranged }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_peloponnese_frontier_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_hellas_frontier_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_macedonia_frontier_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_thrace_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_syria_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_palestina_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_africa_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_aegypt_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_pannonia_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_bavaria_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:theme_mauretania_formed }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_italia_reunified }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_francogallia_incorporated }
+			is_target_in_global_variable_list = { name = unavailable_unique_decisions  target = flag:roman_spania }
+		}
+	}
+
+	is_valid_showing_failures_only = {
+		is_landed = yes
+		is_capable_adult = yes
+		is_imprisoned = no
+		top_liege = this
+	}
+
+	effect = {
+		custom_tooltip = restore_roman_empire_decision_effect_tooltip
+		show_as_tooltip = {
+			create_roman_empire_scripted_effect = yes
+		}
+		if = {
+			limit = {
+				has_ep3_dlc_trigger = yes
+			}
+			trigger_event = ep3_roman_restoration.0100
+		}
+		else = {
+			trigger_event = roman_restoration.0001
+		}
+		hidden_effect = {
+			add_to_global_variable_list = {
+				name = unavailable_unique_decisions
+				target = flag:flag_restored_roman_empire
+			}
+			set_global_variable = {
+				name = flag_restored_roman_empire
+				value = root
+			}
+		}
+	}
+
+	ai_potential = {
+		always = yes
+	}
+
+	ai_will_do = {
+		base = 100
+	}
+}

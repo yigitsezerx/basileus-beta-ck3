@@ -1,0 +1,16 @@
+# =====================================================================
+# BASILEUS — THE TWO EMPERORS — character modifiers.
+# ---------------------------------------------------------------------
+# Awarded when the Western (Holy Roman) emperor concedes precedence to the
+# Basileus in the dispute over the Roman inheritance (diplomacy branch).
+# Permanent standing as the acknowledged senior emperor of Christendom.
+# =====================================================================
+
+basileus_acknowledged_basileus_modifier = {
+	icon = diplomacy_positive
+
+	legitimacy_gain_mult = 0.10
+	monthly_prestige = 0.5
+	courtier_and_guest_opinion = 5
+	vassal_opinion = 5
+}

@@ -1,0 +1,380 @@
+# =====================================================================
+# BASILEUS — IMPERIAL RECONSTRUCTION great project.
+# ---------------------------------------------------------------------
+# A Byzantine analogue of the TGP "Sinicize Area" (minister_project_culture):
+# a duchy-scoped, contribution-funded campaign that Romanises a frontier.
+# On completion every de jure county of the targeted duchy is converted to
+# the reigning Basileus's culture AND faith, gains development and control,
+# and tribal holders are folded into the administrative realm.
+#
+# Cost and construction time scale with the duchy's de jure county count
+# (script value basileus_duchy_de_jure_county_count).
+#
+# Lives in its own file; great-project types merge across files, so this
+# slots in beside the mod's overridden vanilla types without re-overriding.
+# =====================================================================
+
+@msg_completion_effect_generic = "event:/DLC/EP4/SFX/Stingers/China/tgp_mx_sting_finishing_great_project_generic"
+
+basileus_imperial_reconstruction_project = {
+	icon = {
+		reference = "gfx/interface/icons/great_projects/_default.dds"
+	}
+	illustration = {
+		reference = "gfx/interface/illustrations/decisions/ep3_decision_roman_restoration.dds"
+	}
+
+	name = {
+		desc = great_project_type_basileus_imperial_reconstruction
+	}
+
+	is_important = yes
+
+	is_shown = {
+		government_has_flag = government_is_roman_imperial
+		OR = {
+			has_title = title:e_byzantium
+			has_title = title:h_roman_empire
+			has_title = title:h_eastern_roman_empire
+		}
+		# Don't let the AI stockpile more of these than it can usefully run.
+		trigger_if = {
+			limit = { is_ai = yes }
+			NOT = {
+				any_great_project = {
+					count >= 2
+					great_project_type = basileus_imperial_reconstruction_project
+				}
+			}
+		}
+	}
+
+	province_filter = top_realm
+	owner = founder_top_liege_title_owner
+
+	can_start_planning = {
+		# Only one Imperial Reconstruction at a time.
+		NOR = {
+			is_planning_great_project = basileus_imperial_reconstruction_project
+			custom_tooltip = {
+				text = only_single_great_project_type_allowed
+				any_great_project = {
+					great_project_type = basileus_imperial_reconstruction_project
+				}
+			}
+		}
+		is_adult = yes
+		is_independent_ruler = yes
+	}
+
+	is_location_valid = {
+		# The emperor must fully control the de jure duchy he means to rebuild.
+		root.top_liege = { completely_controls = scope:province.duchy }
+		scope:province = {
+			duchy = {
+				# There must be something left to Romanise.
+				custom_tooltip = {
+					text = basileus_reconstruction_has_target_county_tt
+					any_de_jure_county = {
+						OR = {
+							culture != root.top_liege.culture
+							faith != root.top_liege.faith
+						}
+					}
+				}
+				# No other Reconstruction already running in this duchy.
+				custom_tooltip = {
+					text = GREAT_PROJECT_CAN_PLAN
+					NOT = {
+						any_in_de_jure_hierarchy = {
+							tier = tier_barony
+							title_province = {
+								any_great_project_in_province = {
+									great_project_type = basileus_imperial_reconstruction_project
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		scope:owner = {
+			government_has_flag = government_is_roman_imperial
+		}
+	}
+
+	# Cost scales with the duchy's de jure county count.
+	cost = {
+		influence = {
+			value = medium_influence_value
+			multiply = basileus_duchy_de_jure_county_count
+		}
+		treasury_or_gold = {
+			value = great_project_base_starting_cost
+			multiply = 0.2
+			multiply = basileus_duchy_de_jure_county_count
+		}
+	}
+
+	# Construction TIME scales with the counties that still NEED reconstructing
+	# (already-Roman counties are excluded); funded optional contributions speed it up.
+	construction_time = {
+		value = great_project_base_construction_time
+		# Diminishing-returns county weighting (NOT raw county count) so large
+		# duchies no longer balloon toward 40-50 years. See script value comment.
+		multiply = basileus_reconstruction_time_factor
+		# BASILEUS time tuning — overall speed knob. At 0.50 the base pacing is
+		# ~7.5 yrs for a small duchy and ~17 yrs for a 12-county one before any
+		# contributions. Lower = faster, higher = slower.
+		multiply = 0.50
+		scope:great_project = {
+			every_contribution = {
+				limit = {
+					contribution_is_funded = yes
+					NOT = { contribution_id = imperial_survey }
+				}
+				subtract = 280
+			}
+		}
+		multiply = common_great_project_construction_time_multiplier_value
+		# Absolute ceiling: even a huge, wholly-foreign duchy with zero
+		# contributions can never drag past 25 years (9125 days).
+		max = 9125
+	}
+
+	contributor_cooldown = standard_contributor_cooldown_value
+
+	allowed_contributor_filter = {
+		owner = yes
+		vassals = yes
+		top_liege = yes
+	}
+
+	invite_interaction = request_great_project_contribution_interaction
+
+	on_plan_build = {}
+
+	on_start_build = {
+		scope:owner = {
+			add_legitimacy_effect = { LEGITIMACY = minor_legitimacy_gain }
+		}
+	}
+
+	on_complete = {
+		# "On Project Completed" description: in the planning UI no location is
+		# chosen yet (no scope:province), so the real per-county effects below
+		# render nothing — describe the payoff with a custom tooltip instead.
+		if = {
+			limit = { NOT = { exists = scope:province } }
+			custom_tooltip = basileus_imperial_reconstruction_effect_desc
+		}
+		scope:owner ?= {
+			send_interface_toast = {
+				type = event_generic_neutral_text
+				title = great_project_completed_msg_t
+				left_icon = scope:owner
+				right_icon = scope:province.county
+				desc = basileus_imperial_reconstruction_complete_desc
+			}
+		}
+		# Romanise every de jure county of the targeted duchy.
+		scope:province ?= {
+			duchy = {
+				every_de_jure_county = {
+					basileus_reconstruct_county_effect = yes
+				}
+			}
+		}
+		# A minister who carried it out is rewarded with influence.
+		scope:founder ?= {
+			if = {
+				limit = {
+					tgp_is_any_minister = yes
+					is_alive = yes
+				}
+				change_influence = minister_influence_gain_value
+			}
+		}
+	}
+
+	on_cancel = {
+		scope:owner = {
+			add_prestige = major_prestige_loss
+			change_influence = major_influence_loss
+		}
+		every_contribution = {
+			limit = { contribution_is_funded = yes }
+			contributor = {
+				if = {
+					limit = {
+						this != scope:owner
+						this != scope:founder
+					}
+					add_to_list = contributors_to_disappoint
+				}
+			}
+		}
+		every_in_list = {
+			list = contributors_to_disappoint
+			add_opinion = {
+				modifier = wasted_our_efforts
+				target = scope:owner
+				opinion = -30
+			}
+		}
+	}
+
+	project_contributions = {
+		# Required: the logothete's survey of the land and its people.
+		imperial_survey = {
+			is_required = yes
+
+			contributor_is_valid = {}
+
+			cost = {
+				treasury_or_gold = {
+					value = great_project_base_contribution_cost
+					multiply = 0.5
+				}
+			}
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = major
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 6
+				duchy = 6
+				kingdom = 3
+				empire = 3
+				hegemony = 3
+			}
+			ai_will_do = { value = 1000 }
+		}
+
+		# Optional: settlers and labour to repopulate and rebuild.
+		settlers = {
+			is_required = no
+
+			contributor_is_valid = { highest_held_title_tier > tier_barony }
+
+			cost = { treasury_or_gold = great_project_base_contribution_cost }
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 12
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = { value = 100 }
+		}
+
+		# Optional: clergy to shepherd the new faithful.
+		clergy = {
+			is_required = no
+
+			contributor_is_valid = { highest_held_title_tier > tier_barony }
+
+			cost = { piety = medium_piety_value }
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 12
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = { value = 80 }
+		}
+
+		# Optional: roads, bridges, and aqueducts to knit the province together.
+		public_works = {
+			is_required = no
+
+			contributor_is_valid = { highest_held_title_tier > tier_barony }
+
+			cost = { treasury_or_gold = great_project_base_contribution_cost }
+
+			contributor_cooldown = individual_contribution_cooldown_value
+
+			on_complete = {
+				great_project_reward_contribution_completion_notification_effect = {
+					LEVEL = minor
+					NON_OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+					OWNER_REWARD_EFFECT = great_project_reward_contribution_completion_null
+				}
+			}
+			on_contribution_funded = {
+				great_project_notify_contribution = yes
+			}
+
+			ai_check_interval_by_tier = {
+				barony = 0
+				county = 12
+				duchy = 12
+				kingdom = 6
+				empire = 6
+				hegemony = 6
+			}
+			ai_will_do = { value = 90 }
+		}
+	}
+
+	ai_target_quick_trigger = {
+		adult = yes
+		rank = county
+	}
+	ai_check_interval_by_tier = {
+		barony = 0
+		county = 6
+		duchy = 3
+		kingdom = 1
+		empire = 1
+		hegemony = 1
+	}
+	ai_will_do = { value = 100 }
+
+	completion_sound_effect = @msg_completion_effect_generic
+}

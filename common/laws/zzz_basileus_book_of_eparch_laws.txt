@@ -1,0 +1,315 @@
+# =====================================================================
+# BASILEUS — THE BOOK OF THE EPARCH (Imperial Commerce Legislation)
+# ---------------------------------------------------------------------
+# A 4-tier, mutually-exclusive imperial realm law modelling the regulation
+# of Constantinople's guilds and trade, enforced by the Eparch of the City
+# (Leo VI's c.912 Eparchikon Biblion):
+#   0  Free Markets                  (decentralised baseline; default)
+#   1  The Guilds                    (Systemata / Collegia — chartered guilds)
+#   2  The Book of the Eparch        (Eparchikon Biblion — full regulation)
+#   3  Imperial Commercial Monopoly  (Basilikon Kommerkion — state monopoly)
+#
+# The arc trades a merchant-friendly, cheap-to-build baseline (happy guild
+# vassals, organic capital growth) for an ever more centralised commercial
+# state (crown trade tax, control, capital development, popular support) that
+# antagonises the guild/townsfolk magnates and raises private building costs.
+#
+# Exclusive to roman_imperial_government (gated by government_is_roman_imperial).
+# flag = admin_law -> appears in the Realm > Laws panel. cumulative = no -> the
+# tiers are mutually exclusive. Mirrors basileus_agrarian_law verbatim in
+# structure: prestige + influence pass_cost, shared admin_law_cooldown, vassal
+# cascade, imperial-bureaucracy gating on the harsher tiers. Shares the custom
+# basileus_imperial_land_law section flag so it sits in the same Laws-panel
+# section as the agrarian law ("Imperial Legislation").
+# =====================================================================
+
+basileus_eparchic_law = {
+	default = basileus_eparchic_law_0
+	cumulative = no
+	flag = admin_law
+	# Custom flag: pulls this group into the shared custom section of the Laws
+	# panel (see gui/window_my_realm.gui), alongside the agrarian law.
+	flag = basileus_imperial_land_law
+
+	# --- Tier 0: Free Markets (default, free) -------------------------------
+	basileus_eparchic_law_0 = {
+		modifier = {
+			# Decentralised baseline: private merchants and guilds run trade —
+			# happy commercial vassals, organic capital growth, cheap building,
+			# but no crown trade tax or control bonus.
+			parochial_opinion = 10
+			character_capital_county_monthly_development_growth_add = 0.1
+			build_gold_cost = -0.05
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_0 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_0 }
+			}
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = { value = 1 }
+	}
+
+	# --- Tier 1: The Guilds -------------------------------------------------
+	basileus_eparchic_law_1 = {
+		modifier = {
+			# Chartered guilds (systemata): first step of regulation — modest
+			# crown trade tax, control and capital growth; merchants still content.
+			parochial_opinion = 5
+			tax_mult = 0.05
+			character_capital_county_monthly_development_growth_add = 0.25
+			monthly_county_control_growth_add = 0.025
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_1 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_1 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = minor_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = { ai_has_cautious_personality = yes }
+				add = 1
+			}
+		}
+	}
+
+	# --- Tier 2: The Book of the Eparch (req. bureaucracy 2) ----------------
+	basileus_eparchic_law_2 = {
+		modifier = {
+			# Full regulation (Eparchikon Biblion): the well-run commercial state
+			# — strong crown trade tax, control and capital growth, fair prices win
+			# popular support; the guild magnates begin to chafe.
+			parochial_opinion = -5
+			county_opinion_add = 5
+			tax_mult = 0.10
+			character_capital_county_monthly_development_growth_add = 0.50
+			monthly_county_control_growth_add = 0.05
+			build_gold_cost = 0
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_2 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_2 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = medium_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = {
+					ai_has_cautious_personality = yes
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+				add = 1
+			}
+		}
+	}
+
+	# --- Tier 3: Imperial Commercial Monopoly (req. bureaucracy 3) ----------
+	basileus_eparchic_law_3 = {
+		modifier = {
+			# State monopoly (Basilikon Kommerkion): peak crown trade tax and
+			# control, fair prices still please the townsfolk — but heavy-handed
+			# monopoly enrages the guild magnates, raises private building costs,
+			# and stifles even capital growth.
+			parochial_opinion = -10
+			county_opinion_add = 5
+			tax_mult = 0.3
+			character_capital_county_monthly_development_growth_add = 1
+			monthly_county_control_growth_add = 0.1
+			build_gold_cost = 0.15
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_3
+					has_realm_law = imperial_bureaucracy_3
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_3 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_3
+					has_realm_law = imperial_bureaucracy_3
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_eparchic_law_3 }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = major_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			if = {
+				limit = {
+					has_realm_law = imperial_bureaucracy_3
+					ai_has_cautious_personality = yes
+				}
+				add = 1
+			}
+		}
+	}
+}

@@ -1,0 +1,47 @@
+﻿# ============================================================================
+# Appointment-succession title law for k_megas_domestikos.
+# ----------------------------------------------------------------------------
+# Modelled on TFE's roman_imperial_grand_marshal_appointment_succession_law.
+# This makes the Tagma command title NON-hereditary: on the holder's death it
+# does NOT pass to a blood heir but returns to the emperor's appointment pool,
+# so the office (and its standing army) persists as an institution rather than
+# becoming a dynastic possession. Added at runtime once the title is granted.
+#
+# IMPORTANT: title succession laws MUST live inside the `title_succession_laws`
+# group block (the engine extends the vanilla group; do not declare at top level).
+# ============================================================================
+
+title_succession_laws = {
+	basileus_tagma_appointment_succession_law = {
+		can_have = {
+			government_has_flag = government_is_roman_imperial
+		}
+		can_pass = {
+			always = no
+		}
+		can_title_have = {
+			this = title:k_megas_domestikos
+		}
+		can_realm_have = {
+			always = no
+		}
+		can_remove_from_title = {
+			custom_tooltip = {
+				text = celestial_ministry_appointment_cannot_remove_desc
+				always = no
+			}
+		}
+		succession = {
+			order_of_succession = appointment
+			appointment_type = basileus_tagma_commander
+			# NOTE: gender_law is NOT a valid field in a title_succession_laws
+			# block (the engine only reads it inside the realm-level
+			# succession_gender_laws group) and is silently ignored here. The
+			# Megas Domestikos male-only bar lives in the appointment_type's
+			# candidate_score instead (see basileus_tagma_commander).
+		}
+		modifier = {
+		}
+		flag = appointment_type_succession
+	}
+}

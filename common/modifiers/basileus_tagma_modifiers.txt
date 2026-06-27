@@ -1,0 +1,33 @@
+# =====================================================================
+# BASILEUS — Imperial Tagma upkeep modifiers (applied to the EMPEROR).
+# ---------------------------------------------------------------------
+# The standing tagma is free for its landless AI office-holder (engine
+# necessity — see the contract's men_at_arms_maintenance = -1.0), so the real
+# fiscal/political cost of maintaining a professional army sits with the top
+# liege who commands it. One modifier per Imperial Bureaucracy tier; the
+# reconcile pulse keeps exactly the matching one applied to the emperor.
+# =====================================================================
+
+basileus_tagma_upkeep_0 = {
+	icon = byzantine_eagle_mixed
+	monthly_income = -0.02
+	monthly_influence = -0.2
+}
+
+basileus_tagma_upkeep_1 = {
+	icon = byzantine_eagle_mixed
+	monthly_income = -0.04
+	monthly_influence = -0.4
+}
+
+basileus_tagma_upkeep_2 = {
+	icon = byzantine_eagle_mixed
+	monthly_income = -0.06
+	monthly_influence = -0.6
+}
+
+basileus_tagma_upkeep_3 = {
+	icon = byzantine_eagle_mixed
+	monthly_income = -0.08
+	monthly_influence = -0.8
+}

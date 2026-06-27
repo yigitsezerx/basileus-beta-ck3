@@ -1,0 +1,204 @@
+# =====================================================================
+# BASILEUS — ROMAN IMPERIAL GOVERNMENT ATTACHMENT
+# ---------------------------------------------------------------------
+# The whole imperial administration runs on roman_imperial_government:
+#   * the holder of e_byzantium / h_roman_empire / h_eastern_roman_empire, AND
+#   * every ADMINISTRATIVE-government vassal beneath them, through the entire
+#     realm hierarchy.
+# Feudal / clan / tribal / theocratic / etc. vassals keep their own government —
+# we only convert characters already on administrative_government (governors),
+# since roman_imperial_government IS administrative under the hood.
+#
+# Maintained at game start AND on the fly:
+#   * on_game_start    — initial sweep of current imperial realms.
+#   * on_title_gain    — a new imperial holder (converts self + whole admin tree),
+#                        or a freshly-appointed governor in an imperial realm.
+#   * on_vassal_gained — an administrative lord absorbed into an imperial realm
+#                        (conquest / swearing fealty) without gaining a title.
+# on_actions lists MERGE across files, so these do not override the existing
+# ERCF / patriarch on_title_gain handlers.
+#
+# (The convert-self-and-admin-subtree logic is inlined in each handler rather
+#  than a scripted effect, because scripted effects cannot be defined in an
+#  on_action file.)
+# =====================================================================
+
+on_game_start = {
+	on_actions = {
+		basileus_roman_imperial_government_setup
+	}
+}
+
+on_title_gain = {
+	on_actions = {
+		basileus_roman_imperial_government_on_gain
+	}
+}
+
+on_vassal_gained = {
+	on_actions = {
+		basileus_roman_imperial_government_vassal_gained
+	}
+}
+
+# A character's government CHANGED (e.g. demanded into administrative governance,
+# which vanilla sets to plain administrative_government). If they now sit on
+# administrative_government under an imperial top liege, fold them into
+# roman_imperial_government. on_government_change is vanilla-owned (it has its own
+# effect block), so we MUST register via the on_actions sub-list, not a direct
+# effect block (which would be silently discarded).
+on_government_change = {
+	on_actions = {
+		basileus_roman_imperial_government_on_change
+	}
+}
+
+# Game-start sweep of every current imperial realm.
+basileus_roman_imperial_government_setup = {
+	effect = {
+		every_ruler = {
+			limit = {
+				OR = {
+					has_title = title:e_byzantium
+					has_title = title:h_roman_empire
+					has_title = title:h_eastern_roman_empire
+				}
+			}
+			# The emperor themselves (whatever their current admin-family government).
+			if = {
+				limit = { NOT = { has_government = roman_imperial_government } }
+				change_government = roman_imperial_government
+			}
+			# Imperial default realm laws — applied ONCE per realm (guarded on the
+			# imperial title; never re-stamped on succession, never downgraded).
+			basileus_initialize_imperial_laws_effect = yes
+			# All administrative vassals beneath them.
+			every_vassal_or_below = {
+				limit = { has_government = administrative_government }
+				change_government = roman_imperial_government
+			}
+		}
+		# Clean up any stuck admin law cooldown variables on startup
+		every_playable_character = {
+			if = {
+				limit = {
+					has_variable = admin_law_cooldown
+				}
+				remove_variable = admin_law_cooldown
+			}
+		}
+	}
+}
+
+# Title gained: either an imperial title (convert holder + whole admin tree) or a
+# governor's title inside an imperial realm (convert the new holder + their tree).
+# (root = new holder, scope:title = the gained title.)
+basileus_roman_imperial_government_on_gain = {
+	trigger = {
+		OR = {
+			scope:title = title:e_byzantium
+			scope:title = title:h_roman_empire
+			scope:title = title:h_eastern_roman_empire
+			# A freshly-landed holder somewhere in an imperial realm.
+			AND = {
+				exists = top_liege
+				top_liege = {
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					scope:title = title:e_byzantium
+					scope:title = title:h_roman_empire
+					scope:title = title:h_eastern_roman_empire
+				}
+			}
+			# Imperial holder: convert self + whole administrative subtree.
+			if = {
+				limit = { NOT = { has_government = roman_imperial_government } }
+				change_government = roman_imperial_government
+			}
+			# Imperial default realm laws — applied ONCE per realm (guarded on the
+			# imperial title; never re-stamped on succession, never downgraded).
+			basileus_initialize_imperial_laws_effect = yes
+			every_vassal_or_below = {
+				limit = { has_government = administrative_government }
+				change_government = roman_imperial_government
+			}
+		}
+		else = {
+			# New administrative governor in an imperial realm: convert self + subtree.
+			if = {
+				limit = { has_government = administrative_government }
+				change_government = roman_imperial_government
+			}
+			every_vassal_or_below = {
+				limit = { has_government = administrative_government }
+				change_government = roman_imperial_government
+			}
+		}
+	}
+}
+
+# A new vassal joined a realm. If that vassal now sits under an imperial top
+# liege, fold them (and their administrative sub-vassals) into the government.
+# (scope:vassal = the newly-gained vassal.)
+basileus_roman_imperial_government_vassal_gained = {
+	trigger = {
+		scope:vassal = {
+			has_government = administrative_government
+			exists = top_liege
+			top_liege = {
+				OR = {
+					has_title = title:e_byzantium
+					has_title = title:h_roman_empire
+					has_title = title:h_eastern_roman_empire
+				}
+			}
+		}
+	}
+	effect = {
+		scope:vassal = {
+			change_government = roman_imperial_government
+			every_vassal_or_below = {
+				limit = { has_government = administrative_government }
+				change_government = roman_imperial_government
+			}
+		}
+	}
+}
+
+# root = the character whose government just changed. Catches the "Demand
+# Administrative Governance" interaction (and any other change_government to
+# administrative) for someone already inside an imperial realm.
+# Re-firing is harmless: after conversion has_government is roman_imperial, so
+# the trigger fails and it stops (no loop).
+basileus_roman_imperial_government_on_change = {
+	trigger = {
+		has_government = administrative_government
+		exists = top_liege
+		top_liege = {
+			OR = {
+				has_title = title:e_byzantium
+				has_title = title:h_roman_empire
+				has_title = title:h_eastern_roman_empire
+			}
+		}
+	}
+	effect = {
+		change_government = roman_imperial_government
+		every_vassal_or_below = {
+			limit = { has_government = administrative_government }
+			change_government = roman_imperial_government
+		}
+	}
+}
+

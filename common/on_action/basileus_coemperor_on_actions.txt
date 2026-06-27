@@ -1,0 +1,144 @@
+###########################################################
+# BASILEUS — CO-EMPEROR TRAITS (hooks)
+# Extends the vanilla diarchy / title on_actions. IMPORTANT: vanilla OWNS the
+# `effect` block on these built-in on_actions (on_entered_diarchy, on_left_diarchy,
+# on_diarch_change, on_title_gain, on_title_lost), so a direct `effect = {}` here
+# would be SILENTLY DISCARDED. Only `on_actions = { ... }` sub-lists merge across
+# files — so every hook below registers a named, mod-owned on_action whose effect
+# DOES run. Effects live in scripted_effects/basileus_coemperor_effects.txt.
+###########################################################
+
+on_entered_diarchy = {
+	on_actions = { basileus_coemperor_on_entered_diarchy }
+}
+
+on_left_diarchy = {
+	on_actions = { basileus_coemperor_on_left_diarchy }
+}
+
+on_diarch_change = {
+	on_actions = { basileus_coemperor_on_diarch_change }
+}
+
+on_title_gain = {
+	on_actions = { basileus_coemperor_on_title_gain }
+}
+
+on_title_lost = {
+	on_actions = { basileus_coemperor_on_title_lost }
+}
+
+yearly_global_pulse = {
+	on_actions = { basileus_coemperor_yearly_reconcile }
+}
+
+# =====================================================================
+# Handlers (mod-owned custom on_actions — their `effect` blocks run).
+# =====================================================================
+
+# Diarchy just created. root = liege (senior); diarch = junior.
+# Reconcile now AND again next tick (the co_emperorship diarchy parameters can
+# apply one tick after this fires, so the synchronous check can miss them).
+basileus_coemperor_on_entered_diarchy = {
+	effect = {
+		basileus_reconcile_coemperor_traits_effect = yes
+		trigger_event = { id = basileus_coemperor.0001 days = 0 }
+	}
+}
+
+# Diarchy ended. root = former liege; scope:old_diarch = former junior.
+# We DON'T strip synchronously: on a senior's death the diarchy may end either
+# before or after the heir gains the title, so we resolve next tick once the
+# dust settles. The former liege reconciles (keeps senior only if still reigning);
+# the former junior resolves their fate (ascended -> senior, else drop junior).
+basileus_coemperor_on_left_diarchy = {
+	effect = {
+		if = {
+			limit = { is_alive = yes }
+			trigger_event = { id = basileus_coemperor.0001 days = 0 }
+		}
+		scope:old_diarch ?= {
+			if = {
+				limit = { is_alive = yes }
+				trigger_event = { id = basileus_coemperor.0002 days = 0 }
+			}
+		}
+	}
+}
+
+# Diarch swapped. root = liege; scope:old_diarch = previous junior; diarch = new junior.
+basileus_coemperor_on_diarch_change = {
+	effect = {
+		scope:old_diarch ?= {
+			basileus_strip_junior_emperor_trait_effect = yes
+		}
+		basileus_reconcile_coemperor_traits_effect = yes
+		trigger_event = { id = basileus_coemperor.0001 days = 0 }
+	}
+}
+
+# A co-emperor who inherits/seizes an imperial title becomes the new senior
+# emperor, and the previous holder sheds the senior trait. root = new holder;
+# scope:previous_holder = the old holder (may be dead).
+basileus_coemperor_on_title_gain = {
+	effect = {
+		if = {
+			limit = { basileus_is_imperial_roman_court_trigger = yes }
+			# The ascending co-emperor is promoted to senior.
+			if = {
+				limit = { has_trait = basileus_junior_emperor }
+				remove_trait = basileus_junior_emperor
+				add_trait = basileus_senior_emperor
+			}
+			# The outgoing holder is no longer the senior emperor.
+			if = {
+				limit = { scope:previous_holder ?= { has_trait = basileus_senior_emperor } }
+				scope:previous_holder = { remove_trait = basileus_senior_emperor }
+			}
+		}
+	}
+}
+
+# A senior emperor who LOSES an imperial title while alive immediately stops
+# being the senior emperor (covers deposition, usurpation, abdication, and
+# title destruction — even when there is no successor to fire on_title_gain).
+# root = the character who lost the title; scope:title = the lost title.
+basileus_coemperor_on_title_lost = {
+	effect = {
+		if = {
+			limit = {
+				is_alive = yes
+				has_trait = basileus_senior_emperor
+				OR = {
+					scope:title = title:e_byzantium
+					scope:title = title:h_roman_empire
+					scope:title = title:h_eastern_roman_empire
+				}
+			}
+			# Now holds no imperial title -> reconcile strips senior (and strips
+			# junior from any lingering diarch).
+			basileus_reconcile_coemperor_traits_effect = yes
+		}
+	}
+}
+
+# Yearly safety net: catches the senior gaining/losing an empire title while a
+# diarchy persists (the diarchy on_actions above don't fire on title changes).
+basileus_coemperor_yearly_reconcile = {
+	effect = {
+		# Strip / refresh anyone who currently carries the senior trait.
+		every_ruler = {
+			limit = { has_trait = basileus_senior_emperor }
+			basileus_reconcile_coemperor_traits_effect = yes
+		}
+		# Grant to newly-qualifying seniors not yet flagged.
+		every_ruler = {
+			limit = {
+				basileus_is_imperial_roman_court_trigger = yes
+				character_has_co_emperorship_trigger = yes
+				NOT = { has_trait = basileus_senior_emperor }
+			}
+			basileus_grant_coemperor_traits_effect = yes
+		}
+	}
+}

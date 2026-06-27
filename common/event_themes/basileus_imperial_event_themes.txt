@@ -1,0 +1,27 @@
+# =====================================================================
+# BASILEUS — custom event theme: "imperial" (Tyrian purple).
+# ---------------------------------------------------------------------
+# Drives the theme-based header BANNER + MEDALLION on any theme-driven
+# event window (vanilla big_event_window or basileus_imperial_big_event,
+# whose theme_header/theme_icon read [EventWindowData.GetThemeHeaderWide]
+# and [EventWindowData.GetThemeIcon]).
+#
+# Use on an event:   theme = basileus_imperial
+# The wide header is authored at 2144x114 (= 2x the 1072x57 header slot);
+# the medallion at 148x148 (scales to the 90x90 icon slot).
+# =====================================================================
+basileus_imperial = {
+	icon = {
+		reference = "gfx/interface/icons/event_types/basileus_eagle_medallion.dds"
+	}
+	header_background = {
+		reference = "gfx/interface/window_event/basileus_event_header_tyrian_purple.dds"
+	}
+	# Fallback background (events normally set their own via override_background).
+	background = {
+		reference = ep3_constantinople
+	}
+	sound = {
+		reference = "event:/SFX/Events/Themes/sfx_event_theme_type_domain"
+	}
+}

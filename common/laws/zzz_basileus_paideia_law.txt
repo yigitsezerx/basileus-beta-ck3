@@ -1,0 +1,316 @@
+# =====================================================================
+# BASILEUS — ENKYKLIOS PAIDEIA (Imperial Education Legislation)
+# ---------------------------------------------------------------------
+# A 3-level, mutually-exclusive imperial realm law modelling Constantine IX
+# Monomachos's 1045/46 restructuring of the Pandidakterion into the first
+# "true" university — two chartered faculties under state-appointed heads:
+#
+#   0  Private Grammarians   (default; letters left to families & the Church)
+#   N  The School of the Laws (Διδασκαλεῖον τῶν Νόμων, under the Nomophylax —
+#                              John Xiphilinos; trains the jurists, judges and
+#                              notaries of the imperial bureaucracy)
+#   P  The Gymnasion          (Γυμνάσιον of philosophy, under the Hypatos ton
+#                              Philosophon — Michael Psellos; Hellenic
+#                              philosophy, rhetoric and the quadrivium)
+#
+# The two faculties were founded TOGETHER, so they are not monastery-vs-academy
+# rivals — they are a FORK of emphasis within the same secular university:
+#   * Law  -> consolidate the STATE: legitimacy, justice/control, steady growth;
+#            mildly secular, so a small clergy cost only.
+#   * Phil -> advance KNOWLEDGE: fast development, innovation and scholarship;
+#            but the revival of "Hellenic" learning enrages the devout (the
+#            theology that had John Italos condemned in 1082) and is costlier.
+#
+# BOTH active faculties are double-gated, so neither can be rushed:
+#   * imperial_bureaucracy_2+ (a mature state), AND
+#   * the Pandidakterion must already be FOUNDED — Constantinople (c_byzantion)
+#     carries pandidakterion_university_modifier, stamped by the existing
+#     refound_pandidakterion_decision (or present at game start). You must build
+#     the university before you can legislate either of its faculties; until
+#     then only Private Grammarians (the default) is available.
+#
+# Exclusive to roman_imperial_government (gated by government_is_roman_imperial).
+# flag = admin_law -> appears in the Realm > Laws panel. cumulative = no -> the
+# levels are mutually exclusive. Shares the custom basileus_imperial_land_law
+# section flag, so it sits in the "Imperial Legislation" section alongside the
+# agrarian and eparchic laws. Structure mirrors basileus_agrarian_law verbatim
+# (prestige + influence pass_cost, shared admin_law_cooldown, vassal cascade).
+# =====================================================================
+
+basileus_paideia_law = {
+	default = basileus_paideia_law_0
+	cumulative = no
+	flag = admin_law
+	# Custom flag: pulls this group into the shared custom section of the Laws
+	# panel (see gui/window_my_realm.gui), alongside the agrarian/eparchic laws.
+	flag = basileus_imperial_land_law
+
+	# --- Level 0: Private Grammarians (default, free) -----------------------
+	basileus_paideia_law_0 = {
+		modifier = {
+			# Letters are left to private grammarians and the Church. The clergy
+			# are content with their customary monopoly; the crown invests nothing
+			# and gains nothing.
+			clergy_opinion = 5
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_0 }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_0 }
+			}
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = { value = 1 }
+	}
+
+	# --- Level N: The School of the Laws (the Nomophylax's faculty) ----------
+	# Double-gated: imperial_bureaucracy_2+ AND the Pandidakterion founded.
+	basileus_paideia_law_nomoi = {
+		modifier = {
+			# The Didaskaleion ton Nomon trains the empire's jurists, judges and
+			# notaries. Imperial authority rests on firmer legal ground, justice
+			# is better kept, and the realm grows steadily — at a modest cost to
+			# the treasury and a little of the clergy's goodwill (the schools are,
+			# after all, secular).
+			development_growth_factor = 0.03
+			legitimacy_gain_mult = 0.05
+			monthly_county_control_growth_add = 0.02
+			# SIGNATURE — Stronger officials: the jurists, judges and notaries the
+			# school trains staff the bureaucracy, so the crown's councillors and
+			# governors serve more loyally. (Philosophy has no such bonus.)
+			councillor_opinion = 10
+			clergy_opinion = -5
+			monthly_treasury_from_vassals = -0.05
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_nomoi }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				# Each gate is wrapped in custom_tooltip — exactly as vanilla
+				# province_war_law does (game/common/laws/02_admininistrative_laws.txt).
+				# The inner triggers STILL enforce: custom_tooltip triggers are evaluated
+				# as part of can_pass. The text only supplies a clean display line,
+				# avoiding the engine's "(BUG: ... missing perspective)" debug text that
+				# bare has_variable / has_county_modifier triggers render in this UI.
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+				# The Pandidakterion must already be FOUNDED — its faculties cannot
+				# be legislated before the university itself stands in Constantinople.
+				custom_tooltip = {
+					text = have_pandidakterion_founded
+					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_nomoi }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = medium_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			# Administrators / just / diligent rulers of a mature state with the
+			# university founded favour the practical school of jurists.
+			if = {
+				limit = {
+					OR = {
+						has_trait = administrator
+						has_trait = just
+						has_trait = diligent
+					}
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
+				}
+				add = 1
+			}
+		}
+	}
+
+	# --- Level P: The Gymnasion (the Hypatos ton Philosophon's faculty) ------
+	# Double-gated: imperial_bureaucracy_2+ AND the Pandidakterion founded.
+	basileus_paideia_law_philosophia = {
+		modifier = {
+			# The Gymnasion revives Hellenic philosophy, rhetoric and the
+			# quadrivium. The realm develops faster, its scholars learn quicker
+			# and innovations come sooner — but the devout bristle at this pagan
+			# learning, the parochial murmur, and the schools must be kept out of
+			# the imperial treasury.
+			development_growth_factor = 0.05
+			# SIGNATURE — Accelerated innovation: the Gymnasion drives the realm's
+			# cultural and intellectual progress — innovations are discovered faster
+			# and new ideas spread (acceptance) more readily. (Law has no such bonus.)
+			cultural_head_fascination_mult = 0.25
+			cultural_acceptance_gain_mult = 0.25
+			monthly_lifestyle_xp_gain_mult = 0.10
+			clergy_opinion = -10
+			parochial_opinion = -5
+			monthly_treasury_from_vassals = -0.05
+		}
+		flag = uses_imperial_bureaucracy
+
+		can_keep = {
+			realm_law_use_imperial_bureaucracy = yes
+			OR = {
+				government_has_flag = government_is_roman_imperial
+				AND = {
+					top_liege = this
+					OR = {
+						has_title = title:e_byzantium
+						has_title = title:h_roman_empire
+						has_title = title:h_eastern_roman_empire
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege = this }
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_philosophia }
+			}
+		}
+
+		can_pass = {
+			government_has_flag = government_is_roman_imperial
+			trigger_if = {
+				limit = { top_liege = this }
+				# custom_tooltip-wrapped gates (see nomoi above): they enforce AND
+				# render clean text instead of the engine's "(BUG: ... missing
+				# perspective)" debug placeholder.
+				custom_tooltip = {
+					text = admin_law_cooldown_desc
+					NOT = { has_variable = admin_law_cooldown }
+				}
+				custom_tooltip = {
+					text = have_bureaucracy_2_or_higher
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+				}
+				custom_tooltip = {
+					text = have_pandidakterion_founded
+					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
+				}
+			}
+			trigger_if = {
+				limit = { top_liege != this }
+				liege = { has_realm_law = basileus_paideia_law_philosophia }
+			}
+		}
+
+		pass_cost = {
+			prestige = { add = admin_law_prestige_cost }
+			influence = { add = major_influence_value }
+		}
+
+		on_pass = {
+			set_variable = { name = admin_law_cooldown years = 5 }
+		}
+
+		ai_will_do = {
+			value = 0
+			# Ambitious / scholarly emperors of a mature state with the schools
+			# already founded embrace the revival of Hellenic learning.
+			if = {
+				limit = {
+					OR = {
+						has_trait = ambitious
+						has_trait = scholar
+					}
+					OR = {
+						has_realm_law = imperial_bureaucracy_2
+						has_realm_law = imperial_bureaucracy_3
+					}
+					title:c_byzantion = { has_county_modifier = pandidakterion_university_modifier }
+				}
+				add = 1
+			}
+		}
+	}
+}

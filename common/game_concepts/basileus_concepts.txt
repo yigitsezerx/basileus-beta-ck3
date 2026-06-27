@@ -1,0 +1,279 @@
+logothetes = {
+	alias = {
+		logothete
+	}
+}
+
+blachernae_palace = {
+	alias = {
+		blachernae
+		palace_of_blachernae
+	}
+}
+
+domestic_schools = {
+	alias = {
+		domesticus_schools
+	}
+}
+
+stratelates = {
+	alias = {
+		master_soldiers
+	}
+}
+
+magister_militum = {
+}
+
+magister_officiorum = {
+	alias = {
+		master_offices
+	}
+}
+
+sakellarios = {
+	alias = {
+		sakellarius
+	}
+}
+
+quaestor = {
+}
+
+eparch = {
+	alias = {
+		eparch_constantinople
+	}
+}
+
+great_palace = {
+	alias = {
+		great_palace_constantinople
+		palace_of_constantinople
+	}
+}
+
+patriarch = {
+}
+
+# Imperial senate institution. Static "Senate" name; tooltip describes the
+# Senate of Magnaura.
+senate = {
+	alias = {
+		synkletos
+		senatus
+		magnaura
+	}
+}
+
+# Dynamic enemy demonym — displayed name resolves via GetEnemyDemonym
+# (Greek "Hagarene" fallback / eastern_roman "Saracen").
+saracen = {
+	alias = {
+		saracens
+		hagarene
+		hagarenes
+	}
+}
+
+praefectus = {
+}
+
+praepositus = {
+	alias = {
+		praepositus_sacri_cubiculi
+	}
+}
+
+symphonia = {
+}
+
+autocrator = {
+	alias = {
+		autocrator
+		autokrator
+	}
+}
+
+constantine_the_great = {
+	alias = {
+		constantine
+		constantine_the_great
+		constantine_i
+	}
+}
+
+isapostolos = {
+	alias = {
+		isapostolos
+		equal_to_the_apostles
+	}
+}
+
+exalted_among_men = {
+	alias = {
+		exalted_among_men
+	}
+	parent = prestige_level
+}
+
+paragon_of_virtue = {
+	alias = {
+		paragon_of_virtue
+	}
+	parent = piety_level
+}
+
+rhomaios = {
+}
+
+triumph = {
+	alias = {
+		triumphs
+	}
+	parent = victory
+}
+
+# Byzantine Greek Concepts
+logothetes_dromou = {
+}
+
+parakoimomenos = {
+}
+
+megas_domestikos = {
+}
+
+logothetes_genikou = {
+}
+
+logothetes_kanikleiou = {
+}
+
+logothetes_praitoriou = {
+}
+
+eparchos = {
+}
+
+domestikos_ton_scholon = {
+}
+
+sakellarios_greek = {
+}
+
+stratopedarches = {
+}
+
+logothetes_ton_sekreton = {
+}
+
+tagmata = {
+	alias = {
+		tagma
+		imperial_tagma
+		imperial_tagmata
+	}
+}
+
+# Pandects and Tribonian
+pandects = {
+	alias = {
+		digest
+	}
+}
+
+tribonian = {
+	alias = {
+		tribonianos
+	}
+}
+
+justinian_the_great = {
+	alias = {
+		justinian_i
+		justinian
+	}
+}
+
+corpus_juris_civilis = {
+}
+
+# Jordanes
+jordanes_the_historian = {
+	alias = {
+		jordanes
+	}
+}
+
+romana_et_getica = {
+	alias = {
+		romana
+		getica
+		romana_getica
+	}
+}
+
+cassiodorus = {
+	alias = {
+		cassiodorus_senator
+	}
+}
+
+struggle_eastern_reconquest_phase_resolve = {
+	parent = struggle_phase
+}
+
+struggle_eastern_reconquest_phase_reconquest = {
+	parent = struggle_phase
+}
+
+struggle_eastern_reconquest_phase_triumph = {
+	parent = struggle_phase
+}
+
+struggle_eastern_reconquest_phase_setback = {
+	parent = struggle_phase
+}
+
+# Macedonian agrarian legislation
+allelengyon = {
+	alias = {
+		allelengion
+		allelengium
+	}
+}
+
+protimesis = {
+	alias = {
+		protimisis
+		pre_emption
+		right_of_pre_emption
+	}
+}
+
+# Book of the Eparch (commerce legislation)
+book_of_the_eparch = {
+	alias = {
+		eparchikon_biblion
+		liber_praefecti
+	}
+}
+
+two_emperor_problem = {
+}
+
+roman_imperial_government = {
+	# Top-level (no parent) + alias, matching celestial_government's structure, so
+	# the engine auto-links the government to this concept for the realm-window
+	# hover tooltip. With parent = government it was a sub-concept and did not link.
+	texture = "gfx/interface/icons/government_types/roman_imperial_government.dds"
+	# roman_imperial_government_i = the icon-alias used by GetGovernmentIcon: the loc
+	# game_concept_roman_imperial_government_i renders the glyph, and "[roman_imperial_government_i|E]"
+	# makes the realm-header gov icon a hoverable concept link (vanilla's pattern).
+	alias = { imperial_autocracy imperial_autocracies roman_imperial_government_i }
+}
+
+basileus = {
+}
