@@ -1,0 +1,43 @@
+# =====================================================================
+# BASILEUS — Spiral Column of Saint (pre-placed decorative landmark at b_athyras).
+# ---------------------------------------------------------------------
+# Standalone custom model (NOT part of a vanilla building atlas), so it uses
+# its own full-size PBR texture set with the generic "standard" mesh shader.
+#
+# Art files (all present in this folder):
+#   arcadius_column.mesh                              (exported via PDX Blender Tools)
+#   basileus_spiral_column_of_saint_diffuse.dds
+#   basileus_spiral_column_of_saint_normal.dds
+#   basileus_spiral_column_of_saint_properties.dds
+#
+# The mesh's object is "Mesh_0" (verified in the .mesh binary) and it carries a
+# single LOD with UVs, so meshsettings.name = "Mesh_0" and no lod_percentages.
+#
+# SIZE is controlled here via "scale". The mod deliberately does NOT ship a
+# special_building_locators.txt override (it would fully replace the file and
+# clobber other map mods' special-building tweaks, e.g. Medieval Arts' Hagia
+# Sophia). The Column sits at Selymbria (vanilla province 3761), whose locator
+# already exists in vanilla/other mods, so position comes from there and only
+# the size needs setting here. Tune "scale" to taste.
+# =====================================================================
+
+pdxmesh = {
+	name = "basileus_spiral_column_of_saint_mesh"
+	file = "arcadius_column.mesh"
+	scale = 1.0
+
+	meshsettings = {
+		name = "Mesh_0"
+		index = 0
+		texture_diffuse = "basileus_spiral_column_of_saint_diffuse.dds"
+		texture_normal = "basileus_spiral_column_of_saint_normal.dds"
+		texture_specular = "basileus_spiral_column_of_saint_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}
+}
+
+entity = {
+	name = "basileus_spiral_column_of_saint_entity"
+	pdxmesh = "basileus_spiral_column_of_saint_mesh"
+}
