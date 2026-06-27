@@ -1,0 +1,14 @@
+# Basileus — text-icon for the Roman Imperial Government (display name
+# "Imperial Autocracy"). Mirrors vanilla's government_type_* texticons in
+# gui/texticons.gui (same 28x28 / offset 0,6 / fontsize 16) but points at our
+# own icon. Referenced by the roman_imperial_government_with_icon loc via
+# @government_type_roman_imperial_government!.
+texticon = {
+	icon = government_type_roman_imperial_government
+	iconsize = {
+		texture = "gfx/interface/icons/government_types/roman_imperial_government.dds"
+		size = { 28 28 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}

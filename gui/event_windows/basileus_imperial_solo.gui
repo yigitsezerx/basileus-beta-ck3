@@ -1,0 +1,492 @@
+﻿# =====================================================================
+# BASILEUS - IMPERIAL SOLO event window (single portrait left, text + options right).
+# A reskinned, NON-overriding copy of vanilla duel_event (window name changed,
+# so real duels are untouched). Byzantine purple & gold tints + the imperial
+# (type_ep3_emperor) event-type icon. Reusable by any character event via:
+#     window = basileus_imperial_solo
+# Shows ONE large portrait (left_portrait) on the left; description + options on the right.
+# Texture/colour lines are marked BASILEUS-RESKIN for easy tweaking.
+# =====================================================================
+
+window = {
+	name = "basileus_imperial_solo"
+	size = { 1240 650 }
+
+	parentanchor = center
+	widgetanchor = center
+	layer = events
+	alpha = 0
+	allow_outside = yes
+
+	datacontext = "[EventWindow.AccessEventWindowData]"
+	
+	using = Event_Window_Debug_EventTools
+	blockoverride "is_event_on_top" {
+		enabled = "[EventWindow.IsOnTop]"
+	}
+	blockoverride "is_event_on_top_close" {
+		trigger_when = "[Not(EventWindow.IsOnTop)]"
+	}
+
+	widget = {
+		visible = "[Not(GameHasMultiplePlayers)]"
+		size = { 100% 100% }
+
+		icon = {
+			visible = "[Not(GetVariableSystem.Exists( 'event_window_mouse_leave'))]"
+			parentanchor = center
+			size = { 200% 200% }
+			alwaystransparent = yes
+			texture = "gfx/interface/component_masks/mask_fade_circle.dds"
+			color = { 0.1 0.1 0.1 1 }
+			alpha = 0
+
+			state = {
+				name = appear
+				trigger_on_create = yes
+				delay = 0.2
+				using = Animation_Curve_Default
+				alpha = 0.6
+				duration = 0.8
+			}
+
+			state = {
+				name = _hide
+				using = Animation_Curve_Default
+				duration = 3
+				alpha = 0
+			}
+		}
+	}
+
+	widget = {
+		size = { 100% 83% }
+		using = Window_Background
+		using = Window_Decoration_Frontend_Flat_Bottom
+		parentanchor = bottom
+	}
+
+	state = {
+		name = show
+		trigger_on_create = yes
+		using = Animation_FadeIn_Standard
+		using = Sound_Panel_Popup_Snapshot
+		duration = 0.7
+
+		on_start = "[GetVariableSystem.Clear( 'event_window_mouse_leave')]"
+
+		start_sound = {
+			soundeffect = "event:/SFX/Events/Panels/sfx_event_panel_large"
+
+			soundparam = {
+				name = StateChange
+				value = 1
+			}
+		}
+	}
+
+	state = {
+		name = _hide
+		using = Animation_FadeOut_Standard
+
+		start_sound = {
+			soundeffect = "event:/MUSIC/Cues/Events/kill_mx_cue"
+		}
+	}
+
+	state = {
+		name = _mouse_hierarchy_leave
+		on_start = "[GetVariableSystem.Set( 'event_window_mouse_leave', 'true' )]"
+	}
+
+	widget = {
+		layoutpolicy_horizontal = expanding
+		size = { 1240 134 }
+
+		icon = {
+			name = "theme_header"
+			parentanchor = center
+			size = { 1200 134 }
+			texture = "gfx/interface/window_duel_event_window/basileus_header_imperial.dds"
+			color = { 1.0 1.0 1.0 1 } # BASILEUS-RESKIN
+
+			modify_texture = {
+				name = overlay
+				texture = "gfx/interface/component_effects/effect_header_blue_shine.dds"
+				blend_mode = colordodge
+				translate_uv = { 0.6 0 }
+			}
+
+			state = {
+				name = right
+				next = left
+
+				duration = 8
+				bezier = { 0.8 0.18 0.96 .05 }
+
+				modify_texture = {
+					name = overlay
+					translate_uv = { -0.6 0 }
+				}
+			}
+
+			state = {
+				name = left
+				next = right
+
+				duration = 0.0
+				delay = 5
+
+				modify_texture = {
+					name = overlay
+					translate_uv = { 0.6 0 }
+				}
+			}
+
+			state = {
+				trigger_on_create = yes
+				name = start
+				next = right
+
+				duration = 0.0
+
+				modify_texture = {
+					name = overlay
+					translate_uv = { 0.6 0 }
+				}
+			}
+		}
+
+		icon = {
+			name = "duel_window_decoration"
+			size = { 1200 134 }
+			parentanchor = center
+			texture = "gfx/interface/window_duel_event_window/basileus_decoration_frame_top_imperial.dds"
+			color = { 1.0 1.0 1.0 1 } # BASILEUS-RESKIN
+		}
+
+		icon = { # BASILEUS-RESKIN: imperial event-type icon
+			name = "imperial_type_icon"
+			parentanchor = top|hcenter
+			position = { 0 3000 }
+			size = { 52 52 }
+			texture = "gfx/interface/icons/event_types/type_ep3_emperor.dds"
+			alwaystransparent = yes
+		}
+		text_single = {
+			name = "title"
+			parentanchor = center
+			fontsize = 29
+			fontsize_min = 16
+			position = { 0 28 }
+			text = "[EventWindowData.GetTitle]"
+			default_format = "#high;glow_color:{0.1,0.1,0.1,1.0}"
+			using = Font_Type_Flavor
+			max_width = 950
+
+			alpha = 0
+
+			background = {
+				using = Background_Area_Dark
+				margin = { 180 0 }
+				margin_top = 5
+				margin_bottom = 20
+				alpha = 0.6
+
+				modify_texture = {
+					texture = "gfx/interface/component_masks/mask_fade_circle.dds"
+					blend_mode = alphaMultiply
+				}
+			}
+
+			state = {
+				name = start
+				trigger_on_create = yes
+				delay = 0.2
+				using = Animation_Curve_Default
+				alpha = 1
+				duration = 0.5
+			}
+		}
+	}
+
+	vbox = {
+		widget = {
+			name = "solo_event_content"
+			layoutpolicy_horizontal = expanding
+			layoutpolicy_vertical = expanding
+
+			event_window_background_widget = {
+				margin = { 40 20 }
+				margin_top = 130
+				blockoverride "event_mask" {
+					modify_texture = {
+						name = mask
+						texture = "gfx/interface/component_masks/mask_fade_horizontal_extended.dds"
+						blend_mode = alphamultiply
+						translate_uv = { 0.4 0 }
+					}
+				}
+				blockoverride "event_picture_properties" {
+					using = Mask_Rough_Edges
+				}
+			}
+
+			# BASILEUS-RESKIN: purple glow, shifted left behind the single portrait
+			icon = {
+				name = "triangle_background"
+				size = { 650 500 }
+				parentanchor = center
+				position = { -260 56 }
+				alpha = 0.3
+				texture = "gfx/interface/window_duel_event_window/background_duel.dds"
+				color = { 0.45 0.12 0.5 1 }
+				modify_texture = {
+					name = mask
+					texture = "gfx/interface/component_masks/triangle_background.dds"
+					blend_mode = alphamultiply
+				}
+			}
+
+			### SINGLE CHARACTER (left = root / left_portrait) ###
+			margin_widget = {
+				name = "characters"
+				parentanchor = bottom
+				size = { 100% 100% }
+				margin = { 40 0 }
+				alpha = 0
+				state = {
+					name = appear
+					trigger_on_create = yes
+					delay = 0.5
+					using = Animation_Curve_Default
+					alpha = 1
+					duration = 0.5
+				}
+				widget = {
+					size = { 100% 100% }
+					scissor = yes
+					widget = {
+						name = "portrait_left"
+						parentanchor = bottom|left
+						position = { 0 0 }
+						size = { 300 500 }
+						allow_outside = no
+						portrait_event_duel = {
+							name = "portrait_left"
+							datacontext = "[EventWindowData.GetPortraitCharacter('left_portrait')]"
+							visible = "[EventWindowData.HasPortraitCharacter('left_portrait')]"
+							parentanchor = bottom|left
+							position = { -60 -18 }
+							size = { 930 500 }
+							blockoverride "portrait_button" {
+								portrait_texture = "[EventWindowData.GetAnimatedEventPortraitTexture('left_portrait', 'camera_event_duel_left', PdxGetWidgetScreenSize(PdxGuiWidget.Self))]"
+								alwaystransparent = "[Not(EventWindowData.ShouldShowPortraitInfo('left_portrait'))]"
+								tooltip_visible = "[EventWindowData.ShouldShowPortraitInfo('left_portrait')]"
+								using = tooltip_ws
+								tooltip_offset = { -150 0 }
+							}
+							blockoverride "highlight_visible" {
+								visible = "[Or(Character.IsHovered, EventWindowData.IsCharacterHighlighted( EventWindowData.GetPortraitCharacter('left_portrait') ))]"
+								position = { -250 0 }
+							}
+							blockoverride "grayscale" {}
+						}
+					}
+				}
+
+				### COA
+				margin_widget = {
+					name = "coa"
+					parentanchor = bottom|left
+					size = { 300 170 }
+					margin_bottom = 30
+					margin_left = 60
+					allow_outside = yes
+
+					flowcontainer = {
+						parentanchor = bottom|hcenter
+						direction = vertical
+						ignoreinvisible = yes
+
+						event_portrait_status_icons_left = {
+							datacontext = "[EventWindowData.GetPortraitCharacter('left_portrait')]"
+							visible = "[EventWindowData.ShouldShowPortraitInfo('left_portrait')]"
+						}
+					}
+				}
+			}
+
+			### EVENT TEXT + OPTIONS (right side, on a darkened readability panel) ###
+			widget = {
+				name = "event_text_box"
+				parentanchor = top|right
+				widgetanchor = top|right
+				position = { -35 170 }
+				size = { 520 470 }
+
+				background = {
+					using = Background_Area_Dark
+					alpha = 0.65
+					margin = { 8 8 }
+					modify_texture = {
+						texture = "gfx/interface/component_masks/mask_fade_circle.dds"
+						blend_mode = alphaMultiply
+					}
+				}
+
+				vbox = {
+					name = "description_and_options"
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					state = {
+						name = appear
+						trigger_on_create = yes
+						delay = 0.2
+						using = Animation_Curve_Default
+						alpha = 1
+						duration = 1.5
+					}
+					hbox = {
+						layoutpolicy_horizontal = expanding
+						layoutpolicy_vertical = expanding
+						margin = { 14 14 }
+						scrollarea = {
+							name = "description_scrollarea"
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
+							minimumsize = { 480 -1 }
+							maximumsize = { 480 -1 }
+							scrollbarpolicy_horizontal = always_off
+							scrollbar_vertical = {
+								using = Scrollbar_Vertical
+							}
+							scrollwidget = {
+								text_multi = {
+									name = "description"
+									minimumsize = { 470 -1 }
+									maximumsize = { 470 -1 }
+									autoresize = yes
+									margin = { 8 4 }
+									text = "[EventWindowData.GetDescription]"
+									align = hcenter
+									fontsize = 16
+								}
+							}
+						}
+					}
+					vbox = {
+						allow_outside = yes
+						ignoreinvisible = yes
+						spacing = 5
+						margin_bottom = 16
+						margin_left = 8
+						fixedgridbox = {
+							name = "option_grid"
+							addcolumn = 490
+							addrow = 42
+							datamodel = "[EventWindowData.GetOptions]"
+							item = {
+								button_eventoption = {
+									blockoverride "option_tooltip_position"
+									{
+										using = tooltip_ws
+										tooltip_offset = { -20 -10 }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	widget = {
+		size = { 410 100% }
+		allow_outside = yes
+		alwaystransparent = yes
+		blockoverride "event_tooltips_position" {
+			position = { 120 0 }
+			parentanchor = bottom
+			widgetanchor = bottom|right	
+		}
+		using = Event_Window_Debug_OptionTooltips
+	}
+
+	flowcontainer = {
+		name = "debug_stuff"
+		visible = "[InDebugMode]"
+		parentanchor = top|right
+		position = { -40 135 }
+		ignoreinvisible = yes
+
+		button_round = {
+			alwaystransparent = no
+			tooltip = "REGENERATE_EVENT_CONTENTS"
+			using = tooltip_below
+
+			using = Animation_ShowHide_Quick
+			onclick = "[EventWindow.ResetContents]"
+
+			button_replace = {
+				parentanchor = center
+				alwaystransparent = yes
+			}
+		}
+
+		button_round = {
+			size = { 40 40 }
+
+			button_icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/flat_icons/data_system.dds"
+				tooltip = "TOGGLE_DATA_SYSTEM"
+				using = tooltip_below
+				onclick = "[ExecuteConsoleCommand('Localization.ToggleSkipDataSystemInLocOutput')]"
+				fontsize = 24
+			}
+		}
+
+		button_round = {
+			size = { 40 40 }
+			button_copy = {
+				parentanchor = center
+				onclick = "[EventWindowData.CopyToClipboard]"
+				tooltip = "COPY_EVENT_CONTENTS"
+			}
+		}
+
+		container = {
+			tooltip = "[EventWindowData.GetTriggerBreakdown]"
+			using = tooltip_below
+			icon = {
+				visible = "[EventWindowData.IsTriggerFulfilled]"
+				size = { 40 40 }
+				texture = "gfx/interface/icons/symbols/icon_check.dds"
+			}
+
+			icon = {
+				visible = "[Not( EventWindowData.IsTriggerFulfilled )]"
+				size = { 40 40 }
+				texture = "gfx/interface/icons/symbols/icon_cross.dds"
+			}
+		}
+
+		button = {
+			name = "debug_icon"
+			size = { 40 40 }
+
+			button = {
+				size = { 100% 100% }
+				tooltip = "[EventWindowData.GetDebugInfo]"
+				using = tooltip_below
+				onclick = "[EventWindowData.CopyToClipboard]"
+				onrightclick = "[EventWindowData.DebugOpen]"
+				button_ignore = none
+				raw_text = "?"
+				fontsize = 24
+			}
+		}
+	}
+}

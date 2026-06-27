@@ -1,0 +1,14 @@
+# Basileus — text-icon for the Lunatic trait, used by the Baguettia easter-egg
+# option in the Francogallia rename event (basileus_rearrange_kingdoms.0011).
+# Vanilla never registers a `lunatic` trait texticon, so we point our own at the
+# vanilla lunatic icon. Mirrors gui/basileus_government_texticons.gui
+# (same 28x28 / offset 0,6 / fontsize 16). Referenced via @basileus_lunatic!.
+texticon = {
+	icon = basileus_lunatic
+	iconsize = {
+		texture = "gfx/interface/icons/traits/lunatic_1.dds"
+		size = { 28 28 }
+		offset = { 0 6 }
+		fontsize = 16
+	}
+}
