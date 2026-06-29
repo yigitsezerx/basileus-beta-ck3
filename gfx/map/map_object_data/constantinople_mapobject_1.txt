@@ -1,0 +1,10 @@
+﻿object={
+	name="Constantinople"
+	render_pass=Map
+	clamp_to_water_level=no
+	generated_content=no
+	layer="building_layer"
+	pdxmesh="constantinople_demo_mesh"
+	count=1
+	transform="2573.551758 0.000000 2479.589355 0.000000 0.254612 0.000000 0.967043 0.912716 0.912716 0.912716
+"}
