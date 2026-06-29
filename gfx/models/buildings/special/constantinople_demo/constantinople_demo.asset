@@ -1,0 +1,442 @@
+pdxmesh = {
+	name = "constantinople_demo_mesh"
+	file = "constantinople_demo.mesh"
+	scale = 1
+
+	meshsettings = {
+		name = "baths_of_zeuxippos"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "baths_of_zeuxippos"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_churches"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_churches"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_decal"
+		index = 0
+		texture_diffuse = "sprawl_decal_diffuse.dds"
+		texture_normal = "sprawl_decal_normal.dds"
+		texture_specular = "sprawl_decal_properties.dds"
+		shader = "decal_local"
+		shader_file = "gfx/FX/pdxmesh_decal.shader"
+		subpass = "LocalDecals"
+	}	
+
+	meshsettings = {
+		name = "constantinople_forums"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_forums"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_forums"
+		index = 2
+		texture_diffuse = "colosseum_outer_diffuse.dds"
+		texture_normal = "colosseum_outer_normal.dds"
+		texture_specular = "colosseum_outer_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_forums"
+		index = 3
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_palace"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_palace"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_palace"
+		index = 2
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_palace"
+		index = 3
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_sprawl"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_sprawl"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinople_sprawl"
+		index = 2
+		texture_diffuse = "insulae_diffuse.dds"
+		texture_normal = "insulae_normal.dds"
+		texture_specular = "insulae_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "hippodrome"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "hippodrome"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "hippodrome"
+		index = 2
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "valens_aqueduct"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "valens_aqueduct"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "blachernae_palace"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "blachernae_palace"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "boukeleon_palace"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "boukeleon_palace"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "boukeleon_palace"
+		index = 2
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinian_walls"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "constantinian_walls"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "exokionion"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "exokionion"
+		index = 1
+		texture_diffuse = "domus_diffuse.dds"
+		texture_normal = "domus_normal.dds"
+		texture_specular = "domus_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "exokionion"
+		index = 2
+		texture_diffuse = "insulae_diffuse.dds"
+		texture_normal = "insulae_normal.dds"
+		texture_specular = "insulae_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "sea_walls"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "sea_walls"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "theodosian_walls"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "theodosian_walls"
+		index = 1
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "chrysotriklinos"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "justinian_holy_apostles"
+		index = 0
+		texture_diffuse = "building_mediterranean_atlas_diffuse.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "standard"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "medieval_hagia_irene"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "medieval_hagia_sophia"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "outer_fields"
+		index = 0
+		texture_diffuse = "villa_decal_diffuse.dds"
+		texture_normal = "villa_decal_normal.dds"
+		texture_specular = "villa_decal_properties.dds"
+		shader = "decal_local"
+		shader_file = "gfx/FX/pdxmesh_decal.shader"
+		subpass = "LocalDecals"
+	}	
+
+	meshsettings = {
+		name = "outer_houses"
+		index = 0
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "walls_inner"
+		index = 0
+		texture_diffuse = "hippodrome_diffuse.dds"
+		texture_normal = "hippodrome_normal.dds"
+		texture_specular = "hippodrome_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+
+	meshsettings = {
+		name = "walls_inner"
+		index = 1
+		texture_diffuse = "italic_atlas.dds"
+		texture_normal = "building_mediterranean_atlas_normal.dds"
+		texture_specular = "building_mediterranean_atlas_properties.dds"
+		shader = "snap_to_terrain"
+		shader_file = "gfx/FX/pdxmesh.shader"
+	}	
+}
+
+entity = {
+	name = "constantinople_demo_entity"
+	pdxmesh = "constantinople_demo_mesh"
+}
